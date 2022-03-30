@@ -1,0 +1,40 @@
+{
+	"pages": [
+		{
+			"path": "pages/home/index",
+			"style": {
+				"navigationBarTitleText": "楼盘"
+			}
+		},
+		{
+			"path": "pages/clue/index",
+			"style": {
+				"navigationBarTitleText": "线索"
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+    "color": "#999999",
+    "selectedColor": "#333333",
+    "borderStyle": "white",
+    "backgroundColor": "#FFFFFF",
+		"fontSize":"20px",
+		"list": [{
+			"pagePath": "pages/home/index",
+			"iconPath": "",
+			"selectedIconPath": "",
+			"text": "楼盘"
+		}, {
+			"pagePath": "pages/clue/index",
+			"iconPath": "",
+			"selectedIconPath": "",
+			"text": "线索"
+		}]
+	}
+}
