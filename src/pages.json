@@ -1,6 +1,12 @@
 {
 	"pages": [
 		{
+			"path": "pages/login/index",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
 			"path": "pages/home/index",
 			"style": {
 				"navigationBarTitleText": "楼盘"
@@ -12,6 +18,9 @@
 				"navigationBarTitleText": "线索"
 			}
 		}
+
+
+
 	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
@@ -27,13 +36,13 @@
 		"fontSize":"20px",
 		"list": [{
 			"pagePath": "pages/home/index",
-			"iconPath": "",
-			"selectedIconPath": "",
+			// "iconPath": "",
+			// "selectedIconPath": "",
 			"text": "楼盘"
 		}, {
 			"pagePath": "pages/clue/index",
-			"iconPath": "",
-			"selectedIconPath": "",
+			// "iconPath": "",
+			// "selectedIconPath": "",
 			"text": "线索"
 		}]
 	}
