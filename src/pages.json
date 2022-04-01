@@ -11,8 +11,36 @@
 			"style": {
 				"navigationBarTitleText": "线索"
 			}
-		}
-	],
+		},
+		{
+			"path" : "pages/clue/scheme-details/scheme-details",
+			"style" :{
+				"navigationBarTitleText": "方案详情",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path" : "pages/clue/scheme-details/scheme-album",
+			"style" :{
+				"navigationBarTitleText": "方案相册",
+				"enablePullDownRefresh": false
+			}
+    },
+		{
+			"path" : "pages/clue/material-upgrade/material-upgrade",
+			"style" :{
+				"navigationBarTitleText": "材料升级",
+				"enablePullDownRefresh": false
+			}
+    },
+		{
+			"path" : "pages/clue/browse-list/browse-list",
+			"style" :{
+				"navigationBarTitleText": "浏览列表",
+				"enablePullDownRefresh": false
+			}
+    }
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
