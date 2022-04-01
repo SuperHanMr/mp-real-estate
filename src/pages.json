@@ -50,7 +50,7 @@
 		{
 			"path": "pages/estate-detail/index",
 			"style": {
-				"navigationBarTitleText": "楼盘详情"
+				"navigationStyle":"custom"
 			}
 		}
 
