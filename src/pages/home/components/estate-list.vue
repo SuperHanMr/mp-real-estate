@@ -2,11 +2,11 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 17:47:35
- * @LastEditTime: 2022-03-31 18:11:43
+ * @LastEditTime: 2022-03-31 21:17:04
  * @LastEditors: HanYongHui
 -->
 <template>
-  <view class="house-item">
+  <view class="house-item" @click="eventEstateDetail">
     <image class="cover-iamge" src="" mode="scaleToFill" />
     <view class="house-item_right">
       <text>楼盘名称楼盘名称楼盘名称楼盘名称</text>
@@ -20,13 +20,15 @@
 </template>
 <script lang="ts" setup>
 import { defineProps, watch, reactive } from "vue";
-
 const props = defineProps({
   item: {
     type: Object,
     required: true,
   },
 });
+const eventEstateDetail = () => {
+  uni.navigateTo({ url: "/pages/estate-detail/index?id=111" });
+};
 </script>
 <style lang="scss" scoped>
 .house-item {

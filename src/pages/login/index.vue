@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:41:39
- * @LastEditTime: 2022-03-31 18:08:33
+ * @LastEditTime: 2022-03-31 20:49:48
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -26,7 +26,7 @@ const getUserInfo = () => {
   uni.getUserProfile({
     desc: "用于完善资料",
     success: ({ userInfo, encryptedData }) => {
-      console.log("获取用户信息", userInfo, encryptedData);
+      console.log("------获取用户信息------", userInfo, encryptedData);
       storeData.userName = userInfo.nickName;
       storeData.avatarUrl = userInfo.avatarUrl;
       try {

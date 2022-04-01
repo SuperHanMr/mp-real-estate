@@ -9,13 +9,20 @@
 		{
 			"path": "pages/home/index",
 			"style": {
-				"navigationBarTitleText": "楼盘"
+				"navigationBarTitleText": "楼盘",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
 			"path": "pages/clue/index",
 			"style": {
 				"navigationBarTitleText": "线索"
+			}
+		},
+		{
+			"path": "pages/estate-detail/index",
+			"style": {
+				"navigationBarTitleText": "楼盘详情"
 			}
 		}
 

@@ -2,7 +2,7 @@
  * @Description: 小程序 主入口
  * @Author: HanYongHui
  * @Date: 2022-03-29 16:44:50
- * @LastEditTime: 2022-03-31 18:08:48
+ * @LastEditTime: 2022-03-31 20:50:23
  * @LastEditors: HanYongHui
 -->
 <script setup lang="ts">
@@ -14,6 +14,7 @@ onLaunch(() => {
   try {
     const token: string = uni.getStorageSync("token");
     if (token) {
+      // 拿到token请求 获取用户信息
       storeData.token = token;
       uni.switchTab({ url: "/pages/home/index" });
     }
