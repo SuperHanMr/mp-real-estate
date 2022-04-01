@@ -6,7 +6,12 @@
  * @LastEditors: HanYongHui
 -->
 <template>
-  <view>线索</view>
+  <view>
+		线索
+		<view class="clue-browse" @click="clueBrowse">
+			B端线索浏览页面
+		</view>
+	</view>
 </template>
 <script lang="ts">
 import { defineComponent } from "vue";
@@ -14,9 +19,21 @@ export default defineComponent({
   name: "",
   components: {},
   setup() {
-    return {};
+		const clueBrowse=()=>{
+			uni.navigateTo({
+				url:"browse-list/browse-list"
+			})
+		}
+    return {
+			clueBrowse
+		};
   },
 });
 </script>
 <style lang="scss" scoped>
+	.clue-browse{
+		width: 200rpx;
+		height: 90rpx;
+		background-color: pink;
+	}
 </style>
