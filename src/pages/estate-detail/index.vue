@@ -2,18 +2,18 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-01 19:10:01
+ * @LastEditTime: 2022-04-01 19:13:26
  * @LastEditors: HanYongHui
 -->
 <template>
-  <navigation-custom>
+  <!-- <navigation-custom>
     <template #content>
       <view class="navigation-content">
         <image @click="backPage" src="" />
         <text>楼盘详情</text>
       </view>
     </template>
-  </navigation-custom>
+  </navigation-custom> -->
 
   <img class="bac-image" :src="imageUrl" />
 
@@ -30,7 +30,7 @@
           <text>北京朝阳区管庄朝阳路5号院</text>
         </view>
       </view>
-      <view class="estate-detail_head--right">
+      <view class="estate-detail_head--right" @click="backPage">
         <image src="../../images/code-icon.png" />
         <text>楼盘二维码</text>
       </view>
@@ -75,7 +75,7 @@ import { useUserInfoHooks } from "../../hoosk/index";
 export default defineComponent({
   name: "",
   components: {
-    navigationCustom,
+    // navigationCustom,
   },
   setup() {
     const { storeData } = useUserInfoHooks();

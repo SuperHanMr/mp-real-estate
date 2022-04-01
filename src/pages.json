@@ -54,14 +54,14 @@
 				"enablePullDownRefresh": false
 			}
     },
-		
+
 		{
 			"path": "pages/estate-detail/index",
 			"style": {
-				"navigationStyle":"custom"
+
 			}
-		},
-		
+		}
+
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
