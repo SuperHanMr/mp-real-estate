@@ -41,22 +41,28 @@
 			}
     },
 		{
+			"path" : "pages/clue/signup-list/signup-list",
+			"style" :{
+					"navigationBarTitleText": "报名列表",
+					"enablePullDownRefresh": false
+			}
+		},
+		{
 			"path" : "pages/clue/browse-list/browse-list",
 			"style" :{
 				"navigationBarTitleText": "浏览列表",
 				"enablePullDownRefresh": false
 			}
     },
+		
 		{
 			"path": "pages/estate-detail/index",
 			"style": {
 				"navigationStyle":"custom"
 			}
-		}
-
-
-
-	],
+		},
+		
+    ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
