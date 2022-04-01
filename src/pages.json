@@ -1,9 +1,16 @@
 {
 	"pages": [
 		{
+			"path": "pages/login/index",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
 			"path": "pages/home/index",
 			"style": {
-				"navigationBarTitleText": "楼盘"
+				"navigationBarTitleText": "楼盘",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -39,8 +46,17 @@
 				"navigationBarTitleText": "浏览列表",
 				"enablePullDownRefresh": false
 			}
-    }
-    ],
+    },
+		{
+			"path": "pages/estate-detail/index",
+			"style": {
+				"navigationBarTitleText": "楼盘详情"
+			}
+		}
+
+
+
+	],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
@@ -55,13 +71,13 @@
 		"fontSize":"20px",
 		"list": [{
 			"pagePath": "pages/home/index",
-			"iconPath": "",
-			"selectedIconPath": "",
+			// "iconPath": "",
+			// "selectedIconPath": "",
 			"text": "楼盘"
 		}, {
 			"pagePath": "pages/clue/index",
-			"iconPath": "",
-			"selectedIconPath": "",
+			// "iconPath": "",
+			// "selectedIconPath": "",
 			"text": "线索"
 		}]
 	}
