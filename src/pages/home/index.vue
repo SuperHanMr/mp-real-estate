@@ -2,31 +2,55 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-03-31 21:26:21
+ * @LastEditTime: 2022-04-01 12:18:14
  * @LastEditors: HanYongHui
 -->
 <template>
   <view class="list">
-    <estate-list v-for="item in 4" :key="item" :item="{}" />
+    <estate-list v-for="item in 10" :key="item" :item="{}" />
+    <load-more :loadType="loadType" />
   </view>
 </template>
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, reactive, ref } from "vue";
+import {
+  onLoad,
+  onShow,
+  onPullDownRefresh,
+  onReachBottom,
+} from "@dcloudio/uni-app";
 import estateList from "./components/estate-list.vue";
+import loadMore from "../../components/load-more/index.vue";
 
 export default defineComponent({
   name: "",
   components: {
     estateList,
-  },
-  onPullDownRefresh() {
-    console.log("----下拉刷新---");
-  },
-  onLoad() {
-    console.log("----初次加载---");
+    loadMore,
   },
   setup() {
-    return {};
+    const loadType = ref<"succeed" | "error" | "load" | "complete">("succeed");
+
+    onLoad((e) => {
+      console.log("---onLoad---", e);
+    });
+
+    onShow(() => {});
+
+    onPullDownRefresh(() => {});
+
+    onReachBottom(() => {
+      if (loadType.value === "complete") {
+        return;
+      }
+      loadType.value = "load";
+      setTimeout(() => {
+        loadType.value = "error";
+      }, 1000);
+    });
+    return {
+      loadType,
+    };
   },
 });
 </script>
