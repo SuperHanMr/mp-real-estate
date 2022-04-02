@@ -30,7 +30,11 @@
 				<!-- <view class="swiper-item"></view> -->
 				<scroll-view class="scroll-view"  scroll-y="true" >
 					<view class="list-container">
-						<view class="item-container" v-for="listItem in 5" :key="listItem">
+						<view class="item-container" 
+						v-for="listItem in 5" 
+						:key="listItem"
+						@click="gotoMaterialPage"
+						>
 							<view class="header">
 								<view >
 									<view class="projectName">
@@ -108,12 +112,18 @@ export default defineComponent({
 			currentIndex.value =index
 		}
 		watch(currentIndex,()=>{})
+		const gotoMaterialPage =()=>{
+			uni.navigateTo({
+				url:"material-upgrade/material-upgrade"
+			})
+		}
     return {
 			clueBrowse,
 			currentIndex,
 			tabList,
 			changTab,
 			swiperChange,
+			gotoMaterialPage,
 		};
   },
 });

@@ -38,6 +38,7 @@
 			"path" : "pages/clue/material-upgrade/material-upgrade",
 			"style" :{
 				"navigationBarTitleText": "材料升级",
+				"navigationBarBackgroundColor":"#ffffff",
 				"enablePullDownRefresh": false
 			}
     },
