@@ -16,7 +16,8 @@
 		{
 			"path": "pages/clue/index",
 			"style": {
-				"navigationBarTitleText": "线索"
+				"navigationBarTitleText": "线索",
+				"navigationBarBackgroundColor":"#ffffff"
 			}
 		},
 		{
