@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-01 12:18:14
+ * @LastEditTime: 2022-04-01 17:23:17
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -58,5 +58,13 @@ export default defineComponent({
 .list {
   height: 100%;
   width: 100%;
+  background: #fff;
+  padding-top: 32rpx;
+}
+</style>
+
+<style>
+page {
+  background: #fff;
 }
 </style>

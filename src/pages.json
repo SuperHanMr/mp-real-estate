@@ -54,14 +54,14 @@
 				"enablePullDownRefresh": false
 			}
     },
-		
+
 		{
 			"path": "pages/estate-detail/index",
 			"style": {
-				"navigationBarTitleText": "楼盘详情"
+
 			}
-		},
-		
+		}
+
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",

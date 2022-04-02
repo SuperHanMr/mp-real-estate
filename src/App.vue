@@ -2,7 +2,7 @@
  * @Description: 小程序 主入口
  * @Author: HanYongHui
  * @Date: 2022-03-29 16:44:50
- * @LastEditTime: 2022-03-31 20:50:23
+ * @LastEditTime: 2022-04-01 18:25:52
  * @LastEditors: HanYongHui
 -->
 <script setup lang="ts">
@@ -11,6 +11,13 @@ import { useUserInfoHooks } from "./hoosk/index";
 onLaunch(() => {
   console.log("App Launch");
   const { storeData } = useUserInfoHooks();
+  uni.getSystemInfo({
+    success: (result) => {
+      console.log("statusBarHeight", result.statusBarHeight);
+      storeData.statusBarHeight = result.statusBarHeight || 0;
+    },
+  });
+
   try {
     const token: string = uni.getStorageSync("token");
     if (token) {
@@ -28,7 +35,7 @@ onHide(() => {});
 <style >
 page {
   height: 100%;
-  background-color: #f5f6f6;
+  background-color: #fff;
   font-size: 16px;
 }
 </style>
