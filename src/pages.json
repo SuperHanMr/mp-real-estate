@@ -58,6 +58,8 @@
 		{
 			"path": "pages/estate-detail/index",
 			"style": {
+				"navigationStyle":"custom",
+				"enablePullDownRefresh": true
 
 			}
 		}

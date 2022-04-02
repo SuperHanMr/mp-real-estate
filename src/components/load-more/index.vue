@@ -2,7 +2,7 @@
  * @Description: 上拉加载更多
  * @Author: HanYongHui
  * @Date: 2022-04-01 11:40:32
- * @LastEditTime: 2022-04-01 12:02:19
+ * @LastEditTime: 2022-04-02 11:24:29
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -34,5 +34,6 @@ const loadText = {
   font-size: 24rpx;
   color: #ccc;
   justify-content: center;
+  align-items: center;
 }
 </style>
