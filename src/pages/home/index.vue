@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-01 17:23:17
+ * @LastEditTime: 2022-04-02 12:14:33
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -37,7 +37,11 @@ export default defineComponent({
 
     onShow(() => {});
 
-    onPullDownRefresh(() => {});
+    onPullDownRefresh(() => {
+      setTimeout(() => {
+        uni.stopPullDownRefresh();
+      }, 500);
+    });
 
     onReachBottom(() => {
       if (loadType.value === "complete") {

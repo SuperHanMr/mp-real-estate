@@ -2,140 +2,162 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-01 19:13:26
+ * @LastEditTime: 2022-04-02 18:34:44
  * @LastEditors: HanYongHui
 -->
 <template>
-  <!-- <navigation-custom>
-    <template #content>
-      <view class="navigation-content">
-        <image @click="backPage" src="" />
-        <text>楼盘详情</text>
-      </view>
-    </template>
-  </navigation-custom> -->
-
-  <img class="bac-image" :src="imageUrl" />
-
+  <navigation-custom title="楼盘详情" :theme="theme" />
   <view class="estate-detail-warp">
-    <view class="estate-detail_head">
-      <view class="estate-detail_head--left">
-        <text class="name">北京新天地五期</text>
-        <view class="describe">
-          <image src="../../images/estate-icon.png" />
-          <text>华润置地华润集团</text>
+    <img class="bac-image" :src="imageUrl" mode="aspectFill" />
+    <view class="estate-content-warp">
+      <view class="estate-detail_head">
+        <view class="estate-detail_head--left">
+          <text class="name">北京新天地五期</text>
+          <view class="describe">
+            <image src="../../images/estate-icon.png" />
+            <text>华润置地华润集团</text>
+          </view>
+          <view class="describe">
+            <image src="../../images/estate-icon.png" />
+            <text>北京朝阳区管庄朝阳路5号院</text>
+          </view>
         </view>
-        <view class="describe">
-          <image src="../../images/estate-icon.png" />
-          <text>北京朝阳区管庄朝阳路5号院</text>
+        <view class="estate-detail_head--right" @click="codeDialogShow = true">
+          <image src="../../images/code-icon.png" />
+          <text>楼盘二维码</text>
         </view>
       </view>
-      <view class="estate-detail_head--right" @click="backPage">
-        <image src="../../images/code-icon.png" />
-        <text>楼盘二维码</text>
-      </view>
-    </view>
 
-    <view class="house-type-list">
-      <view class="list-title">
-        <view></view>
-        <text>全部户型（10）</text>
-      </view>
-      <view class="house-type-warp">
-        <view class="house-type_image">
-          <image
-            class="house-type_image--cover"
-            :src="imageUrl"
-            mode="scaleToFill"
-          />
-          <swiper class="house-type_image--swiper">
-            <swiper-item>
-              <image :src="imageUrl" mode="scaleToFill" />
-            </swiper-item>
-          </swiper>
+      <view class="house-type-list">
+        <view class="list-title">
+          <view></view>
+          <text>全部户型（10）</text>
         </view>
-        <view class="house-type_describe">
-          <view class="house-type_describe--info">
-            <text>北区1-3栋 1室户型</text>
-            <text>1室1厅1卫｜面积：69.5㎡ ｜东北 </text>
+        <view class="house-type-warp" v-for="item in 6" :key="item">
+          <view class="house-type_image">
+            <image
+              class="house-type_image--cover"
+              :src="imageUrl"
+              mode="aspectFill"
+            />
+            <swiper class="house-type_image--swiper">
+              <swiper-item>
+                <image :src="imageUrl" mode="aspectFill" />
+              </swiper-item>
+            </swiper>
           </view>
-          <view class="house-type_describe--number">
-            <text>5</text>
-            <text>方案</text>
+          <view class="house-type_describe">
+            <view class="house-type_describe--info">
+              <text>北区1-3栋 1室户型</text>
+              <text>1室1厅1卫｜面积：69.5㎡ ｜东北 </text>
+            </view>
+            <view class="house-type_describe--number">
+              <text>5</text>
+              <text>方案</text>
+            </view>
           </view>
         </view>
+        <load-more :loadType="loadType" />
       </view>
     </view>
   </view>
+  <code-dialog
+    style="width: 100%; height: 100%"
+    codeUrl=""
+    v-model:show="codeDialogShow"
+  />
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
+import {
+  onLoad,
+  onPullDownRefresh,
+  onReachBottom,
+  onPageScroll,
+} from "@dcloudio/uni-app";
 import navigationCustom from "../../components/navigation-custom/index.vue";
 import { useUserInfoHooks } from "../../hoosk/index";
+import loadMore from "../../components/load-more/index.vue";
+import codeDialog from "../../components/code-dialog/index.vue";
 export default defineComponent({
   name: "",
   components: {
-    // navigationCustom,
+    navigationCustom,
+    loadMore,
+    codeDialog,
   },
   setup() {
     const { storeData } = useUserInfoHooks();
 
-    const backPage = () => {
-      uni.navigateBack({ delta: 1 });
-    };
+    const loadType = ref<"succeed" | "error" | "load" | "complete">("succeed");
+
+    onLoad((e) => {
+      console.log("---onLoad---", e);
+    });
+    onPullDownRefresh(() => {
+      setTimeout(() => {
+        uni.stopPullDownRefresh();
+      }, 500);
+    });
+    onReachBottom(() => {
+      if (loadType.value === "complete" || loadType.value === "load") {
+        return;
+      }
+      loadType.value = "load";
+      setTimeout(() => {
+        loadType.value = "error";
+      }, 1000);
+    });
+
+    const theme = ref<"white" | "black" | "transparent">("transparent");
+    onPageScroll((e) => {
+      if (e.scrollTop > 64) {
+        theme.value = "white";
+      } else {
+        theme.value = "transparent";
+      }
+    });
     const imageUrl: string =
       "https://ali-res-test.dabanjia.com/res/20220211/14/1644561850441_1874%240be4eaff-1611-4087-9d91-57dbfe053ac0.jpg";
-    return { backPage, imageUrl };
+
+    const codeDialogShow = ref<boolean>(false);
+
+    return { imageUrl, loadType, theme, codeDialogShow };
   },
 });
 </script>
 <style lang="scss" scoped>
-.navigation-content {
-  position: relative;
-  text-align: center;
-  width: 100%;
-
-  image {
-    position: absolute;
-    width: 44px;
-    height: 44px;
-    background: #000;
-    left: 0;
-    top: 0;
-  }
-
-  text {
-    line-height: 44px;
-    font-size: 34rpx;
-    font-weight: bold;
-    color: #fff;
-  }
-}
-.bac-image {
-  position: absolute;
-  top: 0;
-  width: 100%;
-  height: 462rpx;
-}
-
 .estate-detail-warp {
-  // position: absolute;
   width: 100%;
-  padding-top: calc(177rpx * 2);
+  height: 100%;
   background: #fff;
+  position: relative;
 
+  .bac-image {
+    width: 100%;
+    height: 462rpx;
+  }
+
+  .estate-content-warp {
+    position: absolute;
+    margin-top: -50rpx;
+    width: 100%;
+  }
   .estate-detail_head {
+    width: 100%;
+
     background: linear-gradient(
       180deg,
       rgba(255, 255, 255, 0.81) 0%,
       rgba(242, 242, 242, 0.9) 100%
     );
-    padding: 40rpx 40rpx 0 40rpx;
+    border: 1px solid #ffffff;
+    box-sizing: border-box;
+    backdrop-filter: blur(20px);
+    padding: 40rpx 40rpx 60rpx 40rpx;
     border-top-right-radius: 40rpx;
     border-top-left-radius: 40rpx;
-    height: 250rpx;
     display: flex;
-    align-items: center;
 
     .estate-detail_head--left {
       display: flex;
@@ -175,16 +197,23 @@ export default defineComponent({
       display: flex;
       align-items: center;
       justify-content: center;
+      border-radius: 10rpx 30rpx 10rpx 10rpx;
+      flex-direction: column;
       image {
         height: 48rpx;
         width: 48rpx;
       }
       text {
+        margin-top: 4rpx;
         font-weight: 400;
         font-size: 20rpx;
         line-height: 28rpx;
         color: #333333;
       }
+    }
+
+    .estate-detail_head--right:active {
+      background: #f5f5f5;
     }
   }
 }
@@ -192,6 +221,10 @@ export default defineComponent({
 .house-type-list {
   background: #ffffff;
   padding-top: 48rpx;
+  margin-top: -20rpx;
+  position: absolute;
+  border-top-left-radius: 40rpx;
+  border-top-right-radius: 40rpx;
   .list-title {
     display: flex;
     align-items: center;
@@ -244,14 +277,15 @@ export default defineComponent({
         width: 570rpx;
         display: flex;
         flex-direction: column;
-        :nth-child(1) {
+
+        text:nth-child(1) {
           width: 100%;
           font-weight: bold;
           font-size: 30rpx;
           line-height: 42rpx;
           color: #333333;
         }
-        :nth-child(2) {
+        text:nth-child(2) {
           width: 100%;
           margin-top: 8rpx;
           font-weight: 400;

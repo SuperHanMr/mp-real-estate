@@ -17,54 +17,83 @@
 			"path": "pages/clue/index",
 			"style": {
 				"navigationBarTitleText": "线索",
-				"navigationBarBackgroundColor":"#ffffff"
+				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 		{
-			"path" : "pages/clue/scheme-details/scheme-details",
-			"style" :{
+			"path": "pages/clue/scheme-details/scheme-details",
+			"style": {
 				"navigationBarTitleText": "方案详情",
 				"enablePullDownRefresh": false
 			}
 		},
 		{
-			"path" : "pages/clue/scheme-details/scheme-album",
-			"style" :{
+			"path": "pages/clue/scheme-details/scheme-album",
+			"style": {
 				"navigationBarTitleText": "方案相册",
 				"enablePullDownRefresh": false
 			}
-    },
+		},
 		{
-			"path" : "pages/clue/material-upgrade/material-upgrade",
-			"style" :{
+			"path": "pages/clue/material-upgrade/material-upgrade",
+			"style": {
 				"navigationBarTitleText": "材料升级",
 				"navigationBarBackgroundColor":"#ffffff",
 				"enablePullDownRefresh": false
 			}
-    },
+		},
 		{
-			"path" : "pages/clue/signup-list/signup-list",
-			"style" :{
-					"navigationBarTitleText": "报名列表",
-					"enablePullDownRefresh": false
+			"path": "pages/clue/signup-list/signup-list",
+			"style": {
+				"navigationBarTitleText": "报名列表",
+				"enablePullDownRefresh": false
 			}
 		},
 		{
-			"path" : "pages/clue/browse-list/browse-list",
-			"style" :{
+			"path": "pages/clue/browse-list/browse-list",
+			"style": {
 				"navigationBarTitleText": "浏览列表",
 				"enablePullDownRefresh": false
 			}
-    },
-
+		},
 		{
 			"path": "pages/estate-detail/index",
 			"style": {
-
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/house-detail/index",
+			"style": {
+				"navigationBarTitleText": "户型详情"
+			}
+		},
+		{
+			"path": "pages/case-detail/index",
+			"style": {
+				"navigationBarTitleText": "方案详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/picture-preview/index",
+			"style": {
+				"navigationBarTitleText": "查看大图",
+				"navigationStyle": "custom"
 			}
 		}
-
-    ],
+	],
+	"condition": {
+		"current": 0,
+		"list": [
+			{
+				"name": "lyb",
+				"path": "/pages/picture-preview/index",
+				"query": ""
+			}
+		]
+	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
@@ -72,21 +101,20 @@
 		"backgroundColor": "#F8F8F8"
 	},
 	"tabBar": {
-    "color": "#999999",
-    "selectedColor": "#333333",
-    "borderStyle": "white",
-    "backgroundColor": "#FFFFFF",
-		"fontSize":"20px",
-		"list": [{
-			"pagePath": "pages/home/index",
-			// "iconPath": "",
-			// "selectedIconPath": "",
-			"text": "楼盘"
-		}, {
-			"pagePath": "pages/clue/index",
-			// "iconPath": "",
-			// "selectedIconPath": "",
-			"text": "线索"
-		}]
+		"color": "#999999",
+		"selectedColor": "#333333",
+		"borderStyle": "white",
+		"backgroundColor": "#FFFFFF",
+		"fontSize": "20px",
+		"list": [
+			{
+				"pagePath": "pages/home/index",
+				"text": "楼盘"
+			},
+			{
+				"pagePath": "pages/clue/index",
+				"text": "线索"
+			}
+		]
 	}
 }
