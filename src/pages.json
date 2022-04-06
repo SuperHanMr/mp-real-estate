@@ -50,13 +50,6 @@
 			}
 		},
 		{
-			"path": "pages/clue/browse-list/browse-list",
-			"style": {
-				"navigationBarTitleText": "浏览列表",
-				"enablePullDownRefresh": false
-			}
-		},
-		{
 			"path": "pages/estate-detail/index",
 			"style": {
 				"navigationStyle": "custom",
