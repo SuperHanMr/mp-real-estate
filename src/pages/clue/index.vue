@@ -26,8 +26,8 @@
 			<swiper-item v-for="item1 in tabList" :key="item1.key">
 				<scroll-view class="scroll-view"  scroll-y="true" >
 					<view class="list-container">
-						<view class="item-container" 
-							v-for="listItem in 5" 
+						<view class="item-container"
+							v-for="listItem in 5"
 							:key="listItem"
 							@click="gotoRegistrationDetailPage"
 						>
@@ -55,14 +55,14 @@
 									<view class="right" style="font-weight: 500;">￥1000.00</view>
 								</view>
 							</view>
-							
+
 							<view class="bottomInfo" v-if="item1.key==2">
 								<view class="itemInfo">
 									<view class="left">浏览时间</view>
 									<view class="right">2021-08-21  07:37:12</view>
 								</view>
 							</view>
-							
+
 						</view>
 					</view>
 				</scroll-view>
@@ -79,15 +79,33 @@
 </template>
 <script lang="ts">
 import { defineComponent,ref,watch} from "vue";
+import { onLoad, onShow, onHide } from "@dcloudio/uni-app";
+import {getClueBrowerList,ClueBrowerList,ClueBrowerItem} from "../../api/clue"
 export default defineComponent({
   name: "",
   components: {},
   setup() {
+		onShow(()=>{
+			console.log("1111111")
+		})
+
+		const reqBrowerList= async()=>{
+			try {
+				let browerList = await getClueBrowerList()
+				console.log("browerList====",browerList)
+			} catch (error) {
+				console.log("error!!",error)
+			}
+		}
+		reqBrowerList()
+
 		const clueBrowse=()=>{
 			uni.navigateTo({
 				url:"browse-list/browse-list"
 			})
 		}
+		const dataList = ref<ClueBrowerItem[]>([])
+		watch(dataList,()=>{})
 		const currentIndex=ref<number>(0)
 		const tabList=[
 			{tabName:"报名记录",key:1},
@@ -101,7 +119,7 @@ export default defineComponent({
 			currentIndex.value =index
 		}
 		watch(currentIndex,()=>{})
-		
+
 		const gotoMaterialPage =()=>{
 			uni.navigateTo({
 				url:"material-upgrade/material-upgrade"
@@ -113,6 +131,8 @@ export default defineComponent({
 				url:"signup-list/signup-detail"
 			})
 		}
+
+
     return {
 			clueBrowse,
 			currentIndex,
