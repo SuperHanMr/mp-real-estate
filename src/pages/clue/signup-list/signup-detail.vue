@@ -37,7 +37,7 @@
 					</view>
 				</view>
 			</view>
-			
+
 			<view class="renovation-header">
 				<view class="icon"></view>
 				<text>装修报价</text>
@@ -45,7 +45,7 @@
 			<view class="renovation-content">
 				<view class="updateMaterial-text">升级材料</view>
 				<view class="content">
-					这里的文字不建议过多这里的文字不建议过多这里这里这里的文字不建议过多这里的文字不建议过多这里这里... 
+					这里的文字不建议过多这里的文字不建议过多这里这里这里的文字不建议过多这里的文字不建议过多这里这里...
 				</view>
 				<view class="price">
 					<text>￥</text>
@@ -69,13 +69,13 @@
 		onReachBottom,
 		onLoad,
 	} from"@dcloudio/uni-app";
-	import navicationCustom from "../../../components/navigation-custom/index.vue"
-	import loadMore from "../../../components/load-more/index.vue";
+	// import navicationCustom from "../../../components/navigation-custom/index.vue"
+	// import loadMore from "../../../components/load-more/index.vue";
 	export default defineComponent({
 		name:"",
 		components:{
-			navicationCustom,
-			loadMore,
+			// navicationCustom,
+			// loadMore,
 
 		},
 		setup(){
@@ -83,7 +83,7 @@
 			const theme = ref<"pink" | "black" | "transparent">("pink");
 			onPageScroll((e) => {
 			  if (e.scrollTop > 64) {
-			    theme.value = "white";
+			    theme.value = "pink";
 			  } else {
 			    theme.value = "transparent";
 			  }
@@ -268,7 +268,7 @@
 						color: #666666;
 					}
 				}
-				
+
 			}
 		}
 	}
