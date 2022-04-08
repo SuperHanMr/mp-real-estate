@@ -38,7 +38,7 @@
 			"path": "pages/clue/material-upgrade/material-upgrade",
 			"style": {
 				"navigationBarTitleText": "材料升级",
-				"navigationBarBackgroundColor":"#ffffff",
+				"navigationBarBackgroundColor": "#ffffff",
 				"enablePullDownRefresh": false
 			}
 		},
@@ -59,7 +59,8 @@
 		{
 			"path": "pages/house-detail/index",
 			"style": {
-				"navigationBarTitleText": "户型详情"
+				"navigationBarTitleText": "户型详情",
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -82,7 +83,7 @@
 		"list": [
 			{
 				"name": "lyb",
-				"path": "/pages/picture-preview/index",
+				"path": "/pages/case-detail/index",
 				"query": ""
 			}
 		]

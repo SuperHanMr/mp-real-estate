@@ -113,7 +113,7 @@ page{
     .introduce-content{
       padding: 0 40rpx 152rpx;
       .content-text{
-        font-size: 0.14rem;
+        font-size: 28rpx;
         // line-height: 0.22rem;
         letter-spacing: 0.3px;
       }
