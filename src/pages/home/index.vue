@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-07 10:35:33
+ * @LastEditTime: 2022-04-08 16:08:12
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -21,7 +21,7 @@ import {
 } from "@dcloudio/uni-app";
 import estateList from "./components/estate-list.vue";
 import loadMore from "../../components/load-more/index.vue";
-
+import { useEstateListHook } from "./hooks/index";
 export default defineComponent({
   name: "",
   components: {
@@ -30,13 +30,12 @@ export default defineComponent({
   },
   setup() {
     const loadType = ref<"succeed" | "error" | "load" | "complete">("succeed");
-
+    const { requestEstateList, list } = useEstateListHook();
+    const maxId = ref<number>(0);
     onLoad((e) => {
       console.log("---onLoad---", e);
+      requestEstateList();
     });
-
-    console.log("---------.env配置---------");
-    console.log(import.meta.env.VITE_URL_BASE_API);
 
     onShow(() => {});
 
@@ -51,12 +50,15 @@ export default defineComponent({
         return;
       }
       loadType.value = "load";
+
+      requestEstateList;
       setTimeout(() => {
         loadType.value = "error";
       }, 1000);
     });
     return {
       loadType,
+      list,
     };
   },
 });
