@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-02 12:14:33
+ * @LastEditTime: 2022-04-07 10:35:33
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -34,6 +34,9 @@ export default defineComponent({
     onLoad((e) => {
       console.log("---onLoad---", e);
     });
+
+    console.log("---------.env配置---------");
+    console.log(import.meta.env.VITE_URL_BASE_API);
 
     onShow(() => {});
 

@@ -2,13 +2,13 @@
  * @Description: 公共数据
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:48:27
- * @LastEditTime: 2022-04-01 16:09:16
+ * @LastEditTime: 2022-04-07 19:17:55
  * @LastEditors: HanYongHui
  */
 import { reactive } from "vue";
 type Store = {
   token: string,
-  role: string,
+  role: number,
   userName: string,
   userId: string,
   avatarUrl: string,
@@ -18,7 +18,6 @@ type Store = {
 const storeData = reactive<Store>(
   {
     token: '',
-    role: '',
     userName: '',
     userId: '',
   } as Store

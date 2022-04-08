@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-02 18:45:07
+ * @LastEditTime: 2022-04-06 11:27:15
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -61,7 +61,7 @@
       </view>
     </view>
   </view>
-  <code-dialog codeUrl="" v-model:show="codeDialogShow" />
+  <code-dialog :codeUrl="imageUrl" v-model:show="codeDialogShow" />
 </template>
 <script lang="ts">
 import { defineComponent, ref } from "vue";
