@@ -3,9 +3,11 @@
 		{
 			"path": "pages/login/index",
 			"style": {
+				"navigationBarBackgroundColor": "#ffffff",
 				"navigationBarTitleText": "登录"
 			}
 		},
+
 		{
 			"path": "pages/home/index",
 			"style": {
@@ -13,6 +15,8 @@
 				"enablePullDownRefresh": true
 			}
 		},
+
+
 		{
 			"path": "pages/clue/index",
 			"style": {
@@ -108,10 +112,14 @@
 		"fontSize": "20px",
 		"list": [
 			{
+				"iconPath":"static/tab-image/tab-estate-un-icon.png",
+				"selectedIconPath":"static/tab-image/tab-estate-icon.png",
 				"pagePath": "pages/home/index",
 				"text": "楼盘"
 			},
 			{
+				"iconPath":"static/tab-image/tab-clue-un-icon.png",
+				"selectedIconPath":"static/tab-image/tab-clue-icon.png",
 				"pagePath": "pages/clue/index",
 				"text": "线索"
 			}
