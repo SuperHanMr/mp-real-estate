@@ -17,47 +17,35 @@
 				{{tabItem.tabName}}
 			</view>
 		</view>
-		<!-- 	:indicator-dots="true"
-			:autoplay="true"
-			:interval="3000" -->
 		<swiper
 			class="swiper"
 			@change="swiperChange"
 			:duration="200"
 			:current="currentIndex"
 			>
-			<swiper-item>
-				<!-- <view class="swiper-item"></view> -->
+			<swiper-item v-for="item1 in tabList" :key="item1.key">
 				<scroll-view class="scroll-view"  scroll-y="true" >
 					<view class="list-container">
 						<view class="item-container" 
-						v-for="listItem in 5" 
-						:key="listItem"
-						@click="gotoMaterialPage"
+							v-for="listItem in 5" 
+							:key="listItem"
+							@click="gotoRegistrationDetailPage"
 						>
-							<view class="header">
-								<view >
-									<view class="projectName">
-										新天地五期新天地
-									</view>
-									<view class="customerName">
-										报名用户： 小可爱
-									</view>
+							<view class="header" @click.stop="gotoMaterialPage">
+								<view>
+									<view class="projectName">新天地五期新天地</view>
+									<view class="customerName">报名用户： 小可爱</view>
 								</view>
 							</view>
 							<view class="caseInfo-container">
 								<image class="caseImg" src="../../images/code-icon.png" />
 								<view class="caseInfo">
-									<view class="caseName">
-										时尚简约，打造都市白领最爱公寓红红火火恍恍惚惚或或或或或或
-									</view>
-									<view class="address">
-										北区1-3栋  1室户型
-									</view>
+									<view class="caseName">时尚简约，打造都市白领最爱公寓红红火火恍恍惚惚或或或或或或</view>
+									<view class="address">北区1-3栋  1室户型</view>
 								</view>
 							</view>
 
-							<view class="bottomInfo">
+							<view class="bottomInfo" v-if="item1.key==1">
 								<view class="itemInfo">
 									<view class="left">报名时间</view>
 									<view class="right">2021-08-21  07:37:12</view>
@@ -67,14 +55,16 @@
 									<view class="right" style="font-weight: 500;">￥1000.00</view>
 								</view>
 							</view>
+							
+							<view class="bottomInfo" v-if="item1.key==2">
+								<view class="itemInfo">
+									<view class="left">浏览时间</view>
+									<view class="right">2021-08-21  07:37:12</view>
+								</view>
+							</view>
+							
 						</view>
 					</view>
-				</scroll-view>
-			</swiper-item>
-			<swiper-item>
-				<!-- <view class="swiper-item"></view> -->
-				<scroll-view scroll-y="true" >
-					<view>bbbbbbbb</view>
 				</scroll-view>
 			</swiper-item>
 		</swiper>
@@ -105,16 +95,22 @@ export default defineComponent({
 		]
 		const changTab=(index:number)=>{
 			currentIndex.value =index
-			console.log("获取数据！！！！！",index,currentIndex)
 		}
 		const swiperChange=(e:any)=>{
 			let index= e.target.current ||e.detail.current;
 			currentIndex.value =index
 		}
 		watch(currentIndex,()=>{})
+		
 		const gotoMaterialPage =()=>{
 			uni.navigateTo({
 				url:"material-upgrade/material-upgrade"
+			})
+		}
+		const gotoRegistrationDetailPage =()=>{
+			console.log("去报名详情页面！！！")
+			uni.navigateTo({
+				url:"signup-list/signup-detail"
 			})
 		}
     return {
@@ -124,6 +120,7 @@ export default defineComponent({
 			changTab,
 			swiperChange,
 			gotoMaterialPage,
+			gotoRegistrationDetailPage,
 		};
   },
 });
