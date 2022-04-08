@@ -65,7 +65,10 @@ function createRequest(baseURL: string): Request {
   service.interceptors.request.use(
     config => {
       // 设置登录Token
-      if (storeData.token) (config.headers as any).accessToken = storeData.token
+      const token = uni.getStorageSync('token')
+      if (token) {
+        (config as any).headers["applet-token"] = token
+      }
       return config
     },
     error => {
@@ -73,13 +76,14 @@ function createRequest(baseURL: string): Request {
       return Promise.reject(error)
     }
   )
-
   // 响应拦截器
   service.interceptors.response.use(
     response => {
       if (response.data.code !== 1) {
         return Promise.reject(response)
       } else {
+        console.log("------request-response-----", response);
+        if (response.headers["applet-token"]) uni.setStorageSync('token', response.headers["applet-token"])
         return response
       }
     },

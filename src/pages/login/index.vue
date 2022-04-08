@@ -2,63 +2,49 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:41:39
- * @LastEditTime: 2022-04-07 19:30:40
+ * @LastEditTime: 2022-04-08 14:52:49
  * @LastEditors: HanYongHui
 -->
 <template>
   <view class="login-warp">
     <image class="logo-image" src="../../images/logo.png" />
-    <button @click="getUserInfo">微信授权</button>
-
-    <!-- <button @click="getUserInfo">微信手机号一键登录</button> -->
+    <button v-if="!rawDataStr" @click="getUserInfo">微信授权</button>
+    <button
+      v-if="rawDataStr"
+      open-type="getPhoneNumber"
+      @getphonenumber="bindgetPhoneNumber"
+    >
+      微信手机号一键登录
+    </button>
   </view>
 </template>
 <script lang="ts" setup>
-import { defineComponent } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import { useUserInfoHooks } from "../../hoosk/index";
 import { useLoginHooks } from "./hooks/index";
 const { storeData } = useUserInfoHooks();
-const { requestLogin, requestRegister } = useLoginHooks();
-
-/**
- * 1、调起微信授权弹窗
- * 2、拿到昵称和头像
- * 3、上传私密信息串 判断是否已注册
- * 4、拿到token 存储跳转
- */
-
-uni.login({
-  provider: "weixin",
-  success: ({ code }) => {
-    requestLogin(code)
-      .then((res) => {
-        storeData.userName = res.data?.name || "";
-        storeData.role = res.data?.role || 0;
-        uni.switchTab({ url: "/pages/home/index" });
-      })
-      .catch((err) => {
-        const { code } = err.data;
-        console.log("异常", code);
-      });
-  },
-});
-
+const { requestRegister } = useLoginHooks();
+const rawDataStr = ref<string>("");
+const signatureStr = ref<string>("");
 const getUserInfo = () => {
   uni.getUserProfile({
     desc: "用于完善资料",
-    success: ({ userInfo, rawData, signature }) => {
-      console.log("------获取用户信息------", userInfo, signature, rawData);
-      // storeData.userName = userInfo.nickName;
-      // storeData.avatarUrl = userInfo.avatarUrl;
-      // try {
-      //   uni.setStorageSync("token", encryptedData);
-      //   uni.switchTab({ url: "/pages/home/index" });
-      // } catch (e) {}
-      // requestLogin(code);
+    success: ({ rawData, signature }) => {
+      console.log("------获取用户信息------", signature, rawData);
+      rawDataStr.value = rawData;
+      signatureStr.value = signature;
     },
   });
 };
-const login = () => {};
+const bindgetPhoneNumber = (res: any) => {
+  requestRegister({
+    code: res.detail.code as string,
+    signature: signatureStr.value,
+    rawData: rawDataStr.value,
+  }).then((res) => {
+    uni.switchTab({ url: "/pages/home/index" });
+  });
+};
 </script>
 <style lang="scss" scoped>
 .login-warp {
