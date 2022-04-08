@@ -2,12 +2,12 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-08 16:08:12
+ * @LastEditTime: 2022-04-08 16:37:14
  * @LastEditors: HanYongHui
 -->
 <template>
   <view class="list">
-    <estate-list v-for="item in 10" :key="item" :item="{}" />
+    <estate-list v-for="item in list" :key="item.id" :item="item" />
     <load-more :loadType="loadType" />
   </view>
 </template>
@@ -29,32 +29,20 @@ export default defineComponent({
     loadMore,
   },
   setup() {
-    const loadType = ref<"succeed" | "error" | "load" | "complete">("succeed");
-    const { requestEstateList, list } = useEstateListHook();
-    const maxId = ref<number>(0);
+    const { requestEstateList, list, loadType } = useEstateListHook();
     onLoad((e) => {
-      console.log("---onLoad---", e);
       requestEstateList();
     });
-
     onShow(() => {});
-
     onPullDownRefresh(() => {
-      setTimeout(() => {
-        uni.stopPullDownRefresh();
-      }, 500);
+      requestEstateList();
     });
-
     onReachBottom(() => {
       if (loadType.value === "complete") {
         return;
       }
       loadType.value = "load";
-
-      requestEstateList;
-      setTimeout(() => {
-        loadType.value = "error";
-      }, 1000);
+      requestEstateList(true);
     });
     return {
       loadType,
@@ -68,7 +56,6 @@ export default defineComponent({
   height: 100%;
   width: 100%;
   background: #fff;
-  padding-top: 32rpx;
 }
 </style>
 

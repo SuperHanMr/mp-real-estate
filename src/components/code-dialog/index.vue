@@ -2,11 +2,11 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-02 16:29:52
- * @LastEditTime: 2022-04-06 11:31:39
+ * @LastEditTime: 2022-04-08 18:45:43
  * @LastEditors: HanYongHui
 -->
 <template>
-  <view class="dialog-warp" v-show="props.show" @click="close">
+  <view class="dialog-warp" v-show="!show" @click="close">
     <view class="dialog_content">
       <view class="code-content">
         <image
@@ -20,7 +20,7 @@
         />
         <image class="code" :src="codeUrl" mode="aspectFit"></image>
         <view class="code-tip">
-          <text>扫描二维码，查看户型详情</text>
+          <text>扫描二维码，查看户型详情{{ show }}</text>
         </view>
       </view>
     </view>
@@ -40,6 +40,7 @@ const props = defineProps({
 });
 const emit = defineEmits(["update:show"]);
 const close = () => {
+  console.log("updateupdateupdate");
   emit("update:show", false);
 };
 </script>
