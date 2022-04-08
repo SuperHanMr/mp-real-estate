@@ -2,13 +2,27 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-02 16:29:52
- * @LastEditTime: 2022-04-02 18:35:28
+ * @LastEditTime: 2022-04-06 11:31:39
  * @LastEditors: HanYongHui
 -->
 <template>
   <view class="dialog-warp" v-show="props.show" @click="close">
     <view class="dialog_content">
-      <view class="dialog_content--head"> </view>
+      <view class="code-content">
+        <image
+          class="share-logo"
+          src="https://ali-image.dabanjia.com/static/mp/capsule-store/share/share_logo.png"
+        />
+        <view class="share-title">装修就找打扮家</view>
+        <image
+          class="share-b"
+          src="https://ali-image.dabanjia.com/static/mp/capsule-store/share/share_b.png"
+        />
+        <image class="code" :src="codeUrl" mode="aspectFit"></image>
+        <view class="code-tip">
+          <text>扫描二维码，查看户型详情</text>
+        </view>
+      </view>
     </view>
   </view>
 </template>
@@ -37,44 +51,72 @@ const close = () => {
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   // transition: 0.3s;
 
   .dialog_content {
-    width: 466rpx;
-    height: 726rpx;
+    width: 648rpx;
+    background: #fff6f4;
+    border-radius: 24rpx;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: url("https://ali-image.dabanjia.com/static/mp/capsule-store/share/share_bg.png");
+    background-size: contain;
+    padding-bottom: 46rpx;
 
-    .dialog_content--head {
-      width: 100%;
-      height: 162rpx;
+    .code-content {
+      margin-top: 88rpx;
+      width: 580rpx;
+      height: 782rpx;
+      background: #ffffff;
+      border-radius: 20px;
+      position: relative;
       display: flex;
+      flex-direction: column;
       align-items: center;
 
-      .avatar-image {
-        margin-left: 40rpx;
-        width: 68rpx;
-        height: 68rpx;
+      .share-logo {
+        position: absolute;
+        left: 50%;
+        top: 6rpx;
+        height: 164rpx;
+        width: 164rpx;
+        transform: translate(-50%, -50%);
       }
 
-      .describe {
-        margin-left: 16rpx;
-        display: flex;
-        flex-direction: column;
-        text:nth-child(1) {
-          font-weight: bold;
-          font-size: 28rpx;
-          line-height: 40rpx;
-          /* identical to box height */
-          color: #333333;
-        }
-        text:nth-child(2) {
-          font-weight: 400;
-          font-size: 22rpx;
-          line-height: 30rpx;
-          color: #999999;
-        }
+      .share-title {
+        margin-top: 108rpx;
+        font-size: 44rpx;
+        color: #333333;
+        font-weight: 500;
       }
-    }
-    .dialog_content--code {
+
+      .share-b {
+        position: absolute;
+        top: 142rpx;
+        right: 98rpx;
+        width: 50rpx;
+        height: 44rpx;
+      }
+
+      .code {
+        width: 357rpx;
+        height: 360rpx;
+        border-radius: 50%;
+        border: 1rpx solid #f5f5f5;
+        margin-top: 118rpx;
+      }
+
+      .code-tip {
+        margin-top: 40rpx;
+        font-weight: 400;
+        color: #333333;
+        font-size: 24rpx;
+      }
     }
   }
 }

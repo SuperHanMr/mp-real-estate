@@ -1,9 +1,10 @@
-// import { Toast } from 'vant'
 import axios, { AxiosInstance, AxiosRequestConfig, } from 'axios'
 // @ts-ignore
 import buildUrl from "axios/lib/helpers/buildURL";
 // @ts-ignore
 import settle from 'axios/lib/core/settle'
+import { useUserInfoHooks } from "../hoosk/index";
+const { storeData } = useUserInfoHooks()
 type RequestInfo = {
   config: AxiosRequestConfig;
   resolve: (value: any) => void;
@@ -26,8 +27,8 @@ function createRequest(baseURL: string): Request {
   // 创建axios实例
   const service: AxiosInstance = axios.create({
     baseURL: baseURL || "/",
-    timeout: 100000
-    // withCredentials: true
+    timeout: 10000,
+    withCredentials: true
   })
   function getRequestKey(config: AxiosRequestConfig) {
     return [
@@ -64,9 +65,7 @@ function createRequest(baseURL: string): Request {
   service.interceptors.request.use(
     config => {
       // 设置登录Token
-      // if (requestConfig.needToken) {
-      //   config.headers.accessToken = requestConfig.accessToken;
-      // }
+      if (storeData.token) (config.headers as any).accessToken = storeData.token
       return config
     },
     error => {
@@ -85,16 +84,16 @@ function createRequest(baseURL: string): Request {
       }
     },
     error => {
-      if (error.response.status === 401) {
-        return new Promise((resolve, reject) => {
-          failRequestList.push({
-            config: error.config,
-            resolve: resolve,
-            reject: reject
-          });
-        })
-      }
       console.error("------response-error-----", error);
+      // if (error.response.status === 401) {
+      //   return new Promise((resolve, reject) => {
+      //     failRequestList.push({
+      //       config: error.config,
+      //       resolve: resolve,
+      //       reject: reject
+      //     });
+      //   })
+      // }
       return Promise.reject(error.response);
     }
   )
@@ -109,6 +108,7 @@ function createRequest(baseURL: string): Request {
           switch (err.status) {
             case 401:
               // 跳转登录页
+              // uni.reLaunch({ url: '/pages/login/index' })
               break
             default:
               if (err.data && err.data.message) {
@@ -149,6 +149,8 @@ function createRequest(baseURL: string): Request {
 }
 axios.defaults.adapter = function (config: AxiosRequestConfig) {
   return new Promise((resolve, reject) => {
+
+
     uni.request({
       method: config.method?.toUpperCase() as any,
       url: config.baseURL + buildUrl(config.url, config.params, config.paramsSerializer),

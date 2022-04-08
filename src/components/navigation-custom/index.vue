@@ -2,24 +2,54 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-01 16:13:40
- * @LastEditTime: 2022-04-01 17:46:44
+ * @LastEditTime: 2022-04-02 19:01:54
  * @LastEditors: HanYongHui
 -->
 <template>
   <view
     class="navigation-bar"
+    :class="{
+      white: props.theme === 'white',
+      transparent: props.theme === 'transparent',
+    }"
     :style="`padding-top: ${storeData.statusBarHeight}px;`"
   >
     <view class="navigation-bar_content">
-      <slot name="content"></slot>
+      <view class="back-icon" @click="backPage">
+        <image :src="backIcon" />
+      </view>
+      <text class="title">{{ props.title }}</text>
     </view>
-    <view :style="`height:${44}px`"></view>
   </view>
 </template>
 <script lang="ts" setup>
-import { defineComponent } from "vue";
+import { defineComponent, defineProps, computed } from "vue";
+import type { PropType } from "vue";
+import whiteBackIcon from "../../images/back-icon.png";
+import blackBackIcon from "../../images/black-back-icon.png";
+
 import { useUserInfoHooks } from "../../hoosk/index";
 const { storeData } = useUserInfoHooks();
+type Theme = "white" | "black" | "transparent";
+const props = defineProps({
+  backgroundColor: {
+    type: String,
+  },
+  title: {
+    type: String,
+  },
+  theme: {
+    type: String as PropType<Theme>,
+    default: "white",
+  },
+});
+
+const backIcon = computed(() => {
+  return props.theme === "transparent" ? whiteBackIcon : blackBackIcon;
+});
+const backPage = () => {
+  uni.navigateBack({ delta: 1 });
+};
 </script>
 <style lang="scss" scoped>
 .navigation-bar {
@@ -27,11 +57,49 @@ const { storeData } = useUserInfoHooks();
   position: fixed;
   top: 0;
   width: 100%;
+  background: transparent;
+  transition: 0.3s;
   .navigation-bar_content {
     width: 100%;
     height: 44px;
     display: flex;
     line-height: 44px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    line-height: 44px;
+    font-size: 34rpx;
+    font-weight: bold;
+
+    .back-icon {
+      left: 0;
+      position: absolute;
+      height: 44px;
+      width: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      image {
+        width: 24rpx;
+        height: 48rpx;
+      }
+    }
+
+    text {
+      color: #fff;
+    }
   }
+}
+
+.white {
+  background-color: #fff;
+  text {
+    color: #333 !important;
+  }
+}
+
+.transparent {
+  color: #fff;
+  background-color: transparent;
 }
 </style>
