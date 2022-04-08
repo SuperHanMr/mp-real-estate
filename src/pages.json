@@ -50,6 +50,13 @@
 			}
 		},
 		{
+			"path" : "pages/clue/signup-list/signup-detail",
+			"style": {
+				"navigationBarTitleText": "报名详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/estate-detail/index",
 			"style": {
 				"navigationStyle": "custom",
