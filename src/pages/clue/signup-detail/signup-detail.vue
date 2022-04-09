@@ -2,18 +2,20 @@
 	<navigation-custom title="报名详情" :theme="theme" ></navigation-custom>
 
 	<view class="container">
-		<view class="bgImg"></view>
+		<!-- <view class="bgImg" ></view> -->
+		<img class="bgImg" @click="toBack" :src="data.coverPictureInfoVO.coverImageUrl" alt="">
 		<view class="header-container">
-			<view class="projectName">
-				墙体改一体  妙变二居室
+			<view class="header-bg"></view>
+			<view class="projectName">{{data.schemeName}}</view>
+			<view class="project-item">
+				<image src="../../../images/code-icon.png" mode=""></image>
+				<text>{{data.houseWithSchemeInfo.houseTypeName}}</text>
 			</view>
 			<view class="project-item">
 				<image src="../../../images/code-icon.png" mode=""></image>
-				<text>北区1-3栋</text>
-			</view>
-			<view class="project-item">
-				<image src="../../../images/code-icon.png" mode=""></image>
-				<text>3室1厅1厨1卫｜124㎡｜东北</text>
+				<text>
+					<text>{{data.houseWithSchemeInfo.specification}}</text>
+				</text>
 			</view>
 		</view>
 		<view class="signup-detial-container">
@@ -26,7 +28,7 @@
 					<text class="left">报名编号</text>
 					<view class="right">
 						<text>628278498723647928364</text>
-						<view class="button">复制</view>
+						<view class="button" @click="duplicate(628278498723647928364)" >复制</view>
 					</view>
 				</view>
 
@@ -43,15 +45,15 @@
 				<text>装修报价</text>
 			</view>
 			<view class="renovation-content">
-				<view class="updateMaterial-text">升级材料</view>
-				<view class="content">
-					这里的文字不建议过多这里的文字不建议过多这里这里这里的文字不建议过多这里的文字不建议过多这里这里...
+				<view v-for="(materialItem,index) in data.productBagVOS" :key="index" @click="gotoNextPage(materialItem)">
+					<view class="updateMaterial-text">{{materialItem.productBagName.productBagName}}</view>
+					<view class="content">{{materialItem.bagDesc.bagPackageDesc}}</view>
+					<view class="price">
+						<text style="font-size:26rpx">￥</text>
+						<text>{{materialItem.buyItNow.buyItNow}}</text>
+					</view>
 				</view>
-				<view class="price">
-					<text>￥</text>
-					<text>9999999.99</text>
-				</view>
-				<view class="showMoreMaterial">
+				<view class="showMoreMaterial" >
 					<image  class="iconImg" src="../../../images/code-icon.png" />
 					<text>查看套餐所含全部商品</text>
 				</view>
@@ -62,13 +64,15 @@
 </template>
 
 <script lang="ts">
-	import{defineComponent,ref} from "vue"
+	import{defineComponent,reactive,ref, toRefs} from "vue"
 	import{
 		onPullDownRefresh,
 		onPageScroll,
 		onReachBottom,
 		onLoad,
+		onShow,
 	} from"@dcloudio/uni-app";
+	import {getSignupRecordDetail,SignupRecordDetail,MaterialItem} from "../../../api/clue"
 	// import navicationCustom from "../../../components/navigation-custom/index.vue"
 	// import loadMore from "../../../components/load-more/index.vue";
 	export default defineComponent({
@@ -79,17 +83,62 @@
 
 		},
 		setup(){
-			// const theme = ref<"white" | "black" | "transparent">("transparent");
-			const theme = ref<"pink" | "black" | "transparent">("pink");
-			onPageScroll((e) => {
-			  if (e.scrollTop > 64) {
-			    theme.value = "pink";
-			  } else {
-			    theme.value = "transparent";
-			  }
+		  const theme = ref<"white" | "black" | "transparent">("transparent");
+			const id =ref<number>(0)
+			const signupDetailInfo= reactive<{data:SignupRecordDetail}>({data:{} as SignupRecordDetail})
+			onLoad((e: any) => {
+				console.log("---onLoad---", e);
+				id.value = +e.id
+				console.log(id.value)
+				reqSignupRecordDetail()
 			});
+			onPageScroll((e) => {
+				if (e.scrollTop > 64) {
+					theme.value = "white";
+				} else {
+					theme.value = "transparent";
+				}
+			});
+			const reqSignupRecordDetail=async()=>{
+				try {
+					const res = await getSignupRecordDetail(id.value)
+					console.log("res",res)
+					if(!res.data) return
+					signupDetailInfo.data =res.data
+					console.log("signupDetailInfo.data==",signupDetailInfo.data )
+				} catch (error) {
+					console.log(error)
+				}
+			}
+			const duplicate= (num:number)=>{
+				uni.setClipboardData({
+					data:`${num}`,
+					success(res){
+						uni.showToast({
+							title:"报名编号以复制",
+							icon:"none",
+							duration:1000
+						})
+					}
+				})
+			}
+			const gotoNextPage=(materialItem:MaterialItem)=>{
+				// uni.$emit("materialUpgradeInfo",materialItem)
+				uni.navigateTo({
+					url:`../material-upgrade/material-upgrade`
+				})
+			}
+
+			const toBack=()=>{
+				uni.navigateBack({})
+			}
 			return {
-				theme
+				theme,
+				toBack,
+				signupDetailInfo,
+				duplicate,
+				gotoNextPage,
+				...toRefs(signupDetailInfo),
 			}
 		}
 
@@ -98,20 +147,41 @@
 
 <style lang="scss" scoped>
 	.container{
+		width: 100%;
+		height: 100%;
+		background: #fff;
+		position: relative;
 		.bgImg{
 			width: 100%;
-			height: 562rpx;
-			background-color: pink;
+			height: 462rpx;
+			// background-repeat: no-repeat;
+			// background-size: contain;
+			.img{
+				width: 100%;
+				height: 100%;
+			}
 		}
 		.header-container{
 			width: 100%;
 			margin-top: -32rpx;
-			height: 300rpx;
+			// height: 300rpx;
 			background: linear-gradient(180deg, rgba(255, 255, 255, 0.81) 0%, rgba(242, 242, 242, 0.9) 100%);
 			border: 2rpx solid #FFFFFF;
 			box-sizing: border-box;
 			border-radius: 32rpx 32rpx 0 0;
 			padding: 48rpx 40rpx;
+			position: relative;
+			.header-bg{
+				position: absolute;
+				top: 0;
+				right: 0;
+				width: 100%;
+				height: 32rpx;
+				border-radius: 32rpx 32rpx 0 0;
+				filter: blur(12rpx);
+				background: linear-gradient(180deg, rgba(255, 255, 255, 0.81) 0%, rgba(242, 242, 242, 0.9) 100%);
+
+			}
 			.projectName{
 				height: 56rpx;
 				line-height: 56rpx;
