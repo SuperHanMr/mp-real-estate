@@ -12,7 +12,8 @@
 			"path": "pages/home/index",
 			"style": {
 				"navigationBarTitleText": "楼盘",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": true,
+				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
 
@@ -63,8 +64,7 @@
 		{
 			"path": "pages/estate-detail/index",
 			"style": {
-				"navigationStyle": "custom",
-				"enablePullDownRefresh": true
+				"navigationStyle": "custom"
 			}
 		},
 		{

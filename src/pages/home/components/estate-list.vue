@@ -2,33 +2,49 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 17:47:35
- * @LastEditTime: 2022-04-01 17:27:58
+ * @LastEditTime: 2022-04-08 16:22:41
  * @LastEditors: HanYongHui
 -->
 <template>
   <view class="house-item" @click="eventEstateDetail">
-    <image class="cover-iamge" :src="imageUrl" mode="scaleToFill" />
+    <image class="cover-iamge" :src="item.url" mode="scaleToFill" />
     <view class="house-item_right">
       <view class="house-item_right--content">
-        <text class="title">北京新天地五期北京</text>
-        <text class="house-item_address">北京朝阳区管庄朝阳路5号院</text>
-        <text class="tag">10个户型｜130个装修方案</text>
+        <text class="title">{{ item.name }}</text>
+        <text class="house-item_address"
+          >{{ item.provinceName }}{{ item.cityName }}{{ item.districtName
+          }}{{ item.address }}</text
+        >
+        <text class="tag"
+          >{{ item.houseTypeNum }}个户型｜{{ item.schemeNum }}个装修方案</text
+        >
       </view>
     </view>
   </view>
 </template>
 <script lang="ts" setup>
 import { defineProps, watch, reactive } from "vue";
+import type { PropType } from "vue";
+
+type EstateItem = {
+  id: number;
+  name: string; //楼盘名称,
+  url: string; //楼盘封面,
+  houseTypeNum: number; //户型个数,
+  schemeNum: number; //方案个数,
+  provinceName: string; //省,
+  cityName: string; //市,
+  districtName: string; //区,
+  address: string; //楼盘详细地址
+};
 const props = defineProps({
   item: {
-    type: Object,
+    type: Object as PropType<EstateItem>,
     required: true,
   },
 });
-const imageUrl: string =
-  "https://ali-res-test.dabanjia.com/res/20220211/14/1644561846245_7512%240002.jpg";
 const eventEstateDetail = () => {
-  uni.navigateTo({ url: "/pages/estate-detail/index?id=111" });
+  uni.navigateTo({ url: `/pages/estate-detail/index?id=${props.item.id}` });
 };
 </script>
 <style lang="scss" scoped>
@@ -55,6 +71,7 @@ const eventEstateDetail = () => {
       flex-direction: column;
       position: relative;
       .title {
+        width: 100%;
         font-weight: bold;
         font-size: 32rpx;
         line-height: 44rpx;
@@ -62,11 +79,15 @@ const eventEstateDetail = () => {
       }
 
       .house-item_address {
+        width: calc(100% - 32rpx);
         margin-top: 6rpx;
         font-weight: 400;
         font-size: 24rpx;
         line-height: 34rpx;
         color: #666666;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .tag {
         position: absolute;

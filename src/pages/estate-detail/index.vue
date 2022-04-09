@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-06 11:27:15
+ * @LastEditTime: 2022-04-08 18:42:14
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -57,7 +57,6 @@
             </view>
           </view>
         </view>
-        <load-more :loadType="loadType" />
       </view>
     </view>
   </view>
@@ -73,38 +72,30 @@ import {
 } from "@dcloudio/uni-app";
 import navigationCustom from "../../components/navigation-custom/index.vue";
 import { useUserInfoHooks } from "../../hoosk/index";
-import loadMore from "../../components/load-more/index.vue";
+import { useEstateDetailHook } from "./hooks/index";
 import codeDialog from "../../components/code-dialog/index.vue";
 export default defineComponent({
   name: "",
   components: {
     navigationCustom,
-    loadMore,
     codeDialog,
   },
   setup() {
-    const { storeData } = useUserInfoHooks();
-
-    const loadType = ref<"succeed" | "error" | "load" | "complete">("succeed");
-
-    onLoad((e) => {
+    const {
+      reuqestEstateDetail,
+      reuqestHouseTypeList,
+      estateDetail,
+      houseTypeList,
+    } = useEstateDetailHook();
+    onLoad((e: any) => {
       console.log("---onLoad---", e);
-    });
-    onPullDownRefresh(() => {
-      setTimeout(() => {
-        uni.stopPullDownRefresh();
-      }, 500);
-    });
-    onReachBottom(() => {
-      if (loadType.value === "complete" || loadType.value === "load") {
-        return;
-      }
-      loadType.value = "load";
-      setTimeout(() => {
-        loadType.value = "error";
-      }, 1000);
+      reuqestEstateDetail(e.id);
+      reuqestHouseTypeList(e.id);
     });
 
+    onPullDownRefresh(() => {
+      // uni.stopPullDownRefresh();
+    });
     const theme = ref<"white" | "black" | "transparent">("transparent");
     onPageScroll((e) => {
       if (e.scrollTop > 64) {
@@ -117,8 +108,13 @@ export default defineComponent({
       "https://ali-res-test.dabanjia.com/res/20220211/14/1644561850441_1874%240be4eaff-1611-4087-9d91-57dbfe053ac0.jpg";
 
     const codeDialogShow = ref<boolean>(false);
-
-    return { imageUrl, loadType, theme, codeDialogShow };
+    return {
+      imageUrl,
+      theme,
+      codeDialogShow,
+      estateDetail,
+      houseTypeList,
+    };
   },
 });
 </script>
