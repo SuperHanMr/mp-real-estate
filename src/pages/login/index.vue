@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:41:39
- * @LastEditTime: 2022-04-08 16:33:04
+ * @LastEditTime: 2022-04-09 15:37:53
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -22,8 +22,7 @@
 import { defineComponent, ref, watch } from "vue";
 import { useUserInfoHooks } from "../../hoosk/index";
 import { useLoginHooks } from "./hooks/index";
-const { storeData } = useUserInfoHooks();
-const { requestRegister } = useLoginHooks();
+const { requestLogin, requestRegister } = useLoginHooks();
 const rawDataStr = ref<string>("");
 const signatureStr = ref<string>("");
 const getUserInfo = () => {
@@ -45,6 +44,29 @@ const bindgetPhoneNumber = (res: any) => {
     uni.switchTab({ url: "/pages/home/index" });
   });
 };
+const login = () => {
+  uni.login({
+    provider: "weixin",
+    success: ({ code }) => {
+      requestLogin(code).then(({ data }) => {
+        switch (data?.isRegister) {
+          case 0:
+            // 未注册
+            break;
+          case 1:
+            uni.setStorageSync("name", data?.name);
+            uni.setStorageSync("role", data?.role);
+            uni.switchTab({ url: "/pages/home/index" });
+            break;
+          case 2:
+            // 处理封禁
+            break;
+        }
+      });
+    },
+  });
+};
+login();
 </script>
 <style lang="scss" scoped>
 .login-warp {

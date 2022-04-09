@@ -112,7 +112,7 @@ function createRequest(baseURL: string): Request {
           switch (err.status) {
             case 401:
               // 跳转登录页
-              // uni.reLaunch({ url: '/pages/login/index' })
+              uni.reLaunch({ url: '/pages/login/index' })
               break
             default:
               if (err.data && err.data.message) {

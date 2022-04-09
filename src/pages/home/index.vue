@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-08 16:37:14
+ * @LastEditTime: 2022-04-09 15:33:14
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -32,6 +32,15 @@ export default defineComponent({
     const { requestEstateList, list, loadType } = useEstateListHook();
     onLoad((e) => {
       requestEstateList();
+      if (uni.getStorageSync("role") === 2) {
+        uni.setTabBarItem({
+          index: 1,
+          text: "我的",
+          iconPath: "/static/tab-image/my-un-icon.png",
+          selectedIconPath: "/static/tab-image/my-icon.png",
+        });
+        console.log("role", uni.getStorageSync("role"));
+      }
     });
     onShow(() => {});
     onPullDownRefresh(() => {
