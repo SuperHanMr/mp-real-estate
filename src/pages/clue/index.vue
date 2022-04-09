@@ -26,13 +26,14 @@
 			<swiper-item v-for="item1 in tabList" :key="item1.key">
 				<scroll-view
 					class="scroll-view"
-					scroll-y="true"
-					lower-threshold="100"
 					:enable-back-to-top="true"
+					lower-threshold="100"
+					scroll-y="true"
 					refresher-background="#FFF"
-					:refresher-enabled="true"
-					@scrolltoupper="refreshEvent"
-					@scrolltolower="refreshEvent"
+					:refresher-triggered="triggerd"
+					@refresherrefresh="onRefresh"
+					refresher-enabled="true"
+					@scrolltolower="onLoadMore"
 				>
 					<view class="list-container" v-if="currentIndex==0">
 						<view class="item-container"
@@ -76,6 +77,7 @@
 							@click="gotoRegistrationDetailPage"
 						>
 							<view class="header" @click.stop="gotoMaterialPage">
+								<img class="img" src="../../images/clue_item_bg.png" alt="">
 								<view>
 									<view class="projectName">{{bowerItem.estateName}}</view>
 									<!-- 报名用户字段只有销售端出现 -->
@@ -119,6 +121,12 @@ export default defineComponent({
 		const currentIndex=ref<number>(0)
 		const browerList = ref<Array<BrowerItem>>([])
 		const signupList =ref<Array<SignupRecordItem>>([])
+		const triggerd =ref<boolean>(false)
+		const loading = ref<boolean>(false)
+		const tabList=[
+			{tabName:"报名记录",key:1},
+			{tabName:"浏览记录",key:2},
+		]
 		type Query = {
 			page: number[],
 			rows: number[],
@@ -135,50 +143,50 @@ export default defineComponent({
 
 			} as Query
 		)
-		const reqBrowerList= async()=>{
-			// debugger
-				try {
-					let params={
-						page:queryData.page[0],
-						rows:queryData.rows[0],
-						level:3
-					}
-					const res = await getClueBrowerList(params)
-					console.log("browerList====",	res )
-					if(!res.data) return
-					browerList.value = res.data.list
-					queryData.totalPage[0] = res.data.totalPage
-					queryData.rows[0] = res.data.rows
-					// queryData.page[0]++
-					console.log("browerList!!!!!!!!!!",browerList.value)
 
-
-				} catch (error) {
-					console.log("error!!",error)
-				}
-			}
 		const reqSignupRecordList = async()=>{
 			try {
 				let params:SignupParams={
-					page: queryData.page[1],
-					rows: queryData.rows[1],
+					page: queryData.page[0],
+					rows: queryData.rows[0],
 					consultantId: 1,//销售顾问id
 					userId: 1,//用户id
 					type: 2,//查询入口 （1-业务后台，2-小程序）
 					estateId: 0,//若为业务后台，需要添加此字段 全部楼盘传0，具体楼盘传具体id即可
 				}
+				loading.value = true
 				const res= await getSignupRecordList(params)
-				console.log("signupList====",res)
+				triggerd.value = false
 				if(!res.data) return
-				signupList.value=res.data.list
+				signupList.value=signupList.value.concat(res.data.list)
+				queryData.totalPage[0] = res.data.totalPage
+				queryData.rows[0] = res.data.rows
+				loading.value = false
+			} catch (error) {
+				console.log("error!!",error)
+			}
+		}
+		const reqBrowerList= async()=>{
+		// debugger
+			try {
+				let params={
+					page:queryData.page[1],
+					rows:queryData.rows[1],
+					level:3
+				}
+				loading.value =true
+				const res = await getClueBrowerList(params)
+				triggerd.value = false
+				if(!res.data) return
+				browerList.value = browerList.value.concat(res.data.list)
 				queryData.totalPage[1] = res.data.totalPage
 				queryData.rows[1] = res.data.rows
+				loading.value = false
 			} catch (error) {
 				console.log("error!!",error)
 			}
 		}
 		onShow(()=>{
-			console.log("1111111")
 			if(currentIndex.value==0){
 				reqSignupRecordList()
 			}else{
@@ -203,10 +211,7 @@ export default defineComponent({
 			})
 		}
 
-		const tabList=[
-			{tabName:"报名记录",key:1},
-			{tabName:"浏览记录",key:2},
-		]
+
 		const changTab=(index:number)=>{
 			currentIndex.value =index
 		}
@@ -230,8 +235,37 @@ export default defineComponent({
 		}
 		const formatDate = (time: number) =>
        moment(time).format("YYYY-MM-DD  HH:mm:ss")
-		const refreshEvent=()=>{
 
+		// 上拉加载
+		const onLoadMore=()=>{
+			console.log("上拉加载！！！")
+			if(loading.value) return
+			if(currentIndex.value==0){
+				if(queryData.page[0]>=queryData.totalPage[0])return
+				queryData.page[0]++
+				reqSignupRecordList()
+			}else{
+				if(queryData.page[1]>=queryData.totalPage[1]) return
+				queryData.page[1]++
+				reqBrowerList()
+			}
+		}
+		// 下拉刷新
+		const onRefresh=()=>{
+			console.log("下拉刷新！！！")
+			if(loading.value) return
+			triggerd.value = true
+			if(currentIndex.value ==0){
+				signupList.value=[]
+				queryData.page[0] = 1
+				queryData.totalPage[0] = 1
+				reqSignupRecordList()
+			}else{
+				browerList.value =[]
+				queryData.page[1]=1
+				queryData.totalPage[1]=1
+				reqBrowerList()
+			}
 		}
     return {
 			bgImg,
@@ -246,7 +280,10 @@ export default defineComponent({
 			// dataList,
 			browerList,
 			signupList,
-			refreshEvent,
+			onLoadMore,
+			onRefresh,
+			triggerd,
+			loading,
 		};
   },
 });
@@ -288,13 +325,12 @@ export default defineComponent({
 		display: flex;
 		flex: 1;
 		flex-direction: column;
-		// background-color: pink;
 		swiper-item{
 			height: 100%;
 			overflow: auto;
 			.scroll-view{
 				flex: 1;
-				overflow: auto;
+				height: 100%;
 				.list-container{
 					display: flex;
 					flex-flow: column nowrap;
