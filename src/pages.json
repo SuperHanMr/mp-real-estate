@@ -3,16 +3,21 @@
 		{
 			"path": "pages/login/index",
 			"style": {
+				"navigationBarBackgroundColor": "#ffffff",
 				"navigationBarTitleText": "登录"
 			}
 		},
+
 		{
 			"path": "pages/home/index",
 			"style": {
 				"navigationBarTitleText": "楼盘",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": true,
+				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
+
+
 		{
 			"path": "pages/clue/index",
 			"style": {
@@ -50,10 +55,16 @@
 			}
 		},
 		{
+			"path" : "pages/clue/signup-list/signup-detail",
+			"style": {
+				"navigationBarTitleText": "报名详情",
+				"navigationStyle": "custom"
+			}
+		},
+		{
 			"path": "pages/estate-detail/index",
 			"style": {
-				"navigationStyle": "custom",
-				"enablePullDownRefresh": true
+				"navigationStyle": "custom"
 			}
 		},
 		{
@@ -103,10 +114,14 @@
 		"fontSize": "20px",
 		"list": [
 			{
+				"iconPath":"static/tab-image/tab-estate-un-icon.png",
+				"selectedIconPath":"static/tab-image/tab-estate-icon.png",
 				"pagePath": "pages/home/index",
 				"text": "楼盘"
 			},
 			{
+				"iconPath":"static/tab-image/tab-clue-un-icon.png",
+				"selectedIconPath":"static/tab-image/tab-clue-icon.png",
 				"pagePath": "pages/clue/index",
 				"text": "线索"
 			}

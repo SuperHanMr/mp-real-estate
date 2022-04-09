@@ -2,12 +2,12 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-07 10:35:33
+ * @LastEditTime: 2022-04-09 15:33:14
  * @LastEditors: HanYongHui
 -->
 <template>
   <view class="list">
-    <estate-list v-for="item in 10" :key="item" :item="{}" />
+    <estate-list v-for="item in list" :key="item.id" :item="item" />
     <load-more :loadType="loadType" />
   </view>
 </template>
@@ -21,7 +21,7 @@ import {
 } from "@dcloudio/uni-app";
 import estateList from "./components/estate-list.vue";
 import loadMore from "../../components/load-more/index.vue";
-
+import { useEstateListHook } from "./hooks/index";
 export default defineComponent({
   name: "",
   components: {
@@ -29,34 +29,33 @@ export default defineComponent({
     loadMore,
   },
   setup() {
-    const loadType = ref<"succeed" | "error" | "load" | "complete">("succeed");
-
+    const { requestEstateList, list, loadType } = useEstateListHook();
     onLoad((e) => {
-      console.log("---onLoad---", e);
+      requestEstateList();
+      if (uni.getStorageSync("role") === 2) {
+        uni.setTabBarItem({
+          index: 1,
+          text: "我的",
+          iconPath: "/static/tab-image/my-un-icon.png",
+          selectedIconPath: "/static/tab-image/my-icon.png",
+        });
+        console.log("role", uni.getStorageSync("role"));
+      }
     });
-
-    console.log("---------.env配置---------");
-    console.log(import.meta.env.VITE_URL_BASE_API);
-
     onShow(() => {});
-
     onPullDownRefresh(() => {
-      setTimeout(() => {
-        uni.stopPullDownRefresh();
-      }, 500);
+      requestEstateList();
     });
-
     onReachBottom(() => {
       if (loadType.value === "complete") {
         return;
       }
       loadType.value = "load";
-      setTimeout(() => {
-        loadType.value = "error";
-      }, 1000);
+      requestEstateList(true);
     });
     return {
       loadType,
+      list,
     };
   },
 });
@@ -66,7 +65,6 @@ export default defineComponent({
   height: 100%;
   width: 100%;
   background: #fff;
-  padding-top: 32rpx;
 }
 </style>
 

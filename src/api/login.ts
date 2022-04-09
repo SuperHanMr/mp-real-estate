@@ -2,7 +2,7 @@
  * @Description: login and register
  * @Author: HanYongHui
  * @Date: 2022-04-06 16:48:34
- * @LastEditTime: 2022-04-07 18:24:48
+ * @LastEditTime: 2022-04-08 14:25:48
  * @LastEditors: HanYongHui
  */
 import createRequest from "../utils/create-request"
@@ -11,6 +11,7 @@ const request = createRequest(baseURL as string)
 export type LoginRes = {
   name: string //名字,
   role: number //角色
+  isRegister: number,
 }
 
 export function login(code: string) {

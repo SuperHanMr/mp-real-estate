@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-01 16:13:40
- * @LastEditTime: 2022-04-02 19:01:54
+ * @LastEditTime: 2022-04-08 16:29:30
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -15,7 +15,7 @@
     :style="`padding-top: ${storeData.statusBarHeight}px;`"
   >
     <view class="navigation-bar_content">
-      <view class="back-icon" @click="backPage">
+      <view class="back-icon" @click="backPage" v-if="isBack">
         <image :src="backIcon" />
       </view>
       <text class="title">{{ props.title }}</text>
@@ -41,6 +41,10 @@ const props = defineProps({
   theme: {
     type: String as PropType<Theme>,
     default: "white",
+  },
+  isBack: {
+    type: Boolean,
+    default: true,
   },
 });
 

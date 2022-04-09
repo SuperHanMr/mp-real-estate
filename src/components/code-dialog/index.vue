@@ -2,11 +2,15 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-02 16:29:52
- * @LastEditTime: 2022-04-06 11:31:39
+ * @LastEditTime: 2022-04-09 10:55:51
  * @LastEditors: HanYongHui
 -->
 <template>
-  <view class="dialog-warp" v-if="props.show" @click="close">
+  <view
+    class="dialog-warp"
+    @click="close"
+    :style="!show ? 'display: none;' : ''"
+  >
     <view class="dialog_content">
       <view class="code-content">
         <image
@@ -46,6 +50,7 @@ const props = defineProps({
 });
 const emit = defineEmits(["update:show"]);
 const close = () => {
+  console.log("updateupdateupdate");
   emit("update:show", false);
 };
 </script>
