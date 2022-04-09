@@ -6,7 +6,7 @@
  * @LastEditors: HanYongHui
 -->
 <template>
-  <view class="dialog-warp" v-show="props.show" @click="close">
+  <view class="dialog-warp" v-if="props.show" @click="close">
     <view class="dialog_content">
       <view class="code-content">
         <image
@@ -28,6 +28,12 @@
 </template>
 <script lang="ts" setup>
 import { defineComponent, defineProps, defineEmits } from "vue";
+import {
+  onLoad,
+  onPullDownRefresh,
+  onReachBottom,
+  onPageScroll,
+} from "@dcloudio/uni-app";
 const props = defineProps({
   codeUrl: {
     type: String,

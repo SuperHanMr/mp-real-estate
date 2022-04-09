@@ -8,6 +8,7 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
 import { useUserInfoHooks } from "./hoosk/index";
+
 onLaunch(() => {
   console.log("App Launch");
   const { storeData } = useUserInfoHooks();
@@ -18,17 +19,17 @@ onLaunch(() => {
     },
   });
 
-  try {
-    const token: string = uni.getStorageSync("token");
-    if (token) {
-      // 拿到token请求 获取用户信息
-      storeData.token = token;
-      uni.switchTab({ url: "/pages/home/index" });
-      // uni.navigateTo({ url: "/pages/estate-detail/index" });
-    }
-  } catch (e) {
-    console.log("获取token失败");
-  }
+  // try {
+  //   const token: string = uni.getStorageSync("token");
+  //   if (token) {
+  //     // 拿到token请求 获取用户信息
+  //     storeData.token = token;
+  //     uni.switchTab({ url: "/pages/home/index" });
+  //     // uni.navigateTo({ url: "/pages/estate-detail/index" });
+  //   }
+  // } catch (e) {
+  //   console.log("获取token失败");
+  // }
 });
 onShow(() => {});
 onHide(() => {});

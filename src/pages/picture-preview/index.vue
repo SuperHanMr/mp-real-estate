@@ -1,20 +1,19 @@
 <template>
+<!-- <navigation-custom title="相册" theme="transparent" /> -->
+
   <view class="picture-preview">
+    <view class="back">
+      <image :src="whiteBack" alt="" @click="backPage"/>
+    </view>
     <view class="content">
-      <swiper class="swiper" :current="0" @change="swiperChange">
-        <swiper-item>
+      <swiper class="swiper"
+        :current="currentIndex"
+        @change="swiperChange"
+        :style="{ height: swiperHeight + 'px' }"
+      >
+        <swiper-item v-for="(item,index) of imgList.list" :key="index">
           <view class="swiper-item uni-bg-red">
-          <image src="https://ali-res-test.dabanjia.com/res/20220322/15/1647934285886_9412%2403.jpg" mode="widthFix" />
-          </view>
-        </swiper-item>
-        <swiper-item>
-          <view class="swiper-item uni-bg-red">
-          <image src="https://ali-res-test.dabanjia.com/res/20220322/15/1647934285886_9412%2403.jpg" mode="widthFix" />
-          </view>
-        </swiper-item>
-        <swiper-item>
-          <view class="swiper-item uni-bg-red">
-          <image src="https://ali-res-test.dabanjia.com/res/20220322/15/1647934285886_9412%2403.jpg" mode="widthFix" />
+          <image :id="'content-wrap' + index" :src="item" mode="widthFix" />
           </view>
         </swiper-item>
       </swiper>
@@ -22,17 +21,12 @@
     <view class="img-introduce">
       <view class="introduce-list">
         <scroll-view :scroll-x="true" class="scroll-list">
-          <view>封面2</view>
-          <view>客厅1</view>
-          <view>卧室4</view>
-          <view>卫生间1</view>
-          <view>户型图3</view>
+          <view v-for="(item,index) of imgList.tagList" :class="{active:currentTagIndex===index}" :key="index" @click="toTagImage(index)">{{item.name}}</view>
         </scroll-view>
       </view>
       <view class="introduce-content">
         <view class="content-text" :class="{'is-hidden':isHidden}">
-          说明字段示例说明字段示例说明字段示例说明字说字说明字段示例明字段示例说明字段示例说明字说字明说明字段示例明字段示例说明字段示例说明字说字明说明字段示例说明字段示例说明字段示例说明字说字说明字段示例明字段示例说明字段示例说明字说字明说明字段示例明字段示例说明字段示例说明字说字明说明字段示例说明字段示例说明字段示例说明字说字
-说明字段示例说明字段示例说明字段示例说明字说字
+          {{imgList.tagList[currentTagIndex].desc}}
         </view>
         <view class="control-text">
         <view class="text-btn" @click="openIntorduce">{{isHidden?'展开':'收起'}}</view>
@@ -42,23 +36,85 @@
   </view>
 </template>
 <script lang="ts">
-import { defineComponent, ref, PropType, resolveDirective } from "vue";
+import { onLoad } from "@dcloudio/uni-app";
+import { defineComponent, ref, onMounted, nextTick, computed } from "vue";
+import {getCaseDetailHooks} from "../case-detail/hooks/index"
+import whiteBack from "../../images/back-icon.png"
 export default defineComponent({
 
-  setup(props){
+  setup(props,context){
     const controlText = ref<String>('展开')
     const isHidden = ref<Boolean>(true)
+    const currentIndex = ref<number>(0)
+    const swiperHeight = ref<number>(0)
+    const currentTagIndex = computed(()=>{
+
+      return imgList.tagList.findIndex(item=>{
+        return currentIndex.value>=item.index&&currentIndex.value<item.index+item.length
+      })
+    })
+
+    const {imgList} = getCaseDetailHooks()
+
+    onLoad((e)=>{
+      e.index?currentIndex.value = +e.index:""
+
+    })
+
+    onMounted(()=>{
+
+        nextTick(()=>{
+        setSwiperHeight()
+      })
+    })
+
     const openIntorduce = () => {
       isHidden.value = !isHidden.value
     }
-    const swiperChange = <T>(e:T) => {
-      console.log(e)
+    const swiperChange = (e:any) => {
+      isHidden.value = true
+      currentIndex.value = e.detail.current
+      // swiperHeight.value = currentIndex.value*200
+      nextTick(()=>{
+        setSwiperHeight()
+      })
     }
+    const setSwiperHeight =() => {
+      let element = "#content-wrap" + currentIndex.value;
+      let query = uni.createSelectorQuery();
+      console.log(query)
+      query.select(element).boundingClientRect(()=>{});
+      query.exec((res) => {
+          console.log(res)
+
+        if (res && res[0]) {
+          console.log(res[0].height)
+          swiperHeight.value = res[0].height;
+        }
+      });
+    }
+
+    const toTagImage = (index:number) => {
+      currentIndex.value = imgList.tagList[index].index
+    }
+    const backPage = () => {
+  uni.navigateBack({ delta: 1 });
+};
+    // nextTick(()=>{
+    //     setSwiperHeight()
+    //   })
     return{
       controlText,
       isHidden,
+      currentIndex,
+      imgList,
+      currentTagIndex,
+      swiperHeight,
+      whiteBack,
       swiperChange,
-      openIntorduce
+      openIntorduce,
+      toTagImage,
+      backPage
     }
   }
 })
@@ -73,9 +129,23 @@ page{
   position: relative;
   display: flex;
   align-items: center;
+  .back{
+    position: absolute;
+    top: 88rpx;
+    height: 88rpx;
+    line-height: 88rpx;
+    left: 34rpx;
+    display: flex;
+    align-items: center;
+    image{
+      width: 24rpx;
+      height: 48rpx;
+    }
+  }
   .content{
     width: 100%;
     .swiper-item{
+
       image{
         width: 100%;
         max-height: 100%;
@@ -108,6 +178,12 @@ page{
           box-sizing: border-box;
           border-radius: 6px;
           margin-right: 24rpx;
+          color: #FFFFFF;
+          opacity: 0.6;
+        }
+        .active{
+          opacity: 1;
+          border: 0.5px solid #FFFFFF;
         }
     }
     .introduce-content{

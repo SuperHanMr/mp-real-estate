@@ -67,7 +67,8 @@
 			"path": "pages/case-detail/index",
 			"style": {
 				"navigationBarTitleText": "方案详情",
-				"navigationStyle": "custom"
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -83,7 +84,7 @@
 		"list": [
 			{
 				"name": "lyb",
-				"path": "/pages/case-detail/index",
+				"path": "/pages/house-detail/index",
 				"query": ""
 			}
 		]

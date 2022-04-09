@@ -9,34 +9,34 @@
   <navigation-custom title="方案详情" :theme="theme" />
   <view class="case-detail-warp">
     <!-- <img class="bac-image" :src="imageUrl" mode="aspectFill" /> -->
-    <swiper class="house-type_image--swiper" :autoplay="true" :current="currentIndex" @change="swiperChange">
-      <swiper-item>
-        <image class="bac-image" :src="imageUrl" mode="widthFix" />
+    <swiper class="house-type_image--swiper" :current="currentIndex" @change="swiperChange">
+      <swiper-item v-for="(item,index) of imgList.list" :key="index">
+        <image class="bac-image" :src="item" mode="widthFix" @click="toImage(index)"/>
       </swiper-item>
-      <swiper-item>
+      <!-- <swiper-item>
         <image class="bac-image" src="https://ali-res-test.dabanjia.com/res/20220322/15/1647934285886_9412%2403.jpg" mode="widthFix" />
       </swiper-item>
       <swiper-item>
         <image class="bac-image" src="https://ali-res-test.dabanjia.com/res/20220322/15/1647934285886_9412%2403.jpg" mode="widthFix" />
-      </swiper-item>
+      </swiper-item> -->
     </swiper>
     <view class="swiper-control">
       <view class="control-btn">
-        <view :class="{active:currentIndex<=1}" @click="changeCurrent(1)">效果图</view>
-        <view :class="{active:currentIndex>1}" @click="changeCurrent(2)">户型图</view>
+        <view :class="{active:currentIndex<=imgList.bannerNum}" @click="changeCurrent(0)">效果图</view>
+        <view :class="{active:currentIndex>imgList.bannerNum}" @click="changeCurrent(imgList.bannerNum+1)">户型图</view>
       </view>
       <view class="swiper-num">
-        3/30
+        {{currentIndex+1}}/{{imgList.list.length}}
       </view>
     </view>
     <view class="case-content-warp">
 
       <view class="case-detail_head">
         <view class="case-detail-title">
-        <text class="title">墙体改一体 秒变二居室墙体改一体秒变二居室</text>
+        <text class="title">{{caseDetail.schemeName}}</text>
         <view>
-        <view class="case-type_describe--info" v-for="(item, index) in 4" :key="index">
-              <text>灰色系</text>
+        <view class="case-type_describe--info" v-for="(item, index) in caseDetail.schemeTags" :key="index">
+              <text>{{item.schemeTagName}}</text>
             </view>
         </view>
       </view>
@@ -44,11 +44,11 @@
         <view class="case-detail_head--left">
           <view class="describe">
             <image src="../../images/estate-icon.png" />
-            <text>北区1-3栋 </text>
+            <text>{{caseDetail.houseWithSchemeInfo.houseTypeName}} </text>
           </view>
           <view class="describe">
             <image src="../../images/house-icon.png" />
-            <text>1室1厅1卫｜面积：69.5㎡ ｜东北 </text>
+            <text>{{caseDetail.houseWithSchemeInfo.specification}}｜面积：{{caseDetail.houseWithSchemeInfo.floorAreaInside}}㎡ ｜{{caseDetail.houseWithSchemeInfo.direction}} </text>
           </view>
         </view>
         <view class="case-detail_head--right" @click="codeDialogShow = true">
@@ -64,14 +64,15 @@
           <text>装修报价</text>
         </view>
         <view class="case-type-conetnt">
-          <view class="case-type-warp" v-for="item in 6" :key="item">
+          <view class="case-type-warp" v-for="(item,index) in caseDetail.productBagVOS" :key="index" :class="{'is-user':!storeData.role,'active-choose':hasGoods(index)}" @click="chooseGoods(item,index)">
             <image src="../../images/case-bg.png" class="case-bg" mode="" />
+            <image src="../../images/choose-bg.png" v-if="hasGoods(index)" class="choose-bg" mode="" />
             <view  class="case-content">
-              <text class="case-name">软装家具</text>
-              <text class="case-desc">这里的文字不建议过多这里的文字不建议是的打开方式过多这里这里</text>
+              <text class="case-name">{{item.productBagName.productBagName}}</text>
+              <text class="case-desc">{{item.bagDesc.bagPackageDesc}}</text>
               <view class="case-price">
                 <text class="price-symbol">¥</text>
-                <text class="price-num">232.00</text>
+                <text class="price-num">{{item.buyItNow.buyItNow}}</text>
               </view>
               <view class="case-btn">
                 <image src="../../images/goods-pack.png"></image>
@@ -79,8 +80,19 @@
               </view>
             </view>
           </view>
+          <view class="report" v-if="!storeData.role">
+            <view class="report-text">精选装修套餐 限时参团享优惠</view>
+            <view class="report-shadow"></view>
+            <view class="report-btn" @click="report">
+              <text class="text">立即报名</text>
+              <view class="symbol">
+                ¥<text class="num">{{goodPrice}}</text>
+              </view>
+              <image src="../../images/report-btn-bg.png" mode="" />
+            </view>
+          </view>
         </view>
-        <load-more :loadType="loadType" />
+        <!-- <load-more :loadType="loadType" /> -->
       </view>
     </view>
   </view>
@@ -91,7 +103,7 @@
   />
 </template>
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, computed, ref, watch, onMounted } from "vue";
 import {
   onLoad,
   onPullDownRefresh,
@@ -102,6 +114,8 @@ import navigationCustom from "@/components/navigation-custom/index.vue";
 import { useUserInfoHooks } from "../../hoosk/index";
 import loadMore from "@/components/load-more/index.vue";
 import codeDialog from "@/components/code-dialog/index.vue";
+import {getCaseDetailHooks} from "./hooks/index"
+import {productItem} from "../../api/case"
 export default defineComponent({
   name: "",
   components: {
@@ -111,29 +125,49 @@ export default defineComponent({
   },
   setup() {
     const { storeData } = useUserInfoHooks();
-    const imageUrl: string =
-    "https://ali-res-test.dabanjia.com/res/20220211/14/1644561850441_1874%240be4eaff-1611-4087-9d91-57dbfe053ac0.jpg";
+    console.log(storeData)
     const codeDialogShow = ref<boolean>(false);
     const loadType = ref<"succeed" | "error" | "load" | "complete">("succeed");
     const theme = ref<"white" | "black" | "transparent">("transparent");
+    //轮播banner激活控制
     const currentIndex = ref<number>(0)
+    const caseId = ref<number>(0)
+    const houseId = ref<number>(0)
+    const goodList = ref<productItem[]>([])
+    const goodPrice = computed(()=>{
+      let num = 0
+      goodList.value.forEach(item=>{
+        num = num+ item.buyItNow.buyItNow
+      })
+      return num
+    })
+    const {requestCaseDetail,requestReport,caseDetail,imgList} = getCaseDetailHooks()
     onLoad((e) => {
       console.log("---onLoad---", e);
+      // e.caseId="111"
+      if(e.caseId)caseId.value = +e.caseId
+      if(e.houseId)houseId.value = +e.houseId
+      requestCaseDetail(caseId.value)
+
     });
+    // onMounted(()=>{
+    // })
     onPullDownRefresh(() => {
+      goodList.value = []
+      requestCaseDetail(caseId.value)
       setTimeout(() => {
         uni.stopPullDownRefresh();
       }, 500);
     });
-    onReachBottom(() => {
-      if (loadType.value === "complete" || loadType.value === "load") {
-        return;
-      }
-      loadType.value = "load";
-      setTimeout(() => {
-        loadType.value = "error";
-      }, 1000);
-    });
+    // onReachBottom(() => {
+    //   if (loadType.value === "complete" || loadType.value === "load") {
+    //     return;
+    //   }
+    //   loadType.value = "load";
+    //   setTimeout(() => {
+    //     loadType.value = "error";
+    //   }, 1000);
+    // });
     onPageScroll((e) => {
       if (e.scrollTop > 64) {
         theme.value = "white";
@@ -146,22 +180,66 @@ export default defineComponent({
         current:number
       }
     }
-
+    watch(caseDetail, () => {
+      // goodList.value.push(caseDetail.value.productBagVOS[0])
+      chooseGoods(caseDetail.value.productBagVOS[0],0)
+    })
     const swiperChange = (e:swiper)=>{
-      console.log(e.detail.current)
       currentIndex.value = e.detail.current
     }
     const changeCurrent = (num:number) =>{
       currentIndex.value = num
     }
+    const chooseGoods = (item:productItem,index:number) =>{
+      let has = goodList.value.findIndex(item=>{
+        return item.index===index
+      })
+      if(has>=0){
+        goodList.value.splice(has,1)
+      }else{
+        item.index = index
+        goodList.value.push(item)
+      }
+
+    }
+    const hasGoods = (index:number) =>{
+      let num = goodList.value.findIndex(item=>{
+        return item.index===index
+      })
+      return num>=0
+    }
+    const toImage = (index:number) =>{
+      uni.navigateTo({
+        url:'/pages/picture-preview/index?index='+index,
+      })
+    }
+    const report = ()=>{
+      let data = {
+        estateId:houseId.value,
+        schemeId:caseId.value,
+        schemeSnapshot:JSON.parse(JSON.stringify(goodList.value)),
+        offerPrice:goodPrice.value,
+        schemeName:caseDetail.value.schemeName,
+
+      }
+      requestReport(data)
+    }
     return {
-      imageUrl,
+      // imageUrl,
       loadType,
       theme,
       codeDialogShow,
       currentIndex,
+      storeData,
+      caseDetail,
+      imgList,
+      goodPrice,
       swiperChange,
-      changeCurrent
+      changeCurrent,
+      chooseGoods,
+      toImage,
+      hasGoods,
+      report
       };
   },
 });
@@ -222,12 +300,13 @@ export default defineComponent({
   }
 }
 .swiper-item{
-  height: 562rpx;
+  // height: 562rpx;
 
 }
   .bac-image {
     width: 100%;
     // height: 462rpx;
+    min-height: 470rpx;
   }
 
   .case-content-warp {
@@ -358,8 +437,17 @@ export default defineComponent({
       color: #333333;
     }
   }
+  .is-user{
+    border: 0.5px solid #ECECEC;
+  }
+  view .active-choose{
+    background: linear-gradient(281.11deg, #FFFFFF 0%, #FFF8F7 100%) !important;
+    border: 0.5px solid #FA4D32;
+    box-sizing: border-box;
+    box-shadow: 0px 3px 5px rgba(250, 77, 50, 0.06);
+  }
   .case-type-conetnt{
-    padding: 8rpx 32rpx;
+    padding: 8rpx 32rpx 250rpx;
     .case-type-warp{
       position: relative;
       padding: 32rpx 40rpx;
@@ -426,6 +514,76 @@ export default defineComponent({
         top: 0;
         width: 188rpx;
         height: 174rpx;
+      }
+      .choose-bg{
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 50rpx;
+        height: 30rpx;
+      }
+    }
+    .report{
+      position: fixed;
+      bottom: 82rpx;
+      width: calc(100% - 64rpx);
+      z-index: 1;
+      .report-text{
+        height: 88rpx;
+        line-height: 88rpx;
+        padding: 0 24rpx;
+        background: linear-gradient(124.17deg, #4F4F4F 29.41%, #363636 81.43%);
+        border-radius: 8px;
+        color: #fff;
+        font-size: 28rpx;
+      }
+      .report-shadow{
+        position: absolute;
+        top: 0;
+        right: 60rpx;
+        height: 88rpx;
+        transform: skewX(-15deg);
+        background: linear-gradient(126.14deg, #FA3B34 30.84%, #FF6A33 87.02%);
+        width: 200rpx;
+        box-shadow: #222;
+      }
+      .report-btn{
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        height: 104rpx;
+        background: linear-gradient(126.14deg, #FA3B34 30.84%, #FF6A33 87.02%);
+        width: 248rpx;
+        color: #fff;
+        border-radius: 16rpx;
+        box-sizing: border-box;
+        padding: 16rpx 30rpx;
+        image{
+          position: absolute;
+          width: 248rpx;
+          height: 104rpx;
+          z-index: 11;
+          top: 0;
+          left: 0;
+        }
+        text{
+          letter-spacing: 0.1px;
+        }
+        .text{
+          font-size: 30rpx;
+          display: block;
+          text-align: center;
+        }
+        view{
+          font-size: 20rpx;
+          letter-spacing: 0,1px;
+          text-align: center;
+          .num{
+            font-size: 26rpx;
+            display: inline-block;
+            margin-left: 4rpx;
+          }
+        }
       }
     }
   }

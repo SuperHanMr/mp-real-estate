@@ -8,13 +8,24 @@
 <template>
   <navigation-custom title="户型详情" :theme="theme" />
   <view class="estate-detail-warp">
-    <img class="bac-image" :src="imageUrl" mode="aspectFill" />
+    <!-- <img class="bac-image" :src="imageUrl" mode="aspectFill" /> -->
+    <swiper class="house-type_image--swiper" :current="0">
+      <swiper-item v-for="(item,index) of houseDetail.floorPlans" :key="index">
+        <image class="bac-image" :src="item" mode="widthFix" />
+      </swiper-item>
+      <!-- <swiper-item>
+        <image class="bac-image" src="https://ali-res-test.dabanjia.com/res/20220322/15/1647934285886_9412%2403.jpg" mode="widthFix" />
+      </swiper-item>
+      <swiper-item>
+        <image class="bac-image" src="https://ali-res-test.dabanjia.com/res/20220322/15/1647934285886_9412%2403.jpg" mode="widthFix" />
+      </swiper-item> -->
+    </swiper>
     <view class="estate-content-warp">
       <view class="estate-detail_head">
         <view class="estate-detail_head--left">
-          <text class="name">北京新天地五期</text>
+          <text class="name">{{houseDetail.name}}</text>
           <view class="describe">
-            <text>1室1厅1卫｜面积：69.5㎡ ｜东北 </text>
+            <text>{{houseDetail.specification}}｜面积：{{houseDetail.floorAreaInside}}㎡ ｜{{houseDetail.direction}} </text>
           </view>
         </view>
         <view class="estate-detail_head--right" @click="codeDialogShow = true">
@@ -26,13 +37,13 @@
       <view class="house-type-list">
         <view class="list-title">
           <view></view>
-          <text>全部方案（10）</text>
+          <text>全部方案（{{houseDetail.schemeSimpleItemVOS.length}}）</text>
         </view>
-        <view class="house-type-warp" v-for="item in 6" :key="item">
+        <view class="house-type-warp" v-for="(item,index) in houseDetail.schemeSimpleItemVOS" @click="toCasedetail(item.schemeId,houseDetail.id)" :key="index">
           <view class="house-type_image">
             <image
               class="house-type_image--cover"
-              :src="imageUrl"
+              :src="item.coverPicture.coverPictureUrl"
               mode="aspectFill"
             />
             <!-- <swiper class="house-type_image--swiper">
@@ -42,16 +53,16 @@
             </swiper> -->
           </view>
           <view class="house-type_describe">
-            <view class="house-type_describe--title" >墙体改一体，秒变宽敞二居室</view>
+            <view class="house-type_describe--title" >{{item.schemeName}}</view>
           </view>
           <view class="house-type_describe">
-            <view class="house-type_describe--info" v-for="(item, index) in 4" :key="index">
-              <text>灰色系</text>
+            <view class="house-type_describe--info" v-for="(el, index) in item.schemeStyles" :key="index">
+              <text>{{el}}</text>
             </view>
 
           </view>
         </view>
-        <load-more :loadType="loadType" />
+        <!-- <load-more :loadType="loadType" /> -->
       </view>
     </view>
   </view>
@@ -71,6 +82,7 @@ import {
 } from "@dcloudio/uni-app";
 import navigationCustom from "@/components/navigation-custom/index.vue";
 import { useUserInfoHooks } from "../../hoosk/index";
+import {getHouseDetailHooks} from "./hooks/index"
 import loadMore from "@/components/load-more/index.vue";
 import codeDialog from "@/components/code-dialog/index.vue";
 export default defineComponent({
@@ -82,13 +94,19 @@ export default defineComponent({
   },
   setup() {
     const { storeData } = useUserInfoHooks();
-
+    const {requestHouseDetail,houseDetail} = getHouseDetailHooks()
     const loadType = ref<"succeed" | "error" | "load" | "complete">("succeed");
-
+    const houseId = ref<number>(0)
     onLoad((e) => {
       console.log("---onLoad---", e);
+      e.houseId = '1'
+      if(e.houseId){
+        houseId.value = +e.houseId
+        requestHouseDetail(+e.houseId)
+      }
     });
     onPullDownRefresh(() => {
+      requestHouseDetail(houseId.value)
       setTimeout(() => {
         uni.stopPullDownRefresh();
       }, 500);
@@ -115,8 +133,12 @@ export default defineComponent({
       "https://ali-res-test.dabanjia.com/res/20220211/14/1644561850441_1874%240be4eaff-1611-4087-9d91-57dbfe053ac0.jpg";
 
     const codeDialogShow = ref<boolean>(false);
-
-    return { imageUrl, loadType, theme, codeDialogShow };
+    const toCasedetail = (caseId:number,houseId:number)=>{
+      uni.navigateTo({
+        url:`/pages/case-detail/index?caseId=${caseId}&houseId=${houseId}`
+      })
+    }
+    return { toCasedetail,houseDetail, loadType, theme, codeDialogShow };
   },
 });
 </script>
@@ -126,7 +148,9 @@ export default defineComponent({
   height: 100%;
   background: #fff;
   position: relative;
-
+  .house-type_image--swipe{
+    height: 462rpx;
+  }
   .bac-image {
     width: 100%;
     height: 462rpx;
