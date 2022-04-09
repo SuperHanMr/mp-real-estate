@@ -2,27 +2,30 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-08 18:42:14
+ * @LastEditTime: 2022-04-09 14:58:51
  * @LastEditors: HanYongHui
 -->
 <template>
   <navigation-custom title="楼盘详情" :theme="theme" />
   <view class="estate-detail-warp">
-    <img class="bac-image" :src="imageUrl" mode="aspectFill" />
+    <img class="bac-image" :src="estateDetail.url" mode="aspectFill" />
     <view class="estate-content-warp">
       <view class="estate-detail_head">
         <view class="estate-detail_head--left">
-          <text class="name">北京新天地五期</text>
+          <text class="name">{{ estateDetail.name }}</text>
           <view class="describe">
             <image src="../../images/estate-icon.png" />
-            <text>华润置地华润集团</text>
+            <text>{{ estateDetail.developerName }}</text>
           </view>
           <view class="describe">
             <image src="../../images/estate-icon.png" />
-            <text>北京朝阳区管庄朝阳路5号院</text>
+            <text
+              >{{ estateDetail.provinceName }}{{ estateDetail.cityName
+              }}{{ estateDetail.districtName }}{{ estateDetail.address }}</text
+            >
           </view>
         </view>
-        <view class="estate-detail_head--right" @click="codeDialogShow = true">
+        <view class="estate-detail_head--right" @click="onClickCodeImage">
           <image src="../../images/code-icon.png" />
           <text>楼盘二维码</text>
         </view>
@@ -31,28 +34,37 @@
       <view class="house-type-list">
         <view class="list-title">
           <view></view>
-          <text>全部户型（10）</text>
+          <text>全部户型（{{ houseTypeList.length }}）</text>
         </view>
-        <view class="house-type-warp" v-for="item in 6" :key="item">
+        <view
+          class="house-type-warp"
+          v-for="item in houseTypeList"
+          :key="item.id"
+          @click="onClickHouseType(item.id)"
+        >
           <view class="house-type_image">
             <image
               class="house-type_image--cover"
-              :src="imageUrl"
+              :src="item.floorPlanFirst"
               mode="aspectFill"
             />
             <swiper class="house-type_image--swiper">
-              <swiper-item>
-                <image :src="imageUrl" mode="aspectFill" />
+              <swiper-item v-for="urlItem in item.schemeURLList" :key="urlItem">
+                <image :src="urlItem" mode="aspectFill" />
               </swiper-item>
             </swiper>
           </view>
           <view class="house-type_describe">
             <view class="house-type_describe--info">
-              <text>北区1-3栋 1室户型</text>
-              <text>1室1厅1卫｜面积：69.5㎡ ｜东北 </text>
+              <text>{{ item.name }}</text>
+              <text
+                >{{ item.specification }}｜面积：{{ item.floorArea }}㎡ ｜{{
+                  item.direction
+                }}
+              </text>
             </view>
             <view class="house-type_describe--number">
-              <text>5</text>
+              <text>{{ item.schemeNum }}</text>
               <text>方案</text>
             </view>
           </view>
@@ -60,7 +72,7 @@
       </view>
     </view>
   </view>
-  <code-dialog :codeUrl="imageUrl" v-model:show="codeDialogShow" />
+  <code-dialog :codeUrl="codeImageUrl" v-model:show="codeDialogShow" />
 </template>
 <script lang="ts">
 import { defineComponent, ref } from "vue";
@@ -71,7 +83,6 @@ import {
   onPageScroll,
 } from "@dcloudio/uni-app";
 import navigationCustom from "../../components/navigation-custom/index.vue";
-import { useUserInfoHooks } from "../../hoosk/index";
 import { useEstateDetailHook } from "./hooks/index";
 import codeDialog from "../../components/code-dialog/index.vue";
 export default defineComponent({
@@ -84,17 +95,16 @@ export default defineComponent({
     const {
       reuqestEstateDetail,
       reuqestHouseTypeList,
+      requestCodeImage,
       estateDetail,
       houseTypeList,
+      codeImageUrl,
+      codeDialogShow,
     } = useEstateDetailHook();
     onLoad((e: any) => {
       console.log("---onLoad---", e);
       reuqestEstateDetail(e.id);
       reuqestHouseTypeList(e.id);
-    });
-
-    onPullDownRefresh(() => {
-      // uni.stopPullDownRefresh();
     });
     const theme = ref<"white" | "black" | "transparent">("transparent");
     onPageScroll((e) => {
@@ -104,16 +114,18 @@ export default defineComponent({
         theme.value = "transparent";
       }
     });
-    const imageUrl: string =
-      "https://ali-res-test.dabanjia.com/res/20220211/14/1644561850441_1874%240be4eaff-1611-4087-9d91-57dbfe053ac0.jpg";
-
-    const codeDialogShow = ref<boolean>(false);
+    const onClickHouseType = (id: number) => {};
+    const onClickCodeImage = () => {
+      requestCodeImage("pages/home/index/index");
+    };
     return {
-      imageUrl,
       theme,
       codeDialogShow,
       estateDetail,
       houseTypeList,
+      codeImageUrl,
+      onClickHouseType,
+      onClickCodeImage,
     };
   },
 });
@@ -162,8 +174,8 @@ export default defineComponent({
       }
       .describe {
         margin-top: 14rpx;
-        display: flex;
-        align-items: center;
+        // display: flex;
+        // align-items: center;
         image {
           width: 24rpx;
           height: 24rpx;

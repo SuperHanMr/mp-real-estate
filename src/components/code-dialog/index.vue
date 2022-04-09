@@ -2,11 +2,15 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-02 16:29:52
- * @LastEditTime: 2022-04-08 18:45:43
+ * @LastEditTime: 2022-04-09 10:55:51
  * @LastEditors: HanYongHui
 -->
 <template>
-  <view class="dialog-warp" v-show="!show" @click="close">
+  <view
+    class="dialog-warp"
+    @click="close"
+    :style="!show ? 'display: none;' : ''"
+  >
     <view class="dialog_content">
       <view class="code-content">
         <image
@@ -20,7 +24,7 @@
         />
         <image class="code" :src="codeUrl" mode="aspectFit"></image>
         <view class="code-tip">
-          <text>扫描二维码，查看户型详情{{ show }}</text>
+          <text>扫描二维码，查看户型详情</text>
         </view>
       </view>
     </view>
