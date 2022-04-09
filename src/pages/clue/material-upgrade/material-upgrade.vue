@@ -3,9 +3,11 @@
 		<scroll-view scroll-y="true" >
 			<view class="header">
 				材料升級
+				<!-- {{data.productBagName.productBagName}} -->
 			</view>
 			<view class="complain">
-				这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的
+				{{data.bagDesc.bagPackageDesc}}
+				<!-- 这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的 -->
 			</view>
 			<view class="list-container">
 				<view class="item-container" v-for="item in 5" :key="item">
@@ -24,12 +26,26 @@
 	</view>
 </template>
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, reactive, ref, toRefs} from "vue";
+import { onLoad, onShow } from "@dcloudio/uni-app";
+import {MaterialItem} from "../../../api/clue"
 export default defineComponent({
   name: "",
   components: {},
   setup() {
-    return {};
+		const materialInfo = reactive<{data:MaterialItem}>({data:{} as MaterialItem})
+		onLoad((e: any) => {
+			// uni.$on("materialUpgradeInfo",(data:MaterialItem)=>{
+			// 	console.log("Data===",data)
+			// 	if(!data) return
+			// 	materialInfo.data = data
+			// 	console.log("materialInfo",materialInfo)
+			// })
+		});
+		onShow(()=>{
+			console.log("ddd")
+		})
+    return {...toRefs(materialInfo)};
   },
 });
 </script>
@@ -100,10 +116,10 @@ export default defineComponent({
 						border-radius: 6rpx;
 						font-size: 22rpx;
 					}
-					
+
 				}
 			}
 		}
-		
+
 	}
 </style>

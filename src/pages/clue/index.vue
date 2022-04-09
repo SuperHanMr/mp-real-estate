@@ -39,9 +39,9 @@
 						<view class="item-container"
 							v-for="(signupItem,index2) in signupList"
 							:key="index2"
-							@click="gotoRegistrationDetailPage"
+							@click="gotoRegistrationDetailPage(signupItem.id)"
 						>
-							<view class="header"  @click.stop="gotoMaterialPage">
+							<view class="header">
 								<img class="img" src="../../images/clue_item_bg.png" alt="">
 								<view>
 									<view class="projectName">{{signupItem.estateName}}</view>
@@ -74,9 +74,9 @@
 						<view class="item-container"
 							v-for="(bowerItem,index3) in browerList"
 							:key="index3"
-							@click="gotoRegistrationDetailPage"
+							@click="gotoRegistrationDetailPage(bowerItem.id)"
 						>
-							<view class="header" @click.stop="gotoMaterialPage">
+							<view class="header" >
 								<img class="img" src="../../images/clue_item_bg.png" alt="">
 								<view>
 									<view class="projectName">{{bowerItem.estateName}}</view>
@@ -102,17 +102,20 @@
 				</scroll-view>
 			</swiper-item>
 		</swiper>
-
-		<!-- <view class="clue-browse" @click="clueBrowse">
-			B端线索浏览页面
-		</view> -->
 	</view>
 </template>
 <script lang="ts" >
 import moment from "moment";
 import { computed, defineComponent,reactive,ref,watch} from "vue";
 import { onLoad, onShow, onHide } from "@dcloudio/uni-app";
-import {getClueBrowerList,getSignupRecordList,SignupParams,BrowerItem,SignupRecordList,SignupRecordItem} from "../../api/clue"
+import {
+	getClueBrowerList,
+	getSignupRecordList,
+	SignupParams,
+	BrowerItem,
+	SignupRecordList,
+	SignupRecordItem
+} from "../../api/clue"
 
 export default defineComponent({
   name: "",
@@ -137,13 +140,12 @@ export default defineComponent({
 		const queryData = reactive<Query>(
 			{
 				page:[1,1],
-				rows:[1,1],
+				rows:[10,10],
 				totalPage:[1,1],
 				totalRows:[1,1]
 
 			} as Query
 		)
-
 		const reqSignupRecordList = async()=>{
 			try {
 				let params:SignupParams={
@@ -201,16 +203,7 @@ export default defineComponent({
 				if(browerList.value.length) return
 				reqBrowerList()
 			}
-		},
-		// {immediate:true}
-		)
-
-		const clueBrowse=()=>{
-			uni.navigateTo({
-				url:"browse-list/browse-list"
-			})
-		}
-
+		})
 
 		const changTab=(index:number)=>{
 			currentIndex.value =index
@@ -220,17 +213,11 @@ export default defineComponent({
 			currentIndex.value =index
 		}
 
-
-		const gotoMaterialPage =()=>{
-			console.log("去材料升级页面")
+		const gotoRegistrationDetailPage =(id:number)=>{
+			console.log("去报名详情页面！！！",id)
+			console.log("userId")
 			uni.navigateTo({
-				url:"material-upgrade/material-upgrade"
-			})
-		}
-		const gotoRegistrationDetailPage =()=>{
-			console.log("去报名详情页面！！！")
-			uni.navigateTo({
-				url:"signup-list/signup-detail"
+				url:`signup-detail/signup-detail?id=${id}`
 			})
 		}
 		const formatDate = (time: number) =>
@@ -269,12 +256,10 @@ export default defineComponent({
 		}
     return {
 			bgImg,
-			clueBrowse,
 			currentIndex,
 			tabList,
 			changTab,
 			swiperChange,
-			gotoMaterialPage,
 			gotoRegistrationDetailPage,
 			formatDate,
 			// dataList,
