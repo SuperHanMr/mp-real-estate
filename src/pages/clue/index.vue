@@ -24,89 +24,185 @@
 			:current="currentIndex"
 			>
 			<swiper-item v-for="item1 in tabList" :key="item1.key">
-				<scroll-view class="scroll-view"  scroll-y="true" >
-					<view class="list-container">
+				<scroll-view
+					class="scroll-view"
+					scroll-y="true"
+					lower-threshold="100"
+					:enable-back-to-top="true"
+					refresher-background="#FFF"
+					:refresher-enabled="true"
+					@scrolltoupper="refreshEvent"
+					@scrolltolower="refreshEvent"
+				>
+					<view class="list-container" v-if="currentIndex==0">
 						<view class="item-container"
-							v-for="listItem in 5"
-							:key="listItem"
+							v-for="(signupItem,index2) in signupList"
+							:key="index2"
 							@click="gotoRegistrationDetailPage"
 						>
-							<view class="header" @click.stop="gotoMaterialPage">
+							<view class="header"  @click.stop="gotoMaterialPage">
+								<img class="img" src="../../images/clue_item_bg.png" alt="">
 								<view>
-									<view class="projectName">新天地五期新天地</view>
-									<view class="customerName">报名用户： 小可爱</view>
+									<view class="projectName">{{signupItem.estateName}}</view>
+									<!-- 报名用户字段只有销售端出现 -->
+									<view class="customerName">报名用户：{{signupItem.userNickName}}</view>
 								</view>
 							</view>
 							<view class="caseInfo-container">
-								<image class="caseImg" src="../../images/code-icon.png" />
+								<image class="caseImg" :src="signupItem.coverImg" />
 								<view class="caseInfo">
-									<view class="caseName">时尚简约，打造都市白领最爱公寓红红火火恍恍惚惚或或或或或或</view>
-									<view class="address">北区1-3栋  1室户型</view>
+									<view class="caseName">{{signupItem.schemeName}}</view>
+									<view class="address">{{signupItem.houseTypeName}}</view>
 								</view>
 							</view>
 
 							<view class="bottomInfo" v-if="item1.key==1">
 								<view class="itemInfo">
 									<view class="left">报名时间</view>
-									<view class="right">2021-08-21  07:37:12</view>
+									<view class="right">{{formatDate(signupItem.signTime)}}</view>
 								</view>
 								<view class="itemInfo">
 									<view class="left"> 总价</view>
-									<view class="right" style="font-weight: 500;">￥1000.00</view>
+									<view class="right" style="font-weight: 500;">￥{{signupItem.offerPrice}}</view>
 								</view>
 							</view>
+						</view>
+					</view>
 
-							<view class="bottomInfo" v-if="item1.key==2">
+					<view class="list-container" v-if="currentIndex==1">
+						<view class="item-container"
+							v-for="(bowerItem,index3) in browerList"
+							:key="index3"
+							@click="gotoRegistrationDetailPage"
+						>
+							<view class="header" @click.stop="gotoMaterialPage">
+								<view>
+									<view class="projectName">{{bowerItem.estateName}}</view>
+									<!-- 报名用户字段只有销售端出现 -->
+									<view class="customerName">报名用户： {{bowerItem.userNickName}}</view>
+								</view>
+							</view>
+							<view class="caseInfo-container">
+								<image class="caseImg" :src="bowerItem.coverImg" />
+								<view class="caseInfo">
+									<view class="caseName">{{bowerItem.schemeName}}</view>
+									<view class="address">{{bowerItem.houseTypeName}}</view>
+								</view>
+							</view>
+							<view class="bottomInfo">
 								<view class="itemInfo">
 									<view class="left">浏览时间</view>
-									<view class="right">2021-08-21  07:37:12</view>
+									<view class="right">{{formatDate(bowerItem.browseTime)}}</view>
 								</view>
 							</view>
-
 						</view>
 					</view>
 				</scroll-view>
 			</swiper-item>
 		</swiper>
 
-
-
-
 		<!-- <view class="clue-browse" @click="clueBrowse">
 			B端线索浏览页面
 		</view> -->
 	</view>
 </template>
-<script lang="ts">
-import { defineComponent,ref,watch} from "vue";
+<script lang="ts" >
+import moment from "moment";
+import { computed, defineComponent,reactive,ref,watch} from "vue";
 import { onLoad, onShow, onHide } from "@dcloudio/uni-app";
-import {getClueBrowerList,ClueBrowerList,ClueBrowerItem} from "../../api/clue"
+import {getClueBrowerList,getSignupRecordList,SignupParams,BrowerItem,SignupRecordList,SignupRecordItem} from "../../api/clue"
+
 export default defineComponent({
   name: "",
   components: {},
   setup() {
-		onShow(()=>{
-			console.log("1111111")
-		})
+		const currentIndex=ref<number>(0)
+		const browerList = ref<Array<BrowerItem>>([])
+		const signupList =ref<Array<SignupRecordItem>>([])
+		type Query = {
+			page: number[],
+			rows: number[],
+			totalPage:number[],
+			totalRows:number[],
+		}
+		const bgImg = "../../images/clue_item_bg.png"
+		const queryData = reactive<Query>(
+			{
+				page:[1,1],
+				rows:[1,1],
+				totalPage:[1,1],
+				totalRows:[1,1]
 
+			} as Query
+		)
 		const reqBrowerList= async()=>{
+			// debugger
+				try {
+					let params={
+						page:queryData.page[0],
+						rows:queryData.rows[0],
+						level:3
+					}
+					const res = await getClueBrowerList(params)
+					console.log("browerList====",	res )
+					if(!res.data) return
+					browerList.value = res.data.list
+					queryData.totalPage[0] = res.data.totalPage
+					queryData.rows[0] = res.data.rows
+					// queryData.page[0]++
+					console.log("browerList!!!!!!!!!!",browerList.value)
+
+
+				} catch (error) {
+					console.log("error!!",error)
+				}
+			}
+		const reqSignupRecordList = async()=>{
 			try {
-				let browerList = await getClueBrowerList()
-				console.log("browerList====",browerList)
+				let params:SignupParams={
+					page: queryData.page[1],
+					rows: queryData.rows[1],
+					consultantId: 1,//销售顾问id
+					userId: 1,//用户id
+					type: 2,//查询入口 （1-业务后台，2-小程序）
+					estateId: 0,//若为业务后台，需要添加此字段 全部楼盘传0，具体楼盘传具体id即可
+				}
+				const res= await getSignupRecordList(params)
+				console.log("signupList====",res)
+				if(!res.data) return
+				signupList.value=res.data.list
+				queryData.totalPage[1] = res.data.totalPage
+				queryData.rows[1] = res.data.rows
 			} catch (error) {
 				console.log("error!!",error)
 			}
 		}
-		reqBrowerList()
+		onShow(()=>{
+			console.log("1111111")
+			if(currentIndex.value==0){
+				reqSignupRecordList()
+			}else{
+				reqBrowerList()
+			}
+		})
+		watch(currentIndex,()=>{
+			if(currentIndex.value==0){
+				if(signupList.value.length) return
+				reqSignupRecordList()
+			}else{
+				if(browerList.value.length) return
+				reqBrowerList()
+			}
+		},
+		// {immediate:true}
+		)
 
 		const clueBrowse=()=>{
 			uni.navigateTo({
 				url:"browse-list/browse-list"
 			})
 		}
-		const dataList = ref<ClueBrowerItem[]>([])
-		watch(dataList,()=>{})
-		const currentIndex=ref<number>(0)
+
 		const tabList=[
 			{tabName:"报名记录",key:1},
 			{tabName:"浏览记录",key:2},
@@ -118,9 +214,10 @@ export default defineComponent({
 			let index= e.target.current ||e.detail.current;
 			currentIndex.value =index
 		}
-		watch(currentIndex,()=>{})
+
 
 		const gotoMaterialPage =()=>{
+			console.log("去材料升级页面")
 			uni.navigateTo({
 				url:"material-upgrade/material-upgrade"
 			})
@@ -131,9 +228,13 @@ export default defineComponent({
 				url:"signup-list/signup-detail"
 			})
 		}
+		const formatDate = (time: number) =>
+       moment(time).format("YYYY-MM-DD  HH:mm:ss")
+		const refreshEvent=()=>{
 
-
+		}
     return {
+			bgImg,
 			clueBrowse,
 			currentIndex,
 			tabList,
@@ -141,6 +242,11 @@ export default defineComponent({
 			swiperChange,
 			gotoMaterialPage,
 			gotoRegistrationDetailPage,
+			formatDate,
+			// dataList,
+			browerList,
+			signupList,
+			refreshEvent,
 		};
   },
 });
@@ -207,11 +313,18 @@ export default defineComponent({
 							width: 686rpx;
 							height: 142rpx;
 							border-radius: 24rpx 24rpx 0 0;
-							background-color: skyblue;
 							display: flex;
 							padding: 0 24rpx;
 							box-sizing: border-box;
 							align-items: center;
+							position: relative;
+							.img{
+								position: absolute;
+								width: 686rpx;
+								height: 142rpx;
+								left: -1rpx;
+								z-index: -1;
+							}
 							view{
 								display: flex;
 								flex-flow: column nowrap;
