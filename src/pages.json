@@ -7,7 +7,6 @@
 				"navigationBarTitleText": "登录"
 			}
 		},
-
 		{
 			"path": "pages/home/index",
 			"style": {
@@ -16,8 +15,6 @@
 				"navigationBarBackgroundColor": "#ffffff"
 			}
 		},
-
-
 		{
 			"path": "pages/clue/index",
 			"style": {
@@ -55,7 +52,7 @@
 			}
 		},
 		{
-			"path" : "pages/clue/signup-list/signup-detail",
+			"path": "pages/clue/signup-list/signup-detail",
 			"style": {
 				"navigationBarTitleText": "报名详情",
 				"navigationStyle": "custom"
@@ -71,7 +68,8 @@
 			"path": "pages/house-detail/index",
 			"style": {
 				"navigationBarTitleText": "户型详情",
-				"navigationStyle": "custom"
+				"navigationStyle": "custom",
+				"enablePullDownRefresh": true
 			}
 		},
 		{
@@ -114,14 +112,14 @@
 		"fontSize": "20px",
 		"list": [
 			{
-				"iconPath":"static/tab-image/tab-estate-un-icon.png",
-				"selectedIconPath":"static/tab-image/tab-estate-icon.png",
+				"iconPath": "static/tab-image/tab-estate-un-icon.png",
+				"selectedIconPath": "static/tab-image/tab-estate-icon.png",
 				"pagePath": "pages/home/index",
 				"text": "楼盘"
 			},
 			{
-				"iconPath":"static/tab-image/tab-clue-un-icon.png",
-				"selectedIconPath":"static/tab-image/tab-clue-icon.png",
+				"iconPath": "static/tab-image/tab-clue-un-icon.png",
+				"selectedIconPath": "static/tab-image/tab-clue-icon.png",
 				"pagePath": "pages/clue/index",
 				"text": "线索"
 			}

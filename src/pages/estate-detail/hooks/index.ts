@@ -11,7 +11,7 @@ import {
   EstateDetail, getEstateDetail,
   getHouseTypeList, HouseTypeList,
   getCodeImage
-} from "../../../api/estate-detail";
+} from "../../../api/estate-detail";
 
 export const useEstateDetailHook = () => {
   const data = reactive<{

@@ -9,7 +9,7 @@
   <navigation-custom title="户型详情" :theme="theme" />
   <view class="estate-detail-warp">
     <!-- <img class="bac-image" :src="imageUrl" mode="aspectFill" /> -->
-    <swiper class="house-type_image--swiper" :current="0">
+    <swiper class="house-type_image--swipe" :current="0">
       <swiper-item v-for="(item,index) of houseDetail.floorPlans" :key="index">
         <image class="bac-image" :src="item" mode="widthFix" />
       </swiper-item>
@@ -40,6 +40,7 @@
           <text>全部方案（{{houseDetail.schemeSimpleItemVOS.length}}）</text>
         </view>
         <view class="house-type-warp" v-for="(item,index) in houseDetail.schemeSimpleItemVOS" @click="toCasedetail(item.schemeId,houseDetail.id)" :key="index">
+          <image class="left-img" src="../../images/case-left.png" v-if="!storeData.role" mode="" />
           <view class="house-type_image">
             <image
               class="house-type_image--cover"
@@ -68,7 +69,7 @@
   </view>
   <code-dialog
     style="width: 100%; height: 100%"
-    codeUrl=""
+    :codeUrl="codeUrl"
     v-model:show="codeDialogShow"
   />
 </template>
@@ -94,7 +95,7 @@ export default defineComponent({
   },
   setup() {
     const { storeData } = useUserInfoHooks();
-    const {requestHouseDetail,houseDetail} = getHouseDetailHooks()
+    const {requestHouseDetail,requestCode,houseDetail,codeUrl} = getHouseDetailHooks()
     const loadType = ref<"succeed" | "error" | "load" | "complete">("succeed");
     const houseId = ref<number>(0)
     onLoad((e) => {
@@ -103,6 +104,7 @@ export default defineComponent({
       if(e.houseId){
         houseId.value = +e.houseId
         requestHouseDetail(+e.houseId)
+        requestCode(e.houseId)
       }
     });
     onPullDownRefresh(() => {
@@ -138,7 +140,15 @@ export default defineComponent({
         url:`/pages/case-detail/index?caseId=${caseId}&houseId=${houseId}`
       })
     }
-    return { toCasedetail,houseDetail, loadType, theme, codeDialogShow };
+    return {
+      toCasedetail,
+      houseDetail,
+      storeData,
+      loadType,
+      theme,
+      codeDialogShow,
+      codeUrl,
+      };
   },
 });
 </script>
@@ -149,7 +159,8 @@ export default defineComponent({
   background: #fff;
   position: relative;
   .house-type_image--swipe{
-    height: 462rpx;
+    height: 562rpx;
+    background-color: #eee;
   }
   .bac-image {
     width: 100%;
@@ -262,15 +273,25 @@ export default defineComponent({
   }
 
   .house-type-warp {
-    margin-top: 32rpx;
+    position: relative;
+    margin-top: 100rpx;
     padding: 0 32rpx;
+    .left-img{
+      position: absolute;
+      left: 32rpx;
+      top: -62rpx;
+      height: 90rpx;
+      width: 310rpx;
+    }
     .house-type_image {
       display: flex;
+      position: relative;
+      z-index: 1;
       .house-type_image--cover {
         width: 100%;
         height: 364rpx;
         border-radius: 24rpx;
-        border: 1rpx solid #e8e8e8;
+        // border: 1rpx solid #e8e8e8;
       }
 
       .house-type_image--swiper {

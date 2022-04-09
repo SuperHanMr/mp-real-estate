@@ -74,7 +74,7 @@
                 <text class="price-symbol">¥</text>
                 <text class="price-num">{{item.buyItNow.buyItNow}}</text>
               </view>
-              <view class="case-btn">
+              <view class="case-btn" @click="toCheckGood(index)">
                 <image src="../../images/goods-pack.png"></image>
                 <text>查看套餐所含全部商品</text>
               </view>
@@ -98,7 +98,7 @@
   </view>
   <code-dialog
     style="width: 100%; height: 100%"
-    codeUrl=""
+    :codeUrl="codeUrl"
     v-model:show="codeDialogShow"
   />
 </template>
@@ -133,6 +133,8 @@ export default defineComponent({
     const currentIndex = ref<number>(0)
     const caseId = ref<number>(0)
     const houseId = ref<number>(0)
+    const consultantId = ref<number>(0)
+    const consultantPhoneNum = ref<string>('')
     const goodList = ref<productItem[]>([])
     const goodPrice = computed(()=>{
       let num = 0
@@ -141,14 +143,16 @@ export default defineComponent({
       })
       return num
     })
-    const {requestCaseDetail,requestReport,caseDetail,imgList} = getCaseDetailHooks()
+    const {requestCaseDetail,requestReport,requestCode,caseDetail,imgList,codeUrl} = getCaseDetailHooks()
     onLoad((e) => {
       console.log("---onLoad---", e);
       // e.caseId="111"
       if(e.caseId)caseId.value = +e.caseId
       if(e.houseId)houseId.value = +e.houseId
+      if(e.consultantId)consultantId.value = +e.consultantId
+      if(e.consultantPhoneNum)consultantPhoneNum.value = e.consultantPhoneNum
       requestCaseDetail(caseId.value)
-
+      getCode()
     });
     // onMounted(()=>{
     // })
@@ -217,12 +221,26 @@ export default defineComponent({
       let data = {
         estateId:houseId.value,
         schemeId:caseId.value,
-        schemeSnapshot:JSON.parse(JSON.stringify(goodList.value)),
+        schemeSnapshot:JSON.stringify(goodList.value),
         offerPrice:goodPrice.value,
         schemeName:caseDetail.value.schemeName,
-
+        consultantId:consultantId.value||0,
+        consultantPhoneNum:consultantPhoneNum.value||''
       }
       requestReport(data)
+    }
+
+    const getCode = () => {
+      let url = `?caseId=${caseId.value}&houseId=${houseId.value}`
+      if(consultantPhoneNum.value){
+        url = url+`&consultantPhoneNum=${consultantPhoneNum.value}&consultantId=${consultantId.value}`
+      }
+      requestCode(url)
+    }
+    const toCheckGood = (index:number) =>{
+      uni.navigateTo({
+        url:'/pages/clue/material-upgrade/material-upgrade?index='+index
+      })
     }
     return {
       // imageUrl,
@@ -234,12 +252,14 @@ export default defineComponent({
       caseDetail,
       imgList,
       goodPrice,
+      codeUrl,
       swiperChange,
       changeCurrent,
       chooseGoods,
       toImage,
       hasGoods,
-      report
+      report,
+      toCheckGood
       };
   },
 });

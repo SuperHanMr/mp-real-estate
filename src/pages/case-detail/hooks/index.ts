@@ -8,6 +8,8 @@
 import { defineComponent, reactive, ref, toRefs } from "vue";
 
 import { caseDetail, reportRecord, reportData } from "../../../api/case";
+import { getCodeImage } from "../../../api/estate-detail";
+
 const caseDetailData = reactive<{ caseDetail: caseDetail }>({ caseDetail: { houseWithSchemeInfo: {} } as caseDetail })
 export type imgList = {
   list: string[],
@@ -21,6 +23,7 @@ type tagItem = {
   desc: string
 }
 let imgList = reactive<imgList>({ list: [], bannerNum: 0, tagList: [] } as imgList)
+const codeUrl = ref<string>('')
 export const getCaseDetailHooks = () => {
 
   const requestCaseDetail = async (caseId: number) => {
@@ -71,7 +74,26 @@ export const getCaseDetailHooks = () => {
   }
   const requestReport = async (reportData: reportData) => {
     let res = await reportRecord(reportData)
-    console.log(res)
+    // return res.code
+    if (res.code === 1) {
+      uni.showToast({
+        title: '报名成功',
+        icon: 'success',
+        mask: true
+      })
+      setTimeout(() => {
+        uni.navigateBack({
+          delta: 1
+        })
+      }, 1000)
+
+    }
+  }
+  const requestCode = async (sence?: string) => {
+    let url = '/pages/case-detail/index'
+    let res = await getCodeImage(url, sence)
+    // console.log(res.data)
+    if (res.data) codeUrl.value = res.data
   }
   // const requestRegister = async (parmas: RegisterParams) => {
   //   const res = await register(parmas)
@@ -81,8 +103,10 @@ export const getCaseDetailHooks = () => {
   return {
     ...toRefs(caseDetailData),
     imgList,
+    codeUrl,
     requestCaseDetail,
-    requestReport
+    requestReport,
+    requestCode
     // requestRegister,
   }
 }

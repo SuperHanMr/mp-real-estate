@@ -21,9 +21,9 @@ onLaunch(() => {
     },
   });
   let token = uni.getStorageSync("token");
-  if (token) {
-    uni.switchTab({ url: "/pages/home/index" });
-  }
+  // if (token) {
+  //   uni.switchTab({ url: "/pages/home/index" });
+  // }
 });
 
 onShow(() => {});
