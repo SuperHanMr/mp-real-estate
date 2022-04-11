@@ -239,7 +239,7 @@ export default defineComponent({
     }
     const toCheckGood = (index:number) =>{
       uni.navigateTo({
-        url:'/pages/clue/material-upgrade/material-upgrade?index='+index
+        url:'/pages/clue/material-upgrade/material-upgrade?index='+index+'&source=true'
       })
     }
     return {
