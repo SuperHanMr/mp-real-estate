@@ -2,7 +2,7 @@
  * @Description: 小程序 主入口
  * @Author: HanYongHui
  * @Date: 2022-03-29 16:44:50
- * @LastEditTime: 2022-04-09 16:16:35
+ * @LastEditTime: 2022-04-11 14:14:30
  * @LastEditors: HanYongHui
 -->
 <script setup lang="ts">
@@ -21,9 +21,9 @@ onLaunch(() => {
     },
   });
   let token = uni.getStorageSync("token");
-  // if (token) {
-  //   uni.switchTab({ url: "/pages/home/index" });
-  // }
+  if (token) {
+    uni.switchTab({ url: "/pages/home/index" });
+  }
 });
 
 onShow(() => {});

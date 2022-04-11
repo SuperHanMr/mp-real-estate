@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-11 10:40:47
+ * @LastEditTime: 2022-04-11 14:14:41
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -76,12 +76,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import {
-  onLoad,
-  onPullDownRefresh,
-  onReachBottom,
-  onPageScroll,
-} from "@dcloudio/uni-app";
+import { onLoad, onShareAppMessage, onPageScroll } from "@dcloudio/uni-app";
 import navigationCustom from "../../components/navigation-custom/index.vue";
 import { useEstateDetailHook } from "./hooks/index";
 import codeDialog from "../../components/code-dialog/index.vue";
@@ -101,8 +96,10 @@ export default defineComponent({
       codeImageUrl,
       codeDialogShow,
     } = useEstateDetailHook();
+    const id = ref<number>(0);
     onLoad((e: any) => {
       console.log("---onLoad---", e);
+      id.value = e.id;
       reuqestEstateDetail(e.id);
       reuqestHouseTypeList(e.id);
     });
@@ -120,6 +117,12 @@ export default defineComponent({
     };
     const url: string =
       "https://dbj-test.oss-cn-beijing.aliyuncs.com/res/20220409/17/1649495698628_7274801.jpg";
+    onShareAppMessage(() => {
+      return {
+        title: "楼盘详情",
+        path: `/pages/estate-detail/index?id=${id.value}`,
+      };
+    });
     return {
       theme,
       codeDialogShow,
