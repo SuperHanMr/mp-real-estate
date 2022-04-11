@@ -46,7 +46,7 @@
 								<view>
 									<view class="projectName">{{signupItem.estateName}}</view>
 									<!-- 报名用户字段只有销售端出现 -->
-									<view class="customerName">报名用户：{{signupItem.userNickName}}</view>
+									<view class="customerName" v-if="storeData.role == 1">报名用户：{{signupItem.userNickName}}</view>
 								</view>
 							</view>
 							<view class="caseInfo-container">
@@ -64,7 +64,9 @@
 								</view>
 								<view class="itemInfo">
 									<view class="left"> 总价</view>
-									<view class="right" style="font-weight: 500;">￥{{signupItem.offerPrice}}</view>
+									<view class="right" style="font-weight: 500;">
+										￥{{handlePrice(signupItem.offerPrice)}}
+									</view>
 								</view>
 							</view>
 						</view>
@@ -80,8 +82,8 @@
 								<img class="img" src="../../images/clue_item_bg.png" alt="">
 								<view>
 									<view class="projectName">{{bowerItem.estateName}}</view>
-									<!-- 报名用户字段只有销售端出现 -->
-									<view class="customerName">报名用户： {{bowerItem.userNickName}}</view>
+									<!-- 报名用户字段只有销售端出现 role 1.销售 2.C端用户-->
+									<view class="customerName" v-if="storeData.role == 1">报名用户： {{bowerItem.userNickName}}</view>
 								</view>
 							</view>
 							<view class="caseInfo-container">
@@ -113,14 +115,16 @@ import {
 	getSignupRecordList,
 	SignupParams,
 	BrowerItem,
-	SignupRecordList,
 	SignupRecordItem
 } from "../../api/clue"
+import { useUserInfoHooks } from "../../hoosk/index";
 
 export default defineComponent({
   name: "",
   components: {},
   setup() {
+		const {storeData} = useUserInfoHooks()
+		console.log("storeData",storeData)
 		const currentIndex=ref<number>(0)
 		const browerList = ref<Array<BrowerItem>>([])
 		const signupList =ref<Array<SignupRecordItem>>([])
@@ -212,6 +216,15 @@ export default defineComponent({
 			let index= e.target.current ||e.detail.current;
 			currentIndex.value =index
 		}
+		const handlePrice=(price:number)=>{
+      if(!price) return ['0','00']
+      let list=String(price).split(".")
+      if(list.length==1){
+        return list[0]+'.'+'00'
+      }else{
+        return list[0]+'.'+list[1]
+      }
+    }
 
 		const gotoRegistrationDetailPage =(id:number)=>{
 			console.log("去报名详情页面！！！",id)
@@ -267,8 +280,10 @@ export default defineComponent({
 			signupList,
 			onLoadMore,
 			onRefresh,
+			handlePrice,
 			triggerd,
 			loading,
+			storeData,
 		};
   },
 });

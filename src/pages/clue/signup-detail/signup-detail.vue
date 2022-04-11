@@ -51,7 +51,9 @@
 					<view class="content">{{materialItem.bagDesc.bagPackageDesc}}</view>
 					<view class="price">
 						<text style="font-size:26rpx">￥</text>
-						<text>{{materialItem.buyItNow.buyItNow}}</text>
+						<text>
+							{{handlePrice(materialItem.buyItNow.buyItNow)}}
+						</text>
 					</view>
 					<view class="showMoreMaterial" >
 						<image  class="iconImg" src="../../../images/code-icon.png" />
@@ -124,6 +126,18 @@
 			const formatDate = (time: number) =>
 				moment(time).format("YYYY-MM-DD  HH:mm:ss")
 
+			const handlePrice=(price:number)=>{
+				if(!price) return ['0','00']
+				let list=String(price).split(".")
+				if(list.length==1){
+					return  list[0]+'.'+'00'
+					//  [list[0],"00"]
+
+				}else{
+					return list[0]+'.'+ list[1]
+					// [list[0],list[1]]
+				}
+			}
 			return {
 				theme,
 				toBack,
@@ -132,6 +146,7 @@
 				gotoNextPage,
 				detailInfo,
 				formatDate,
+				handlePrice,
 				...toRefs(signupDetailInfo),
 			}
 		}
