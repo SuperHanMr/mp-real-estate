@@ -35,7 +35,10 @@ export default defineComponent({
   name: "",
   components: {},
   setup() {
-		const materialInfo = reactive<{data:MaterialItem}>({data:{} as MaterialItem})
+		const materialInfo = reactive<{data:MaterialItem}>({data:{
+			productBagName:{},
+			bagDesc:{},
+		} as MaterialItem})
 		const index=ref<number>(0);
 		const source =ref<boolean>(false);//玉帛的页面跳转到此页面
 
@@ -47,7 +50,7 @@ export default defineComponent({
 			console.log("e.source===",source.value)
 
 			// })
-			if(source.value){
+			if(!source.value){
 				const {detailInfo} = getRecordDetail()
 				console.log("detailInfo",detailInfo)
 				console.log("detailInfo.productBagVOS====",detailInfo.value.productBagVOS)

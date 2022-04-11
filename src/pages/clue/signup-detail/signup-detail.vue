@@ -2,8 +2,9 @@
 	<navigation-custom title="报名详情" :theme="theme" ></navigation-custom>
 
 	<view class="container">
-		<!-- <view class="bgImg" ></view> -->
-		<img class="bgImg" @click="toBack" :src="detailInfo.coverPictureInfoVO.coverImageUrl" alt="">
+		<view class="bgImg"
+		:style="{backgroundImage:`url(${detailInfo.coverPictureInfoVO.coverImageUrl})`}"></view>
+		<!-- <img class="bgImg" @click="toBack" :src="detailInfo.coverPictureInfoVO.coverImageUrl" alt=""> -->
 		<view class="header-container">
 			<view class="header-bg"></view>
 			<view class="projectName">{{detailInfo.schemeName}}</view>
@@ -71,16 +72,15 @@
 		onShow,
 	} from"@dcloudio/uni-app";
 	import {getRecordDetail} from "../hooks/index"
-	import {SignupRecordDetail,MaterialItem} from "../../../api/clue"
+	import {SignupRecordDetail} from "../../../api/clue"
 	import moment from "moment";
-	// import navicationCustom from "../../../components/navigation-custom/index.vue"
-	// import loadMore from "../../../components/load-more/index.vue";
+	import navigationCustom from "@/components/navigation-custom/index.vue"
+	import loadMore from "@/components/load-more/index.vue";
 	export default defineComponent({
 		name:"",
-		components:{
-			// navicationCustom,
-			// loadMore,
-
+		components: {
+			navigationCustom,
+			loadMore,
 		},
 		setup(){
 			const {requestSignupDetail,detailInfo} = getRecordDetail()
@@ -148,8 +148,8 @@
 		.bgImg{
 			width: 100%;
 			height: 462rpx;
-			// background-repeat: no-repeat;
-			// background-size: contain;
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
 			.img{
 				width: 100%;
 				height: 100%;
