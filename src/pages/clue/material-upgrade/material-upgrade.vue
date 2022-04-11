@@ -2,22 +2,22 @@
   <view class="container">
 		<scroll-view scroll-y="true" >
 			<view class="header">
-				材料升級
-				<!-- {{data.productBagName.productBagName}} -->
+				<!-- 材料升級 -->
+				{{data.productBagName.productBagName}}
 			</view>
 			<view class="complain">
 				{{data.bagDesc.bagPackageDesc}}
 				<!-- 这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的说明文案这是材料升级的 -->
 			</view>
 			<view class="list-container">
-				<view class="item-container" v-for="item in 5" :key="item">
-					<image src="../../../images/code-icon.png" mode=""></image>
+				<view class="item-container" v-for="(procuctItem,index) in data.spuInfoVOS" :key="index">
+					<image :src="procuctItem.spuImageUrl" />
 					<view class="info">
 						<view class="title">
-							室内玄关柜家居中式轻奢创意亚克力摆 件家装必备公寓件家装必备公寓件家室内玄关柜家居中式轻奢创意亚克力摆 件家装必备公寓件家装必备公寓件家..
+							{{procuctItem.spuName}}
 						</view>
 						<view class="icon">
-							创意摆件｜苏里曼
+							{{procuctItem.categoryName}}	｜ {{procuctItem.brandName}}
 						</view>
 					</view>
 				</view>
@@ -29,23 +29,41 @@
 import { defineComponent, reactive, ref, toRefs} from "vue";
 import { onLoad, onShow } from "@dcloudio/uni-app";
 import {MaterialItem} from "../../../api/clue"
+import {getRecordDetail} from "../../clue/hooks/index"
+import {getCaseDetailHooks} from "../../case-detail/hooks"
 export default defineComponent({
   name: "",
   components: {},
   setup() {
 		const materialInfo = reactive<{data:MaterialItem}>({data:{} as MaterialItem})
+		const index=ref<number>(0);
+		const source =ref<boolean>(false);//玉帛的页面跳转到此页面
+
 		onLoad((e: any) => {
-			// uni.$on("materialUpgradeInfo",(data:MaterialItem)=>{
-			// 	console.log("Data===",data)
-			// 	if(!data) return
-			// 	materialInfo.data = data
-			// 	console.log("materialInfo",materialInfo)
+			source.value = e.source
+			index.value= +e.index
+
+			console.log("e.index===",index.value)
+			console.log("e.source===",source.value)
+
 			// })
+			if(source.value){
+				const {detailInfo} = getRecordDetail()
+				console.log("detailInfo",detailInfo)
+				console.log("detailInfo.productBagVOS====",detailInfo.value.productBagVOS)
+				console.log("需要用的数据====",detailInfo.value.productBagVOS[index.value])
+				materialInfo.data = detailInfo.value.productBagVOS[index.value]
+			}else{
+				const {caseDetail}  = getCaseDetailHooks()
+				materialInfo.data = caseDetail.value.productBagVOS[index.value]
+			}
 		});
 		onShow(()=>{
 			console.log("ddd")
 		})
-    return {...toRefs(materialInfo)};
+    return {
+			...toRefs(materialInfo)
+		};
   },
 });
 </script>
