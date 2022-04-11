@@ -35,7 +35,7 @@
 					refresher-enabled="true"
 					@scrolltolower="onLoadMore"
 				>
-					<view class="list-container" v-if="currentIndex==0">
+					<view class="list-container" v-if="currentIndex==0 && signupList && signupList.length">
 						<view class="item-container"
 							v-for="(signupItem,index2) in signupList"
 							:key="index2"
@@ -45,7 +45,6 @@
 								<img class="img" src="../../images/clue_item_bg.png" alt="">
 								<view>
 									<view class="projectName">{{signupItem.estateName}}</view>
-									<!-- 报名用户字段只有销售端出现 -->
 									<view class="customerName" v-if="storeData.role == 1">报名用户：{{signupItem.userNickName}}</view>
 								</view>
 							</view>
@@ -72,7 +71,7 @@
 						</view>
 					</view>
 
-					<view class="list-container" v-if="currentIndex==1">
+					<view class="list-container" v-if="currentIndex==1 && browerList &&  browerList.length">
 						<view class="item-container"
 							v-for="(bowerItem,index3) in browerList"
 							:key="index3"
@@ -82,7 +81,6 @@
 								<img class="img" src="../../images/clue_item_bg.png" alt="">
 								<view>
 									<view class="projectName">{{bowerItem.estateName}}</view>
-									<!-- 报名用户字段只有销售端出现 role 1.销售 2.C端用户-->
 									<view class="customerName" v-if="storeData.role == 1">报名用户： {{bowerItem.userNickName}}</view>
 								</view>
 							</view>
@@ -127,7 +125,7 @@ export default defineComponent({
 		console.log("storeData",storeData)
 		const currentIndex=ref<number>(0)
 		const browerList = ref<Array<BrowerItem>>([])
-		const signupList =ref<Array<SignupRecordItem>>([])
+		const signupList =ref<SignupRecordItem[]>([])
 		const triggerd =ref<boolean>(false)
 		const loading = ref<boolean>(false)
 		const tabList=[
@@ -163,11 +161,13 @@ export default defineComponent({
 				loading.value = true
 				const res= await getSignupRecordList(params)
 				triggerd.value = false
-				if(!res.data) return
-				signupList.value=signupList.value.concat(res.data.list)
-				queryData.totalPage[0] = res.data.totalPage
-				queryData.rows[0] = res.data.rows
 				loading.value = false
+				if(res.data && res.data.list ){
+					signupList.value =[...signupList.value,...res.data?.list]
+					// debugger
+					queryData.totalPage[0] = res.data.totalPage
+					queryData.rows[0] = res.data.rows
+				}
 			} catch (error) {
 				console.log("error!!",error)
 			}
@@ -183,11 +183,12 @@ export default defineComponent({
 				loading.value =true
 				const res = await getClueBrowerList(params)
 				triggerd.value = false
-				if(!res.data) return
-				browerList.value = browerList.value.concat(res.data.list)
-				queryData.totalPage[1] = res.data.totalPage
-				queryData.rows[1] = res.data.rows
 				loading.value = false
+				if(res.data && res.data.list){
+					browerList.value = [...browerList.value, ...res.data?.list]
+					queryData.totalPage[1] = res.data.totalPage
+					queryData.rows[1] = res.data.rows
+				}
 			} catch (error) {
 				console.log("error!!",error)
 			}
@@ -207,11 +208,12 @@ export default defineComponent({
 				if(browerList.value.length) return
 				reqBrowerList()
 			}
-		})
+		},)
 
 		const changTab=(index:number)=>{
 			currentIndex.value =index
 		}
+
 		const swiperChange=(e:any)=>{
 			let index= e.target.current ||e.detail.current;
 			currentIndex.value =index
@@ -228,7 +230,6 @@ export default defineComponent({
 
 		const gotoRegistrationDetailPage =(id:number)=>{
 			console.log("去报名详情页面！！！",id)
-			console.log("userId")
 			uni.navigateTo({
 				url:`signup-detail/signup-detail?id=${id}`
 			})
