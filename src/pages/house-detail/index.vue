@@ -100,14 +100,16 @@ export default defineComponent({
     const houseId = ref<number>(0)
     onLoad((e) => {
       console.log("---onLoad---", e);
-      e.houseId = '1'
+      e.houseId = '28'
       if(e.houseId){
         houseId.value = +e.houseId
         requestHouseDetail(+e.houseId)
         requestCode(e.houseId)
       }
-      if(e.consultantId)storeData.consultantId = +e.consultantId
-      if(e.consultantPhoneNum)storeData.consultantPhoneNum = e.consultantPhoneNum
+      if(e.shardId){
+        // storeData.consultantId = +e.shardId
+        uni.setStorageSync('shareId',e.shardId)
+      }
     });
     onPullDownRefresh(() => {
       requestHouseDetail(houseId.value)
@@ -133,9 +135,6 @@ export default defineComponent({
         theme.value = "transparent";
       }
     });
-    const imageUrl: string =
-      "https://ali-res-test.dabanjia.com/res/20220211/14/1644561850441_1874%240be4eaff-1611-4087-9d91-57dbfe053ac0.jpg";
-
     const codeDialogShow = ref<boolean>(false);
     const toCasedetail = (caseId:number,houseId:number)=>{
       houseCaseCheck(houseId,caseId)

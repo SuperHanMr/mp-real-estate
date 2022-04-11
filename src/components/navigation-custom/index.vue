@@ -52,7 +52,18 @@ const backIcon = computed(() => {
   return props.theme === "transparent" ? whiteBackIcon : blackBackIcon;
 });
 const backPage = () => {
-  uni.navigateBack({ delta: 1 });
+  // uni.navigateBack({ delta: 1 });
+  let pages = getCurrentPages()
+        // console.log(pages.length,'当前栈深度')
+        if (pages.length < 2) {
+          uni.switchTab({
+            url: '/pages/home/index'
+          });
+        } else {
+          uni.navigateBack({
+            delta: 1
+          })
+        }
 };
 </script>
 <style lang="scss" scoped>
