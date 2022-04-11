@@ -51,9 +51,7 @@
 					<view class="content">{{materialItem.bagDesc.bagPackageDesc}}</view>
 					<view class="price">
 						<text style="font-size:26rpx">￥</text>
-						<text>
-							{{handlePrice(materialItem.buyItNow.buyItNow)}}
-						</text>
+						<text>{{materialItem.buyItNow.buyItNow}}</text>
 					</view>
 					<view class="showMoreMaterial" >
 						<image  class="iconImg" src="../../../images/code-icon.png" />

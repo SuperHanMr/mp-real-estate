@@ -39,7 +39,7 @@
 						<view class="item-container"
 							v-for="(signupItem,index2) in signupList"
 							:key="index2"
-							@click="gotoRegistrationDetailPage(signupItem.id)"
+							@click="gotoRegistrationDetailPage(signupItem.id,0)"
 						>
 							<view class="header">
 								<img class="img" src="../../images/clue_item_bg.png" alt="">
@@ -64,7 +64,7 @@
 								<view class="itemInfo">
 									<view class="left"> 总价</view>
 									<view class="right" style="font-weight: 500;">
-										￥{{handlePrice(signupItem.offerPrice)}}
+										￥{{handlePrice(signupItem.offerPrice/100)}}
 									</view>
 								</view>
 							</view>
@@ -75,7 +75,7 @@
 						<view class="item-container"
 							v-for="(bowerItem,index3) in browerList"
 							:key="index3"
-							@click="gotoRegistrationDetailPage(bowerItem.id)"
+							@click="gotoRegistrationDetailPage(bowerItem.id,bowerItem.deleteFlag)"
 						>
 							<view class="header" >
 								<img class="img" src="../../images/clue_item_bg.png" alt="">
@@ -116,6 +116,7 @@ import {
 	SignupRecordItem
 } from "../../api/clue"
 import { useUserInfoHooks } from "../../hoosk/index";
+import { BooleanLiteral } from "@babel/types";
 
 export default defineComponent({
   name: "",
@@ -228,11 +229,19 @@ export default defineComponent({
       }
     }
 
-		const gotoRegistrationDetailPage =(id:number)=>{
+		const gotoRegistrationDetailPage =(id:number,deleteFlag:number)=>{
 			console.log("去报名详情页面！！！",id)
-			uni.navigateTo({
-				url:`signup-detail/signup-detail?id=${id}`
-			})
+			if(deleteFlag==-1){
+				uni.showToast({
+					title:"方案已下架！",
+					icon:"none",
+					duration:1000
+				})
+			}else{
+				uni.navigateTo({
+					url:`signup-detail/signup-detail?id=${id}`
+				})
+			}
 		}
 		const formatDate = (time: number) =>
        moment(time).format("YYYY-MM-DD  HH:mm:ss")
