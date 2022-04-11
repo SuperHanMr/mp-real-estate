@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-09 15:33:14
+ * @LastEditTime: 2022-04-09 16:18:32
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -41,6 +41,7 @@ export default defineComponent({
         });
         console.log("role", uni.getStorageSync("role"));
       }
+      // console.log("getApp", getApp().globalData);
     });
     onShow(() => {});
     onPullDownRefresh(() => {

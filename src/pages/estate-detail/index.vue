@@ -2,13 +2,13 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-09 14:58:51
+ * @LastEditTime: 2022-04-11 10:40:47
  * @LastEditors: HanYongHui
 -->
 <template>
   <navigation-custom title="楼盘详情" :theme="theme" />
   <view class="estate-detail-warp">
-    <img class="bac-image" :src="estateDetail.url" mode="aspectFill" />
+    <img class="bac-image" :src="url" mode="aspectFill" />
     <view class="estate-content-warp">
       <view class="estate-detail_head">
         <view class="estate-detail_head--left">
@@ -118,6 +118,8 @@ export default defineComponent({
     const onClickCodeImage = () => {
       requestCodeImage("pages/home/index/index");
     };
+    const url: string =
+      "https://dbj-test.oss-cn-beijing.aliyuncs.com/res/20220409/17/1649495698628_7274801.jpg";
     return {
       theme,
       codeDialogShow,
@@ -126,6 +128,7 @@ export default defineComponent({
       codeImageUrl,
       onClickHouseType,
       onClickCodeImage,
+      url,
     };
   },
 });

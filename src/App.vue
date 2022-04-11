@@ -2,11 +2,11 @@
  * @Description: 小程序 主入口
  * @Author: HanYongHui
  * @Date: 2022-03-29 16:44:50
- * @LastEditTime: 2022-04-09 15:37:55
+ * @LastEditTime: 2022-04-09 16:16:35
  * @LastEditors: HanYongHui
 -->
 <script setup lang="ts">
-import { watch } from "vue";
+import { watch, reactive } from "vue";
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
 import { useUserInfoHooks } from "./hoosk/index";
 import { useLoginHooks } from "../src/pages/login/hooks/index";
