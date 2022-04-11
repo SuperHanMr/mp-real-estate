@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-01 16:13:40
- * @LastEditTime: 2022-04-08 16:29:30
+ * @LastEditTime: 2022-04-11 10:38:30
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -84,8 +84,8 @@ const backPage = () => {
       align-items: center;
       justify-content: center;
       image {
-        width: 24rpx;
-        height: 48rpx;
+        width: 18rpx;
+        height: 34rpx;
       }
     }
 

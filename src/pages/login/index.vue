@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:41:39
- * @LastEditTime: 2022-04-09 15:37:53
+ * @LastEditTime: 2022-04-09 15:56:54
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -54,6 +54,7 @@ const login = () => {
             // 未注册
             break;
           case 1:
+            // role 1 C端用户 2 销售人员
             uni.setStorageSync("name", data?.name);
             uni.setStorageSync("role", data?.role);
             uni.switchTab({ url: "/pages/home/index" });

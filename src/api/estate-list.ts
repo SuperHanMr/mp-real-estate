@@ -2,7 +2,7 @@
  * @Description: 楼盘列表
  * @Author: HanYongHui
  * @Date: 2022-04-08 15:51:40
- * @LastEditTime: 2022-04-08 16:35:17
+ * @LastEditTime: 2022-04-09 15:57:45
  * @LastEditors: HanYongHui
  */
 
@@ -22,5 +22,6 @@ export type EstateList = {
 }[]
 
 export function getEstateList(maxId: number) {
-  return request.get<EstateList>('/em/applet/client/findHouses', { maxId: maxId, pageSize: 10 })
+  const url: string = uni.getStorageSync('role') === 2 ? '/em/applet/client/findHouses' : '/em/applet/sales/findHouses'
+  return request.get<EstateList>(url, { maxId: maxId, pageSize: 10 })
 }
