@@ -32,6 +32,12 @@
 </template>
 <script lang="ts" setup>
 import { defineComponent, defineProps, defineEmits } from "vue";
+import {
+  onLoad,
+  onPullDownRefresh,
+  onReachBottom,
+  onPageScroll,
+} from "@dcloudio/uni-app";
 const props = defineProps({
   codeUrl: {
     type: String,
