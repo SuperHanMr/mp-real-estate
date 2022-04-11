@@ -13,7 +13,8 @@ type Store = {
   userId: string,
   avatarUrl: string,
   statusBarHeight: number,
-
+  consultantId: number,
+  consultantPhoneNum: string
 }
 const storeData = reactive<Store>(
   {

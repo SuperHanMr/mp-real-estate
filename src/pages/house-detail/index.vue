@@ -40,7 +40,7 @@
           <text>全部方案（{{houseDetail.schemeSimpleItemVOS.length}}）</text>
         </view>
         <view class="house-type-warp" v-for="(item,index) in houseDetail.schemeSimpleItemVOS" @click="toCasedetail(item.schemeId,houseDetail.id)" :key="index">
-          <image class="left-img" src="../../images/case-left.png" v-if="!storeData.role" mode="" />
+          <image class="left-img" src="../../images/case-left.png" v-if="storeData.role===1" mode="" />
           <view class="house-type_image">
             <image
               class="house-type_image--cover"
@@ -95,7 +95,7 @@ export default defineComponent({
   },
   setup() {
     const { storeData } = useUserInfoHooks();
-    const {requestHouseDetail,requestCode,houseDetail,codeUrl} = getHouseDetailHooks()
+    const {requestHouseDetail,requestCode,houseCaseCheck,houseDetail,codeUrl} = getHouseDetailHooks()
     const loadType = ref<"succeed" | "error" | "load" | "complete">("succeed");
     const houseId = ref<number>(0)
     onLoad((e) => {
@@ -106,6 +106,8 @@ export default defineComponent({
         requestHouseDetail(+e.houseId)
         requestCode(e.houseId)
       }
+      if(e.consultantId)storeData.consultantId = +e.consultantId
+      if(e.consultantPhoneNum)storeData.consultantPhoneNum = e.consultantPhoneNum
     });
     onPullDownRefresh(() => {
       requestHouseDetail(houseId.value)
@@ -136,9 +138,7 @@ export default defineComponent({
 
     const codeDialogShow = ref<boolean>(false);
     const toCasedetail = (caseId:number,houseId:number)=>{
-      uni.navigateTo({
-        url:`/pages/case-detail/index?caseId=${caseId}&houseId=${houseId}`
-      })
+      houseCaseCheck(houseId,caseId)
     }
     return {
       toCasedetail,

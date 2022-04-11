@@ -111,6 +111,10 @@ export function houseDetailHooks(houseId: number) {
   return request.get<houseDetail>('/em/applet/client/findHousesTypeInfo?housesTypeId=' + houseId)
 }
 
+export function requestHouseCaseCheck(houseId: number) {
+  return request.get<{ status: number }>('/em/applet/client/checkScheme?schemeId=' + houseId)
+}
+
 // export function houseCaseListHooks(houseId: number) {
 //   return request.get<houseCaseList>('/em/applet/client/findSchemeList?housesTypeId=' + houseId)
 // }
