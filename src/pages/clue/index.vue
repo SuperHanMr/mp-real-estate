@@ -75,7 +75,7 @@
 						<view class="item-container"
 							v-for="(bowerItem,index3) in browerList"
 							:key="index3"
-							@click="gotoRegistrationDetailPage(bowerItem.id,bowerItem.deleteFlag)"
+							@click="gotoRegistrationDetailPage(bowerItem.id,bowerItem.deleteFlag || 0)"
 						>
 							<view class="header" >
 								<img class="img" src="../../images/clue_item_bg.png" alt="">
