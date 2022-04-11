@@ -92,10 +92,10 @@ export type SignupRecordDetail = {
     livingroomNum: number, //厅,
     kitchenNum: number, //厨,
     toiletNum: number, //卫,
-    direction: string, //朝向,
+    direction: string //朝向,
     floorArea: number, //建筑面积,
     floorAreaInside: number, //套内面积,
-    status: number,//状态(0 删除 1启用 2停用),
+    status: number, //状态(0 删除 1启用 2停用),
     houseTypeName: string, //户型名称,
     specification: string, //规格(三室一厅一厨一卫.....)
   },
@@ -103,43 +103,55 @@ export type SignupRecordDetail = {
     schemeTagName: string, //方案标签名称,
     tagCode: string, //方案code码值
   }],
-  schemeName: string, //方案名称
+  schemeName: string, //方案名称,
+  deleteFlag: number, //0 : 正常    -1： 已删除,
+  estateName: string //楼盘名称,
+  userNickName: string //用户昵称,
+  userPhone: string //用户手机号,
+  signNo: string //报名编号,
+  signUpTime: number, //报名时间,
+  consultantId: number, //销售员id,
+  consultantName: string, //销售姓名,
+  consultantPhone: string, //销售手机号,
+  offerPrice: number, //总报价
 }
 
-export type MaterialItem= {
+
+export type MaterialItem = {
   productBagName: {
-    productBagName: string //输入不超过15个字符
+    productBagName: string, //输入不超过15个字符
   },
   buyItNow: {
-    buyItNow: number //输入两位小数数字
+    buyItNow: number, //输入两位小数数字
   },
   bagDesc: {
     bagPackageDesc: string //套包简介
   },
   spuInfoVOS: [{
-    createDate: Number //创建时间,
-        skuInfoVOList: [{
-      skuImageUrl: string //【商品SKU图】取【商品SKU图】,
-          skuId: number //【SKUID】取商品【SKUID】,
-          skuAttribute: string //【SKU属性】取商品销售规格中 SKU属性拼接,
-          baseStateInfo: {
-        code: number,
-        stateDesc: string
+    spuId: number,
+    createDate: number, //创建时间,
+    skuInfoVOList: [{
+      skuImageUrl: string, //【商品SKU图】取【商品SKU图】,
+      skuId: number, //【SKUID】取商品【SKUID】,
+      skuAttribute: string, //【SKU属性】取商品销售规格中 SKU属性拼接,
+      baseStateInfo: {
+        code: number, //1：& 2：,
+        stateDesc: string,
       },
-      minByCount: string //最小起购数量,
-          unitStr: string //销售单位,
-          salePrice: string //销售价
+      minByCount: string, //最小起购数量,
+      unitStr: string, //销售单位,
+      salePrice: string, //销售价
     }],
     baseStateInfo: {
-      code: number //1：& 2：,
-          stateDesc: string
+      code: number, //1：& 2：,
+      stateDesc: string,
     },
-    spuImageUrl: string //【商品图】取【商品SPU缩略图】,
-        spuName: string //【商品名称】取【商品名称】,
-        categoryName: string //【商品品类】取商品品类【品类名称】,
-        brandName: string //【品牌】取商品关联品牌【品牌名称】,
-        supplierName: string //【供应商】取商品关联供应商【供应商名称】，无显示--,
-        storeName: string //所属店铺】取商品关联店铺【店铺名称】
+    spuImageUrl: string, //【商品图】取【商品SPU缩略图】,
+    spuName: string, //【商品名称】取【商品名称】,
+    categoryName: string, //【商品品类】取商品品类【品类名称】,
+    brandName: string, //【品牌】取商品关联品牌【品牌名称】,
+    supplierName: string, //【供应商】取商品关联供应商【供应商名称】，无显示--,
+    storeName: string, //所属店铺】取商品关联店铺【店铺名称】
   }]
 }
 

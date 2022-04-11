@@ -2,19 +2,20 @@
 	<navigation-custom title="报名详情" :theme="theme" ></navigation-custom>
 
 	<view class="container">
-		<!-- <view class="bgImg" ></view> -->
-		<img class="bgImg" @click="toBack" :src="data.coverPictureInfoVO.coverImageUrl" alt="">
+		<view class="bgImg"
+		:style="{backgroundImage:`url(${detailInfo.coverPictureInfoVO.coverImageUrl})`}"></view>
+		<!-- <img class="bgImg" @click="toBack" :src="detailInfo.coverPictureInfoVO.coverImageUrl" alt=""> -->
 		<view class="header-container">
 			<view class="header-bg"></view>
-			<view class="projectName">{{data.schemeName}}</view>
+			<view class="projectName">{{detailInfo.schemeName}}</view>
 			<view class="project-item">
 				<image src="../../../images/code-icon.png" mode=""></image>
-				<text>{{data.houseWithSchemeInfo.houseTypeName}}</text>
+				<text>{{detailInfo.houseWithSchemeInfo.houseTypeName}}</text>
 			</view>
 			<view class="project-item">
 				<image src="../../../images/code-icon.png" mode=""></image>
 				<text>
-					<text>{{data.houseWithSchemeInfo.specification}}</text>
+					<text>{{detailInfo.houseWithSchemeInfo.specification}}</text>
 				</text>
 			</view>
 		</view>
@@ -27,7 +28,7 @@
 				<view class="content-item">
 					<text class="left">报名编号</text>
 					<view class="right">
-						<text>628278498723647928364</text>
+						<text>{{detailInfo.signNo}}</text>
 						<view class="button" @click="duplicate(628278498723647928364)" >复制</view>
 					</view>
 				</view>
@@ -35,7 +36,7 @@
 				<view class="content-item">
 					<text class="left">报名时间</text>
 					<view class="right">
-						<text>2021-08-21  07:39:12</text>
+						<text>{{formatDate(data.signUpTime)}}</text>
 					</view>
 				</view>
 			</view>
@@ -45,17 +46,17 @@
 				<text>装修报价</text>
 			</view>
 			<view class="renovation-content">
-				<view v-for="(materialItem,index) in data.productBagVOS" :key="index" @click="gotoNextPage(materialItem)">
+				<view v-for="(materialItem,index) in detailInfo.productBagVOS" :key="index" @click="gotoNextPage(index)">
 					<view class="updateMaterial-text">{{materialItem.productBagName.productBagName}}</view>
 					<view class="content">{{materialItem.bagDesc.bagPackageDesc}}</view>
 					<view class="price">
 						<text style="font-size:26rpx">￥</text>
 						<text>{{materialItem.buyItNow.buyItNow}}</text>
 					</view>
-				</view>
-				<view class="showMoreMaterial" >
-					<image  class="iconImg" src="../../../images/code-icon.png" />
-					<text>查看套餐所含全部商品</text>
+					<view class="showMoreMaterial" >
+						<image  class="iconImg" src="../../../images/code-icon.png" />
+						<text>查看套餐所含全部商品</text>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -66,23 +67,23 @@
 <script lang="ts">
 	import{defineComponent,reactive,ref, toRefs} from "vue"
 	import{
-		onPullDownRefresh,
 		onPageScroll,
-		onReachBottom,
 		onLoad,
 		onShow,
 	} from"@dcloudio/uni-app";
-	import {getSignupRecordDetail,SignupRecordDetail,MaterialItem} from "../../../api/clue"
-	// import navicationCustom from "../../../components/navigation-custom/index.vue"
-	// import loadMore from "../../../components/load-more/index.vue";
+	import {getRecordDetail} from "../hooks/index"
+	import {SignupRecordDetail} from "../../../api/clue"
+	import moment from "moment";
+	import navigationCustom from "@/components/navigation-custom/index.vue"
+	import loadMore from "@/components/load-more/index.vue";
 	export default defineComponent({
 		name:"",
-		components:{
-			// navicationCustom,
-			// loadMore,
-
+		components: {
+			navigationCustom,
+			loadMore,
 		},
 		setup(){
+			const {requestSignupDetail,detailInfo} = getRecordDetail()
 		  const theme = ref<"white" | "black" | "transparent">("transparent");
 			const id =ref<number>(0)
 			const signupDetailInfo= reactive<{data:SignupRecordDetail}>({data:{} as SignupRecordDetail})
@@ -90,7 +91,7 @@
 				console.log("---onLoad---", e);
 				id.value = +e.id
 				console.log(id.value)
-				reqSignupRecordDetail()
+				requestSignupDetail(e.id)
 			});
 			onPageScroll((e) => {
 				if (e.scrollTop > 64) {
@@ -99,17 +100,6 @@
 					theme.value = "transparent";
 				}
 			});
-			const reqSignupRecordDetail=async()=>{
-				try {
-					const res = await getSignupRecordDetail(id.value)
-					console.log("res",res)
-					if(!res.data) return
-					signupDetailInfo.data =res.data
-					console.log("signupDetailInfo.data==",signupDetailInfo.data )
-				} catch (error) {
-					console.log(error)
-				}
-			}
 			const duplicate= (num:number)=>{
 				uni.setClipboardData({
 					data:`${num}`,
@@ -122,22 +112,26 @@
 					}
 				})
 			}
-			const gotoNextPage=(materialItem:MaterialItem)=>{
-				// uni.$emit("materialUpgradeInfo",materialItem)
+			const gotoNextPage=(index:number)=>{
 				uni.navigateTo({
-					url:`../material-upgrade/material-upgrade`
+					url:`../material-upgrade/material-upgrade?index=${index}`
 				})
 			}
 
 			const toBack=()=>{
 				uni.navigateBack({})
 			}
+			const formatDate = (time: number) =>
+				moment(time).format("YYYY-MM-DD  HH:mm:ss")
+
 			return {
 				theme,
 				toBack,
 				signupDetailInfo,
 				duplicate,
 				gotoNextPage,
+				detailInfo,
+				formatDate,
 				...toRefs(signupDetailInfo),
 			}
 		}
@@ -154,8 +148,8 @@
 		.bgImg{
 			width: 100%;
 			height: 462rpx;
-			// background-repeat: no-repeat;
-			// background-size: contain;
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
 			.img{
 				width: 100%;
 				height: 100%;
