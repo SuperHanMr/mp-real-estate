@@ -35,18 +35,17 @@
 					refresher-enabled="true"
 					@scrolltolower="onLoadMore"
 				>
-					<view class="list-container" v-if="currentIndex==0">
+					<view class="list-container" v-if="currentIndex==0 && signupList && signupList.length">
 						<view class="item-container"
 							v-for="(signupItem,index2) in signupList"
 							:key="index2"
-							@click="gotoRegistrationDetailPage(signupItem.id)"
+							@click="gotoRegistrationDetailPage(signupItem.id,0)"
 						>
 							<view class="header">
 								<img class="img" src="../../images/clue_item_bg.png" alt="">
 								<view>
 									<view class="projectName">{{signupItem.estateName}}</view>
-									<!-- 报名用户字段只有销售端出现 -->
-									<view class="customerName">报名用户：{{signupItem.userNickName}}</view>
+									<view class="customerName" v-if="storeData.role == 1">报名用户：{{signupItem.userNickName}}</view>
 								</view>
 							</view>
 							<view class="caseInfo-container">
@@ -64,24 +63,25 @@
 								</view>
 								<view class="itemInfo">
 									<view class="left"> 总价</view>
-									<view class="right" style="font-weight: 500;">￥{{signupItem.offerPrice}}</view>
+									<view class="right" style="font-weight: 500;">
+										￥{{handlePrice(signupItem.offerPrice/100)}}
+									</view>
 								</view>
 							</view>
 						</view>
 					</view>
 
-					<view class="list-container" v-if="currentIndex==1">
+					<view class="list-container" v-if="currentIndex==1 && browerList &&  browerList.length">
 						<view class="item-container"
 							v-for="(bowerItem,index3) in browerList"
 							:key="index3"
-							@click="gotoRegistrationDetailPage(bowerItem.id)"
+							@click="gotoRegistrationDetailPage(bowerItem.id,bowerItem.deleteFlag || 0)"
 						>
 							<view class="header" >
 								<img class="img" src="../../images/clue_item_bg.png" alt="">
 								<view>
 									<view class="projectName">{{bowerItem.estateName}}</view>
-									<!-- 报名用户字段只有销售端出现 -->
-									<view class="customerName">报名用户： {{bowerItem.userNickName}}</view>
+									<view class="customerName" v-if="storeData.role == 1">报名用户： {{bowerItem.userNickName}}</view>
 								</view>
 							</view>
 							<view class="caseInfo-container">
@@ -113,17 +113,20 @@ import {
 	getSignupRecordList,
 	SignupParams,
 	BrowerItem,
-	SignupRecordList,
 	SignupRecordItem
 } from "../../api/clue"
+import { useUserInfoHooks } from "../../hoosk/index";
+import { BooleanLiteral } from "@babel/types";
 
 export default defineComponent({
   name: "",
   components: {},
   setup() {
+		const {storeData} = useUserInfoHooks()
+		console.log("storeData",storeData)
 		const currentIndex=ref<number>(0)
 		const browerList = ref<Array<BrowerItem>>([])
-		const signupList =ref<Array<SignupRecordItem>>([])
+		const signupList =ref<SignupRecordItem[]>([])
 		const triggerd =ref<boolean>(false)
 		const loading = ref<boolean>(false)
 		const tabList=[
@@ -159,11 +162,13 @@ export default defineComponent({
 				loading.value = true
 				const res= await getSignupRecordList(params)
 				triggerd.value = false
-				if(!res.data) return
-				signupList.value=signupList.value.concat(res.data.list)
-				queryData.totalPage[0] = res.data.totalPage
-				queryData.rows[0] = res.data.rows
 				loading.value = false
+				if(res.data && res.data.list ){
+					signupList.value =[...signupList.value,...res.data?.list]
+					// debugger
+					queryData.totalPage[0] = res.data.totalPage
+					queryData.rows[0] = res.data.rows
+				}
 			} catch (error) {
 				console.log("error!!",error)
 			}
@@ -179,11 +184,12 @@ export default defineComponent({
 				loading.value =true
 				const res = await getClueBrowerList(params)
 				triggerd.value = false
-				if(!res.data) return
-				browerList.value = browerList.value.concat(res.data.list)
-				queryData.totalPage[1] = res.data.totalPage
-				queryData.rows[1] = res.data.rows
 				loading.value = false
+				if(res.data && res.data.list){
+					browerList.value = [...browerList.value, ...res.data?.list]
+					queryData.totalPage[1] = res.data.totalPage
+					queryData.rows[1] = res.data.rows
+				}
 			} catch (error) {
 				console.log("error!!",error)
 			}
@@ -203,22 +209,39 @@ export default defineComponent({
 				if(browerList.value.length) return
 				reqBrowerList()
 			}
-		})
+		},)
 
 		const changTab=(index:number)=>{
 			currentIndex.value =index
 		}
+
 		const swiperChange=(e:any)=>{
 			let index= e.target.current ||e.detail.current;
 			currentIndex.value =index
 		}
+		const handlePrice=(price:number)=>{
+      if(!price) return ['0','00']
+      let list=String(price).split(".")
+      if(list.length==1){
+        return list[0]+'.'+'00'
+      }else{
+        return list[0]+'.'+list[1]
+      }
+    }
 
-		const gotoRegistrationDetailPage =(id:number)=>{
+		const gotoRegistrationDetailPage =(id:number,deleteFlag:number)=>{
 			console.log("去报名详情页面！！！",id)
-			console.log("userId")
-			uni.navigateTo({
-				url:`signup-detail/signup-detail?id=${id}`
-			})
+			if(deleteFlag==-1){
+				uni.showToast({
+					title:"方案已下架！",
+					icon:"none",
+					duration:1000
+				})
+			}else{
+				uni.navigateTo({
+					url:`signup-detail/signup-detail?id=${id}`
+				})
+			}
 		}
 		const formatDate = (time: number) =>
        moment(time).format("YYYY-MM-DD  HH:mm:ss")
@@ -267,8 +290,10 @@ export default defineComponent({
 			signupList,
 			onLoadMore,
 			onRefresh,
+			handlePrice,
 			triggerd,
 			loading,
+			storeData,
 		};
   },
 });

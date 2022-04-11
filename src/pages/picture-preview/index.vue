@@ -25,11 +25,11 @@
         </scroll-view>
       </view>
       <view class="introduce-content">
-        <view class="content-text" :class="{'is-hidden':isHidden}">
+        <view class="content-text" id="content-text" :class="{'is-hidden':isHidden}">
           {{imgList.tagList[currentTagIndex].desc}}
         </view>
         <view class="control-text">
-        <view class="text-btn" @click="openIntorduce">{{isHidden?'展开':'收起'}}</view>
+        <view class="text-btn" v-if="hasControl" @click="openIntorduce">{{isHidden?'展开':'收起'}}</view>
         </view>
       </view>
     </view>
@@ -43,12 +43,12 @@ import whiteBack from "../../images/back-icon.png"
 export default defineComponent({
 
   setup(props,context){
+    const hasControl = ref<Boolean>(false)
     const controlText = ref<String>('展开')
     const isHidden = ref<Boolean>(true)
     const currentIndex = ref<number>(0)
     const swiperHeight = ref<number>(0)
     const currentTagIndex = computed(()=>{
-
       return imgList.tagList.findIndex(item=>{
         return currentIndex.value>=item.index&&currentIndex.value<item.index+item.length
       })
@@ -58,11 +58,9 @@ export default defineComponent({
 
     onLoad((e)=>{
       e.index?currentIndex.value = +e.index:""
-
     })
 
     onMounted(()=>{
-
         nextTick(()=>{
         setSwiperHeight()
       })
@@ -84,12 +82,16 @@ export default defineComponent({
       let query = uni.createSelectorQuery();
       console.log(query)
       query.select(element).boundingClientRect(()=>{});
+      query.select('#content-text').boundingClientRect(()=>{})
       query.exec((res) => {
           console.log(res)
-
         if (res && res[0]) {
           console.log(res[0].height)
           swiperHeight.value = res[0].height;
+        }
+        if(res&&res[1]){
+          hasControl.value = res[1].height/18>4
+          console.log(res[1].height,">>>>>>>>")
         }
       });
     }
@@ -98,8 +100,8 @@ export default defineComponent({
       currentIndex.value = imgList.tagList[index].index
     }
     const backPage = () => {
-  uni.navigateBack({ delta: 1 });
-};
+      uni.navigateBack({ delta: 1 });
+    };
     // nextTick(()=>{
     //     setSwiperHeight()
     //   })
@@ -111,6 +113,7 @@ export default defineComponent({
       currentTagIndex,
       swiperHeight,
       whiteBack,
+      hasControl,
       swiperChange,
       openIntorduce,
       toTagImage,

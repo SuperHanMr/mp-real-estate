@@ -53,7 +53,7 @@
         </view>
         <view class="case-detail_head--right" @click="codeDialogShow = true">
           <image src="../../images/code-icon.png" />
-          <text>户型二维码</text>
+          <text>方案二维码</text>
         </view>
       </view>
       </view>
@@ -64,7 +64,7 @@
           <text>装修报价</text>
         </view>
         <view class="case-type-conetnt">
-          <view class="case-type-warp" v-for="(item,index) in caseDetail.productBagVOS" :key="index" :class="{'is-user':!storeData.role,'active-choose':hasGoods(index)}" @click="chooseGoods(item,index)">
+          <view class="case-type-warp" v-for="(item,index) in caseDetail.productBagVOS" :key="index" :class="{'is-user':storeData.role===2,'active-choose':hasGoods(index)}" @click="chooseGoods(item,index)">
             <image src="../../images/case-bg.png" class="case-bg" mode="" />
             <image src="../../images/choose-bg.png" v-if="hasGoods(index)" class="choose-bg" mode="" />
             <view  class="case-content">
@@ -80,7 +80,7 @@
               </view>
             </view>
           </view>
-          <view class="report" v-if="!storeData.role">
+          <view class="report" v-if="storeData.role===2">
             <view class="report-text">精选装修套餐 限时参团享优惠</view>
             <view class="report-shadow"></view>
             <view class="report-btn" @click="report">
@@ -133,8 +133,6 @@ export default defineComponent({
     const currentIndex = ref<number>(0)
     const caseId = ref<number>(0)
     const houseId = ref<number>(0)
-    const consultantId = ref<number>(0)
-    const consultantPhoneNum = ref<string>('')
     const goodList = ref<productItem[]>([])
     const goodPrice = computed(()=>{
       let num = 0
@@ -143,15 +141,17 @@ export default defineComponent({
       })
       return num
     })
-    const {requestCaseDetail,requestReport,requestCode,caseDetail,imgList,codeUrl} = getCaseDetailHooks()
+    const {requestCaseDetail,requestReport,requestCode,requestFindParentIds,caseDetail,imgList,codeUrl} = getCaseDetailHooks()
     onLoad((e) => {
       console.log("---onLoad---", e);
-      // e.caseId="111"
+      e.caseId="140"
       if(e.caseId)caseId.value = +e.caseId
-      if(e.houseId)houseId.value = +e.houseId
-      if(e.consultantId)consultantId.value = +e.consultantId
-      if(e.consultantPhoneNum)consultantPhoneNum.value = e.consultantPhoneNum
+      if(e.shardId){
+        // storeData.consultantId = +e.shardId
+        uni.setStorageSync('shareId',e.shardId)
+      }
       requestCaseDetail(caseId.value)
+      requestFindParentIds({pageId:caseId.value,level:3})
       getCode()
     });
     // onMounted(()=>{
@@ -195,6 +195,9 @@ export default defineComponent({
       currentIndex.value = num
     }
     const chooseGoods = (item:productItem,index:number) =>{
+      if(storeData.role!==2){
+        return
+      }
       let has = goodList.value.findIndex(item=>{
         return item.index===index
       })
@@ -218,22 +221,26 @@ export default defineComponent({
       })
     }
     const report = ()=>{
+      if(goodList.value.length===0){
+        return
+      }
       let data = {
-        estateId:houseId.value,
+        estateId:0,
         schemeId:caseId.value,
         schemeSnapshot:JSON.stringify(goodList.value),
         offerPrice:goodPrice.value,
         schemeName:caseDetail.value.schemeName,
-        consultantId:consultantId.value||0,
-        consultantPhoneNum:consultantPhoneNum.value||''
+        consultantId:uni.getStorageSync('shareId')||'',
       }
-      requestReport(data)
+      requestReport(data,()=>{
+        goodList.value = []
+      })
     }
 
     const getCode = () => {
-      let url = `?caseId=${caseId.value}&houseId=${houseId.value}`
-      if(consultantPhoneNum.value){
-        url = url+`&consultantPhoneNum=${consultantPhoneNum.value}&consultantId=${consultantId.value}`
+      let url = `caseId=${caseId.value}`
+      if(uni.getStorageSync('shareId')){
+        url = url+`&shareId=${uni.getStorageSync('shareId')}`
       }
       requestCode(url)
     }

@@ -25,6 +25,7 @@ export type BrowerItem = {
   schemeName: string,  //方案名称",
   coverImg: string, //封面图片",
   browseTime: number,//浏览时间"
+  deleteFlag?:number,//是否下架 0正常 -1 已删除
 }
 
 export type SignupParams = {

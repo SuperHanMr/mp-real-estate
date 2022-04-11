@@ -45,7 +45,7 @@
 			}
 		},
 		{
-			"path" : "pages/clue/signup-detail/signup-detail",
+			"path": "pages/clue/signup-detail/signup-detail",
 			"style": {
 				"navigationBarTitleText": "报名详情",
 				"navigationStyle": "custom"
@@ -86,7 +86,7 @@
 		"list": [
 			{
 				"name": "lyb",
-				"path": "/pages/house-detail/index",
+				"path": "/pages/case-detail/index",
 				"query": ""
 			}
 		]

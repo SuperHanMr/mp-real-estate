@@ -40,7 +40,7 @@
           <text>全部方案（{{houseDetail.schemeSimpleItemVOS.length}}）</text>
         </view>
         <view class="house-type-warp" v-for="(item,index) in houseDetail.schemeSimpleItemVOS" @click="toCasedetail(item.schemeId,houseDetail.id)" :key="index">
-          <image class="left-img" src="../../images/case-left.png" v-if="!storeData.role" mode="" />
+          <image class="left-img" src="../../images/case-left.png" v-if="storeData.role===1" mode="" />
           <view class="house-type_image">
             <image
               class="house-type_image--cover"
@@ -95,16 +95,20 @@ export default defineComponent({
   },
   setup() {
     const { storeData } = useUserInfoHooks();
-    const {requestHouseDetail,requestCode,houseDetail,codeUrl} = getHouseDetailHooks()
+    const {requestHouseDetail,requestCode,houseCaseCheck,houseDetail,codeUrl} = getHouseDetailHooks()
     const loadType = ref<"succeed" | "error" | "load" | "complete">("succeed");
     const houseId = ref<number>(0)
     onLoad((e) => {
       console.log("---onLoad---", e);
-      e.houseId = '1'
+      e.houseId = '28'
       if(e.houseId){
         houseId.value = +e.houseId
         requestHouseDetail(+e.houseId)
         requestCode(e.houseId)
+      }
+      if(e.shardId){
+        // storeData.consultantId = +e.shardId
+        uni.setStorageSync('shareId',e.shardId)
       }
     });
     onPullDownRefresh(() => {
@@ -131,14 +135,9 @@ export default defineComponent({
         theme.value = "transparent";
       }
     });
-    const imageUrl: string =
-      "https://ali-res-test.dabanjia.com/res/20220211/14/1644561850441_1874%240be4eaff-1611-4087-9d91-57dbfe053ac0.jpg";
-
     const codeDialogShow = ref<boolean>(false);
     const toCasedetail = (caseId:number,houseId:number)=>{
-      uni.navigateTo({
-        url:`/pages/case-detail/index?caseId=${caseId}&houseId=${houseId}`
-      })
+      houseCaseCheck(houseId,caseId)
     }
     return {
       toCasedetail,

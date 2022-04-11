@@ -100,8 +100,7 @@ export type reportData = {
   schemeId: number,
   schemeSnapshot: string,
   offerPrice: number,
-  consultantId?: number,
-  consultantPhoneNum?: string,
+  consultantId?: string,
   schemeName: string
 }
 
@@ -111,6 +110,29 @@ export function caseDetail(caseId: number) {
 
 export function reportRecord(params: reportData) {
   return request.post<{}>('/em/applet/signUpRecord', params)
+}
+export type findParentParams = {
+  pageId: number, level: number
+}
+export type findParentData = {
+  estateId: number, houseTypeId: number
+}
+export function findParentIds(params: findParentParams) {
+  return request.get<findParentData>('/em/applet/sales/findParentIds', params)
+}
+
+export type addBrowseType = {
+  userId: number,
+  userNickName: string,
+  consultantId?: string,
+  estateId: number,
+  houseTypeId?: number,
+  schemeId?: number,
+  schemeName?: string
+}
+
+export function addBrowseRecord(params: addBrowseType) {
+  return request.post<{}>('/em/applet/browseRecord/addBrowseRecord', params)
 }
 
 export type houseDetail = {
@@ -134,6 +156,10 @@ export type houseCaseItem = {
 }
 export function houseDetailHooks(houseId: number) {
   return request.get<houseDetail>('/em/applet/client/findHousesTypeInfo?housesTypeId=' + houseId)
+}
+
+export function requestHouseCaseCheck(houseId: number) {
+  return request.get<{ status: number }>('/em/applet/client/checkScheme?schemeId=' + houseId)
 }
 
 // export function houseCaseListHooks(houseId: number) {

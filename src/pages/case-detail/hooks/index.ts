@@ -7,9 +7,18 @@
  */
 import { defineComponent, reactive, ref, toRefs } from "vue";
 
-import { caseDetail, reportRecord, reportData } from "../../../api/case";
+import {
+  caseDetail,
+  reportRecord,
+  reportData,
+  findParentIds,
+  findParentParams,
+  findParentData,
+  addBrowseRecord,
+} from "../../../api/case";
 import { getCodeImage } from "../../../api/estate-detail";
-
+import { useUserInfoHooks } from "../../../hoosk/index";
+const { storeData } = useUserInfoHooks();
 const caseDetailData = reactive<{ caseDetail: caseDetail }>({ caseDetail: { houseWithSchemeInfo: {} } as caseDetail })
 export type imgList = {
   list: string[],
@@ -24,6 +33,7 @@ type tagItem = {
 }
 let imgList = reactive<imgList>({ list: [], bannerNum: 0, tagList: [] } as imgList)
 const codeUrl = ref<string>('')
+const parentId = ref<findParentData>({} as findParentData)
 export const getCaseDetailHooks = () => {
 
   const requestCaseDetail = async (caseId: number) => {
@@ -32,6 +42,7 @@ export const getCaseDetailHooks = () => {
     try {
       const data = await caseDetail(caseId)
       caseDetailData.caseDetail = data.data as caseDetail
+      requestAddBrowseRecord(caseId)
       console.log(caseDetailData.caseDetail, ">>>>>>>")
       addImage(caseDetailData.caseDetail)
     } catch { }
@@ -72,22 +83,59 @@ export const getCaseDetailHooks = () => {
     })
     console.log(imgList)
   }
-  const requestReport = async (reportData: reportData) => {
+  const requestReport = async (reportData: reportData, callBack: VoidFunction) => {
+    reportData.estateId = parentId.value.estateId
     let res = await reportRecord(reportData)
     // return res.code
-    if (res.code === 1) {
-      uni.showToast({
-        title: '报名成功',
-        icon: 'success',
-        mask: true
-      })
-      setTimeout(() => {
-        uni.navigateBack({
-          delta: 1
+    switch (res.code) {
+      case 1:
+        uni.showToast({
+          title: '报名成功',
+          icon: 'success',
+          mask: true
         })
-      }, 1000)
-
+        setTimeout(() => {
+          uni.navigateBack({
+            delta: 1
+          })
+        }, 1000)
+        break;
+      case 204:
+        let pages = getCurrentPages()
+        // console.log(pages.length,'当前栈深度')
+        if (pages.length < 2) {
+          uni.switchTab({
+            url: '/pages/home/index'
+          });
+        } else {
+          uni.navigateBack({
+            delta: 1
+          })
+        }
+        break;
+      default:
+        break;
     }
+  }
+
+  //查询父级id
+  const requestFindParentIds = async (params: findParentParams) => {
+    let res = await findParentIds(params)
+    if (res.data) parentId.value = res.data
+  }
+  const requestAddBrowseRecord = async (caseId: number) => {
+    let params = {
+      userId: +storeData.userId || 12,
+      userNickName: storeData.userName || '丢你个二维码',
+      consultantId: uni.getStorageSync('shareId') || '',
+      estateId: parentId.value.estateId,
+      houseTypeId: parentId.value.houseTypeId,
+      schemeId: caseId,
+      schemeName: caseDetailData.caseDetail.schemeName
+    }
+    let res = await addBrowseRecord(params)
+    console.log(res)
+    // if (res.data) parentId.value = res.data
   }
   const requestCode = async (sence?: string) => {
     let url = '/pages/case-detail/index'
@@ -106,7 +154,8 @@ export const getCaseDetailHooks = () => {
     codeUrl,
     requestCaseDetail,
     requestReport,
-    requestCode
+    requestCode,
+    requestFindParentIds,
     // requestRegister,
   }
 }

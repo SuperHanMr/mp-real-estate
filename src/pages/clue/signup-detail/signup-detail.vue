@@ -124,6 +124,31 @@
 			const formatDate = (time: number) =>
 				moment(time).format("YYYY-MM-DD  HH:mm:ss")
 
+			const handlePrice=(price:number)=>{
+				if(!price) return ['0','00']
+				let list=String(price).split(".")
+				if(list.length==1){
+					return  list[0]+'.'+'00'
+					//  [list[0],"00"]
+
+				}else{
+					return list[0]+'.'+ list[1]
+					// [list[0],list[1]]
+				}
+			}
+			const sliceArray=(array:number[],size:number)=>{
+					var result = [];
+					for(var i=0;i<Math.ceil(array.length/size);i++){
+								var start = i * size;
+								var end = start + size;
+								result.push(array.slice(start, end));
+					}
+					return result;
+			}
+			const arr=[1,2,3,4,5,6,7,8,9,10,11,1,2,13,14,15,16,17,18,19,20]
+			const array=sliceArray(arr,4)
+			console.log("array====",array)
+
 			return {
 				theme,
 				toBack,
@@ -132,6 +157,7 @@
 				gotoNextPage,
 				detailInfo,
 				formatDate,
+				handlePrice,
 				...toRefs(signupDetailInfo),
 			}
 		}
