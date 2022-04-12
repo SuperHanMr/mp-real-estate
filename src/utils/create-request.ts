@@ -118,7 +118,7 @@ function createRequest(baseURL: string): Request {
               // 跳转登录页
               uni.reLaunch({ url: '/pages/login/index' })
               break
-            case 403:
+            case 403 || 410:
               setTimeout(() => {
                 let pages = getCurrentPages()
                 // console.log(pages.length,'当前栈深度')
