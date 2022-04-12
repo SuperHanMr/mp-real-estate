@@ -9,13 +9,17 @@
 			<view class="header-bg"></view>
 			<view class="projectName">{{ detailInfo.schemeName }}</view>
 			<view class="project-item">
-				<image src="../../../images/code-icon.png" mode=""></image>
+				<image src="../../../images/developes_ic.png" mode=""></image>
 				<text>{{ detailInfo.houseWithSchemeInfo.houseTypeName }}</text>
 			</view>
 			<view class="project-item">
-				<image src="../../../images/code-icon.png" mode=""></image>
+				<image src="../../../images/house_type_ic.png" mode=""></image>
 				<text>
-					<text>{{ detailInfo.houseWithSchemeInfo.specification }}</text>
+					<text>
+						<text>{{ detailInfo.houseWithSchemeInfo.specification }}</text>
+						<text>&nbsp;| &nbsp;{{detailInfo.houseWithSchemeInfo.floorArea}}m²</text>
+						<text>&nbsp;| &nbsp;{{detailInfo.houseWithSchemeInfo.direction}}</text>
+					</text>
 				</text>
 			</view>
 		</view>
@@ -211,7 +215,6 @@ export default defineComponent({
 			image {
 				width: 28rpx;
 				height: 28rpx;
-				background-color: pink;
 				margin-right: 8rpx;
 			}
 
