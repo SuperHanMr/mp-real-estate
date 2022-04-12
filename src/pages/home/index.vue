@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-11 11:10:49
+ * @LastEditTime: 2022-04-11 20:29:42
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -22,11 +22,14 @@ import {
 import estateList from "./components/estate-list.vue";
 import loadMore from "../../components/load-more/index.vue";
 import { useEstateListHook } from "./hooks/index";
+import navigationCustom from "../../components/navigation-custom/index.vue";
+
 export default defineComponent({
   name: "",
   components: {
     estateList,
     loadMore,
+    navigationCustom,
   },
   setup() {
     const { requestEstateList, list, loadType } = useEstateListHook();
@@ -39,9 +42,7 @@ export default defineComponent({
           iconPath: "/static/tab-image/my-un-icon.png",
           selectedIconPath: "/static/tab-image/my-icon.png",
         });
-        console.log("role", uni.getStorageSync("role"));
       }
-      // console.log("getApp", getApp().globalData);
     });
     onShow(() => {});
     onPullDownRefresh(() => {

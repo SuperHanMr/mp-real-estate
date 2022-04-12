@@ -1,8 +1,8 @@
 <!--
- * @Description: 楼盘详情
+ * @Description: 文件内容描述
  * @Author: HanYongHui
- * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-11 14:14:41
+ * @Date: 2022-04-11 20:44:18
+ * @LastEditTime: 2022-04-11 20:55:05
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -74,70 +74,45 @@
   </view>
   <code-dialog :codeUrl="codeImageUrl" v-model:show="codeDialogShow" />
 </template>
-<script lang="ts">
-import { defineComponent, ref } from "vue";
+<script lang="ts" setup>
+import { defineComponent, defineProps, ref } from "vue";
 import { onLoad, onShareAppMessage, onPageScroll } from "@dcloudio/uni-app";
-import navigationCustom from "../../components/navigation-custom/index.vue";
-import { useEstateDetailHook } from "./hooks/index";
+import navigationCustom from "../../../components/navigation-custom/index.vue";
+import { useEstateDetailHook } from "../hooks/index";
 import codeDialog from "../../components/code-dialog/index.vue";
-export default defineComponent({
-  name: "",
-  components: {
-    navigationCustom,
-    codeDialog,
+const {
+  reuqestEstateDetail,
+  reuqestHouseTypeList,
+  requestCodeImage,
+  estateDetail,
+  houseTypeList,
+  codeImageUrl,
+  codeDialogShow,
+} = useEstateDetailHook();
+const props = defineProps({
+  estateId: {
+    type: Number,
   },
-  setup() {
-    const {
-      reuqestEstateDetail,
-      reuqestHouseTypeList,
-      requestCodeImage,
-      estateDetail,
-      houseTypeList,
-      codeImageUrl,
-      codeDialogShow,
-    } = useEstateDetailHook();
-    const id = ref<number>(0);
-    onLoad((e: any) => {
-      console.log("---onLoad---", e);
-      id.value = e.id;
-      reuqestEstateDetail(e.id);
-      reuqestHouseTypeList(e.id);
-    });
-    const theme = ref<"white" | "black" | "transparent">("transparent");
-    onPageScroll((e) => {
-      if (e.scrollTop > 64) {
-        theme.value = "white";
-      } else {
-        theme.value = "transparent";
-      }
-    });
-    const onClickHouseType = (id: number) => {
-      uni.navigateTo({
-        url:'/pages/house-detail/index?houseId='+id
-      })
-    };
-    const onClickCodeImage = () => {
-      requestCodeImage("pages/home/index/index");
-    };
-    const url: string =
-      "https://dbj-test.oss-cn-beijing.aliyuncs.com/res/20220409/17/1649495698628_7274801.jpg";
-    onShareAppMessage(() => {
-      return {
-        title: "楼盘详情",
-        path: `/pages/estate-detail/index?id=${id.value}`,
-      };
-    });
-    return {
-      theme,
-      codeDialogShow,
-      estateDetail,
-      houseTypeList,
-      codeImageUrl,
-      onClickHouseType,
-      onClickCodeImage,
-      url,
-    };
-  },
+});
+const theme = ref<"white" | "black" | "transparent">("transparent");
+onPageScroll((e) => {
+  if (e.scrollTop > 64) {
+    theme.value = "white";
+  } else {
+    theme.value = "transparent";
+  }
+});
+const onClickHouseType = (id: number) => {};
+const onClickCodeImage = () => {
+  requestCodeImage("pages/home/index/index");
+};
+const url: string =
+  "https://dbj-test.oss-cn-beijing.aliyuncs.com/res/20220409/17/1649495698628_7274801.jpg";
+onShareAppMessage(() => {
+  return {
+    title: "楼盘详情",
+    path: `/pages/estate-detail/index?id=${props.estateId}`,
+  };
 });
 </script>
 <style lang="scss" scoped>
