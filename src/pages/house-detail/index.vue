@@ -6,7 +6,7 @@
  * @LastEditors: HanYongHui
 -->
 <template>
-  <navigation-custom title="户型详情" :theme="theme" />
+  <navigation-custom title="户型详情" :theme="theme" :share='fromShare'/>
   <view class="estate-detail-warp">
     <!-- <img class="bac-image" :src="imageUrl" mode="aspectFill" /> -->
     <swiper class="house-type_image--swipe" :current="0">
@@ -98,6 +98,8 @@ export default defineComponent({
     const {requestHouseDetail,requestCode,houseCaseCheck,enterNum,houseDetail,codeUrl} = getHouseDetailHooks()
     const loadType = ref<"succeed" | "error" | "load" | "complete">("succeed");
     const houseId = ref<number>(0)
+        const fromShare = ref<Boolean>(false)
+
     onLoad((e) => {
       console.log("---onLoad---", e);
       if(e.houseId){
@@ -107,6 +109,7 @@ export default defineComponent({
       }
       if(e.shardId&&storeData.role===2){
         // storeData.consultantId = +e.shardId
+        fromShare.value =true
         uni.setStorageSync('shareId',e.shardId)
       }
     });
@@ -145,6 +148,7 @@ export default defineComponent({
     return {
       toCasedetail,
       houseDetail,
+      fromShare,
       storeData,
       loadType,
       theme,

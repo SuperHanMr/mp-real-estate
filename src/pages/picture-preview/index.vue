@@ -25,7 +25,7 @@
         </scroll-view>
       </view>
       <view class="introduce-content">
-        <view class="content-text" id="content-text" :class="{'is-hidden':isHidden}">
+        <view class="content-text" id="content-text" :class="{'is-hidden':isHidden&&hasControl}">
           {{imgList.tagList[currentTagIndex].desc}}
         </view>
         <view class="control-text">
@@ -86,12 +86,12 @@ export default defineComponent({
       query.exec((res) => {
           console.log(res)
         if (res && res[0]) {
-          console.log(res[0].height)
+          // console.log(res[0].height)
           swiperHeight.value = res[0].height;
         }
         if(res&&res[1]){
-          hasControl.value = res[1].height/18>4
-          console.log(res[1].height,">>>>>>>>")
+          hasControl.value = (res[1].height/18)>4
+          // console.log(res[1])
         }
       });
     }
