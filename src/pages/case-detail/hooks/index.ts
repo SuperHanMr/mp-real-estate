@@ -42,7 +42,6 @@ export const getCaseDetailHooks = () => {
     try {
       const data = await caseDetail(caseId)
       caseDetailData.caseDetail = data.data as caseDetail
-      requestAddBrowseRecord(caseId)
       console.log(caseDetailData.caseDetail, ">>>>>>>")
       addImage(caseDetailData.caseDetail)
     } catch { }
@@ -122,6 +121,8 @@ export const getCaseDetailHooks = () => {
   const requestFindParentIds = async (params: findParentParams) => {
     let res = await findParentIds(params)
     if (res.data) parentId.value = res.data
+    requestAddBrowseRecord(params.pageId)
+
   }
   const requestAddBrowseRecord = async (caseId: number) => {
     let params = {

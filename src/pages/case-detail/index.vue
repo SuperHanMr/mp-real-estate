@@ -146,7 +146,7 @@ export default defineComponent({
       console.log("---onLoad---", e);
       // e.caseId="140"
       if(e.caseId)caseId.value = +e.caseId
-      if(e.shardId){
+      if(e.shardId&&storeData.role===2){
         // storeData.consultantId = +e.shardId
         uni.setStorageSync('shareId',e.shardId)
       }
@@ -225,6 +225,7 @@ export default defineComponent({
         return
       }
       let data = {
+        userId:storeData.userId,
         estateId:0,
         schemeId:caseId.value,
         schemeSnapshot:JSON.stringify(goodList.value),

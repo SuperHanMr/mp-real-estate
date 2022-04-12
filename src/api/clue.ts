@@ -10,9 +10,9 @@ export type ClueBrowerlistInfo = {
 }
 export type BrowerList = BrowerItem[]
 export type BrowerItem = {
-  id: number, //主键",
-  userId: number, //浏览用户的id",
-  userNickName: string, //浏览用户的昵称",
+  id: number, //主键,
+  userId: number, //浏览用户的id,
+  userNickName: string, //浏览用户的昵称,
   phoneNum: string,  //浏览用户的手机号",
   consultantId: number, //分享页面的销售顾问的id",
   consultantName: string, //销售顾问姓名",
@@ -25,7 +25,7 @@ export type BrowerItem = {
   schemeName: string,  //方案名称",
   coverImg: string, //封面图片",
   browseTime: number,//浏览时间"
-  deleteFlag?:number,//是否下架 0正常 -1 已删除
+  deleteFlag?: number,//是否下架 0正常 -1 已删除
 }
 
 export type SignupParams = {
@@ -34,8 +34,17 @@ export type SignupParams = {
   consultantId?: number,//销售顾问id
   userId?: number,//用户id
   type: number,//查询入口 （1-业务后台，2-小程序）
-  estateId: number,//若为业务后台，需要添加此字段 全部楼盘传0，具体楼盘传具体id即可
+  // estateId: number,//若为业务后台，需要添加此字段 全部楼盘传0，具体楼盘传具体id即可
 }
+export type BrowerParams = {
+  page: number,
+  rows: number,
+  consultantId?: number,//销售顾问id
+  userId?: number,//用户id
+  // estateId: number,//若为业务后台，需要添加此字段 全部楼盘传0，具体楼盘传具体id即可
+  level: number,//展示何种级别的浏览记录（1-楼盘，2-户型，3-方案）
+}
+
 
 
 export type SignupRecordListInfo = {
@@ -116,8 +125,6 @@ export type SignupRecordDetail = {
   consultantPhone: string, //销售手机号,
   offerPrice: number, //总报价
 }
-
-
 export type MaterialItem = {
   productBagName: {
     productBagName: string, //输入不超过15个字符
@@ -155,11 +162,68 @@ export type MaterialItem = {
     storeName: string, //所属店铺】取商品关联店铺【店铺名称】
   }]
 }
+export type BrowerDetail = {
+  EffectSpace: [{
+    spaceName: {
+      spaceName: string //空间名称
+    },
+    effectImages: [{
+      effectImageUrl: string //效果图地址
+    }],
+    designIdeas: {
+      designIdeasContext: string //设计思路
+    }
+  }],
+  productBagVOS: MaterialItem[],
+  productBags: [{
+    productBagStep: number,
+    productBagName: {
+      productBagName: string, //输入不超过15个字符
+    },
+    buyItNow: {
+      buyItNow: number, //输入两位小数数字
+    },
+    bagDesc: {
+      bagPackageDesc: string, //套包简介
+    },
+    products: [{
+      spuInfo: {
+        spuId: number,
+      },
+      createDate: number,
+    }]
+  }],
+  planeImages: string[], //平面图,
+  houseTypeImageUrls: string[], //户型图,
+  coverPictureInfoVO: {
+    coverImageUrl: string,
+    designIdeas: string,
+  },
+  houseWithSchemeInfo: {
+    bedroomNum: number, //室,
+    livingroomNum: number, //厅,
+    kitchenNum: number, //厨,
+    toiletNum: number, //卫,
+    direction: string //朝向,
+    floorArea: number, //建筑面积,
+    floorAreaInside: number, //套内面积,
+    status: number, //状态(0 删除 1启用 2停用),
+    houseTypeName: string //户型名称,
+    specification: string //规格(三室一厅一厨一卫.....)
+  },
+  schemeTags: [{
+    schemeTagName: string //方案标签名称,
+    tagCode: string //方案code码值
+  }],
+  schemeName: string //方案名称,
+  deleteFlag: number, //0 : 正常    -1： 已删除
+}
+
 
 
 
 // 浏览列表接口
-export function getClueBrowerList(params: any) {
+export function getClueBrowerList(params: BrowerParams) {
   return request.get<ClueBrowerlistInfo>(`/em/applet/browseRecord/list`, params)
 }
 //报名列表接口
@@ -170,4 +234,11 @@ export function getSignupRecordList(params: SignupParams) {
 //报名详情接口
 export function getSignupRecordDetail(id: number) {
   return request.get<SignupRecordDetail>(`/em/applet/signUpRecord/detail/${id}`)
+}
+
+
+
+//浏览记录详情接口
+export function getBrowerDetail(schemeId: number) {
+  return request.get<BrowerDetail>(`/em/applet/browseRecord/detail/${schemeId}`)
 }
