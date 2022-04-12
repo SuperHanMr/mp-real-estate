@@ -225,6 +225,7 @@ export default defineComponent({
         return
       }
       let data = {
+        userId:storeData.userId,
         estateId:0,
         schemeId:caseId.value,
         schemeSnapshot:JSON.stringify(goodList.value),
