@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:41:39
- * @LastEditTime: 2022-04-11 18:28:11
+ * @LastEditTime: 2022-04-12 10:31:22
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -36,7 +36,7 @@ import selectIcon from "../../images/select-icon.png";
 
 import { useUserInfoHooks } from "../../hoosk/index";
 import { useLoginHooks } from "./hooks/index";
-
+const { storeData } = useUserInfoHooks();
 const { requestLogin, requestRegister } = useLoginHooks();
 const rawDataStr = ref<string>("");
 const signatureStr = ref<string>("");
@@ -57,18 +57,14 @@ const bindgetPhoneNumber = (res: any) => {
     signature: signatureStr.value,
     rawData: rawDataStr.value,
   }).then((res) => {
+    // 小程序注册 都是用户
+    storeData.role = 2;
     uni.switchTab({ url: "/pages/home/index" });
   });
 };
-
 const isRegister = ref<number>(0);
-
-const loginData = reactive({
-  isRegister: 0,
-  name: "",
-  role: 2,
-});
 const login = () => {
+  console.log("storeData", storeData);
   if (!isAgreement.value) {
     uni.showToast({
       title: "请勾选服务协议",
@@ -77,35 +73,18 @@ const login = () => {
     });
     return;
   }
-  switch (loginData.isRegister) {
+  switch (storeData.isRegister) {
     case 0:
       // 未注册
       getUserInfo();
       break;
     case 1:
-      // role 1 销售人员 2 C端用户
-      uni.setStorageSync("name", loginData.name);
-      uni.setStorageSync("role", loginData.role);
-      uni.switchTab({ url: "/pages/home/index" });
       break;
     case 2:
       // 处理封禁
       break;
   }
 };
-
-(function () {
-  uni.login({
-    provider: "weixin",
-    success: ({ code }) => {
-      requestLogin(code).then(({ data }) => {
-        loginData.isRegister = data?.isRegister || 0;
-        loginData.name = data?.name || "";
-        loginData.role = data?.isRegister || 2;
-      });
-    },
-  });
-})();
 
 const isAgreement = ref<boolean>(true);
 const chooseIcon = computed(() => {
@@ -133,7 +112,7 @@ const clickEvent = (type: string) => {
   flex-direction: column;
 
   .logo-image {
-    margin-top: 200rpx;
+    margin-top: 328rpx;
     width: 365rpx;
     height: 134rpx;
   }

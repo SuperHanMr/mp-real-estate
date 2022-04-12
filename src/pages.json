@@ -1,20 +1,24 @@
 {
 	"pages": [
 		{
-			"path": "pages/login/index",
-			"style": {
-				"navigationBarBackgroundColor": "#ffffff",
-				"navigationBarTitleText": "登录"
-			}
-		},
-		{
 			"path": "pages/home/index",
 			"style": {
 				"navigationBarTitleText": "楼盘",
 				"enablePullDownRefresh": true,
-				"navigationBarBackgroundColor": "#ffffff"
+				"navigationBarBackgroundColor": "#ffffff",
+				"navigationStyle": "custom"
+
 			}
 		},
+		{
+			"path": "pages/login/index",
+			"style": {
+				"navigationBarBackgroundColor": "#ffffff",
+				"navigationBarTitleText": "登录",
+				"navigationStyle": "custom"
+			}
+		},
+
 		{
 			"path": "pages/clue/index",
 			"style": {
@@ -78,6 +82,12 @@
 			"style": {
 				"navigationBarTitleText": "查看大图",
 				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/web-view/index",
+			"style": {
+				"navigationBarTitleText": "协议"
 			}
 		}
 	],
