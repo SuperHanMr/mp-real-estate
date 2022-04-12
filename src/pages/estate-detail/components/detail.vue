@@ -69,7 +69,6 @@
 </template>
 <script lang="ts" setup>
 import { defineComponent, defineProps, ref, watch } from "vue";
-import { onLoad, onShareAppMessage, onPageScroll } from "@dcloudio/uni-app";
 import { useEstateDetailHook } from "../hooks/index";
 import codeDialog from "../../../components/code-dialog/index.vue";
 const {
@@ -87,7 +86,6 @@ const props = defineProps({
     required: true,
   },
 });
-onLoad(() => {});
 if (props.estateId) {
   reuqestEstateDetail(props.estateId);
   reuqestHouseTypeList(props.estateId);

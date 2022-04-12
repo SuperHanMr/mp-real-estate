@@ -2,7 +2,7 @@
  * @Description: login and register
  * @Author: HanYongHui
  * @Date: 2022-04-06 16:48:34
- * @LastEditTime: 2022-04-12 14:35:57
+ * @LastEditTime: 2022-04-12 16:06:00
  * @LastEditors: HanYongHui
  */
 import createRequest from "../utils/create-request"
@@ -26,7 +26,7 @@ export type RegisterParams = {
   signature: string,
 }
 export function register(params: RegisterParams) {
-  return request.post('/em/applet/wx/register', params)
+  return request.post<LoginRes>('/em/applet/wx/register', params)
 }
 
 

@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-12 15:40:53
+ * @LastEditTime: 2022-04-12 16:11:13
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -47,7 +47,9 @@ export default defineComponent({
     onShareAppMessage(() => {
       return {
         title: "楼盘详情",
-        path: `/pages/estate-detail/index?id=${id.value}`,
+        path: `/pages/estate-detail/index?estateId=${id.value}&shareId=${
+          storeData.role === 2 ? "" : storeData.userId
+        }`,
       };
     });
     return {
