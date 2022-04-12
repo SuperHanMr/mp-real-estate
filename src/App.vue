@@ -2,7 +2,7 @@
  * @Description: 小程序 主入口
  * @Author: HanYongHui
  * @Date: 2022-03-29 16:44:50
- * @LastEditTime: 2022-04-12 10:51:30
+ * @LastEditTime: 2022-04-12 14:21:55
  * @LastEditors: HanYongHui
 -->
 <script setup lang="ts">
@@ -30,12 +30,12 @@ onLaunch(() => {
             uni.reLaunch({ url: "/pages/login/index" });
             break;
           case 1:
-            storeData.userId = data?.id
+            storeData.userId = data?.id;
             storeData.userName = data?.name;
             storeData.role = data?.role;
             storeData.isLogin = true;
-            if(storeData.role===1){
-              uni.setStorageSync('shareId',storeData.userId)
+            if (storeData.role === 1) {
+              uni.setStorageSync("shareId", storeData.userId);
             }
             break;
           case 2:
