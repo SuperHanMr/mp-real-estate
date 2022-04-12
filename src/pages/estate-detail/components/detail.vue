@@ -68,7 +68,7 @@
   <code-dialog :codeUrl="codeImageUrl" v-model:show="codeDialogShow" />
 </template>
 <script lang="ts" setup>
-import { defineComponent, defineProps, ref, watch } from "vue";
+import { defineComponent, defineProps, ref, watch, defineExpose } from "vue";
 import { useEstateDetailHook } from "../hooks/index";
 import codeDialog from "../../../components/code-dialog/index.vue";
 const {
@@ -97,6 +97,14 @@ watch(
     reuqestHouseTypeList(props.estateId);
   }
 );
+
+const refreshPage = () => {
+  reuqestEstateDetail(props.estateId);
+  reuqestHouseTypeList(props.estateId);
+};
+defineExpose({
+  refreshPage,
+});
 
 const onClickHouseType = (id: number) => {
   uni.navigateTo({

@@ -2,14 +2,14 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-12 16:47:08
+ * @LastEditTime: 2022-04-12 19:12:45
  * @LastEditors: HanYongHui
 -->
 <template>
   <template v-if="storeData.role === 2 && storeData.estateId">
     <!-- 用户且有楼盘详情浏览记录 -->
     <navigation-custom title="楼盘详情" :theme="theme" :isBack="false" />
-    <estate-detail :estateId="storeData.estateId" />
+    <estate-detail :estateId="storeData.estateId" ref="estateDetailDom" />
   </template>
   <template
     v-if="storeData.role == 1 || (storeData.role === 2 && !storeData.estateId)"
@@ -49,8 +49,8 @@ export default defineComponent({
   setup() {
     const { storeData } = useUserInfoHooks();
     const { requestEstateList, loadType } = useEstateListHook();
+    const estateDetailDom = ref<any>(null);
     onLoad((e) => {});
-
     watch(
       () => storeData.isLogin,
       () => {
@@ -78,6 +78,9 @@ export default defineComponent({
       if (!storeData.estateId) {
         requestEstateList();
       }
+      if (storeData.role === 2 && storeData.estateId) {
+        estateDetailDom.value?.refreshPage();
+      }
     });
     onReachBottom(() => {
       if (!storeData.estateId) {
@@ -98,6 +101,7 @@ export default defineComponent({
     return {
       storeData,
       theme,
+      estateDetailDom,
     };
   },
 });

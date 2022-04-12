@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:02:49
- * @LastEditTime: 2022-04-12 15:40:51
+ * @LastEditTime: 2022-04-12 18:46:05
  * @LastEditors: HanYongHui
  */
 
@@ -27,16 +27,18 @@ export const useEstateDetailHook = () => {
       estateDetail: {} as EstateDetail,
       houseTypeList: [],
       codeImageUrl: '',
-      codeDialogShow: false
+      codeDialogShow: false,
     }
   )
   const reuqestEstateDetail = async (estateId: number) => {
     const res = await getEstateDetail(estateId)
     data.estateDetail = res.data as EstateDetail
+    uni.stopPullDownRefresh()
   }
   const reuqestHouseTypeList = async (estateId: number) => {
     const res = await getHouseTypeList(estateId)
     data.houseTypeList = res.data || []
+    uni.stopPullDownRefresh()
   }
 
   const requestCodeImage = async (pagePath: string, scene?: string) => {
@@ -48,6 +50,7 @@ export const useEstateDetailHook = () => {
   const requestAddBrowseRecord = async (parmas: addBrowseType) => {
     const res = await addBrowseRecord(parmas)
   }
+
   return {
     ...toRefs(data),
     reuqestEstateDetail,

@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-12 18:29:02
+ * @LastEditTime: 2022-04-12 19:12:29
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -12,11 +12,16 @@
     :isBack="!shareBtn"
     :shareBtn="shareBtn"
   />
-  <detail :estateId="id" />
+  <detail :estateId="id" ref="estateDetail" />
 </template>
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { onLoad, onShareAppMessage, onPageScroll } from "@dcloudio/uni-app";
+import {
+  onLoad,
+  onShareAppMessage,
+  onPageScroll,
+  onPullDownRefresh,
+} from "@dcloudio/uni-app";
 import detail from "./components/detail.vue";
 import navigationCustom from "../../components/navigation-custom/index.vue";
 import { useEstateDetailHook } from "./hooks/index";
@@ -32,6 +37,7 @@ export default defineComponent({
     const { requestAddBrowseRecord } = useEstateDetailHook();
     const id = ref<number>(0);
     const shareBtn = ref<boolean>(false);
+    const estateDetail = ref<any>(null);
     onLoad((e: any) => {
       console.log("-----load-------", e);
       id.value = +e.estateId;
@@ -66,10 +72,15 @@ export default defineComponent({
         path: `/pages/estate-detail/index?estateId=${id.value}&shareId=${shareId}`,
       };
     });
+
+    onPullDownRefresh(() => {
+      estateDetail.value?.refreshPage();
+    });
     return {
       id,
       theme,
       shareBtn,
+      estateDetail,
     };
   },
 });
