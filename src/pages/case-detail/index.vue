@@ -6,7 +6,7 @@
  * @LastEditors: HanYongHui
 -->
 <template>
-  <navigation-custom title="方案详情" :theme="theme" />
+  <navigation-custom title="方案详情" :theme="theme" :shareBtn="fromShare" />
   <view class="case-detail-warp">
     <!-- <img class="bac-image" :src="imageUrl" mode="aspectFill" /> -->
     <swiper class="house-type_image--swiper" :current="currentIndex" @change="swiperChange">
@@ -135,7 +135,7 @@ export default defineComponent({
     //轮播banner激活控制
     const currentIndex = ref<number>(0)
     const caseId = ref<number>(0)
-    const houseId = ref<number>(0)
+    const fromShare = ref<Boolean>(false)
     const goodList = ref<productItem[]>([])
     const goodPrice = computed(()=>{
       let num = 0
@@ -151,7 +151,10 @@ export default defineComponent({
       if(e.caseId)caseId.value = +e.caseId
       if(e.shardId&&storeData.role===2){
         // storeData.consultantId = +e.shardId
-        uni.setStorageSync('shareId',e.shardId)
+        fromShare.value =true
+        if(storeData.role===2){
+          uni.setStorageSync('shareId',e.shardId)
+        }
       }
       enterNum.value = 0
       requestCaseDetail(caseId.value)
@@ -268,6 +271,7 @@ export default defineComponent({
       codeUrl,
       goodsPackActive,
       goodsPack,
+      fromShare,
       swiperChange,
       changeCurrent,
       chooseGoods,
