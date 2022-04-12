@@ -144,7 +144,7 @@ export default defineComponent({
     const {requestCaseDetail,requestReport,requestCode,requestFindParentIds,caseDetail,imgList,codeUrl} = getCaseDetailHooks()
     onLoad((e) => {
       console.log("---onLoad---", e);
-      e.caseId="140"
+      // e.caseId="140"
       if(e.caseId)caseId.value = +e.caseId
       if(e.shardId){
         // storeData.consultantId = +e.shardId

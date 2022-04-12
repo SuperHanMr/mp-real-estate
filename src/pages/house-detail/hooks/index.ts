@@ -24,11 +24,14 @@ export const getHouseDetailHooks = () => {
     requestFindParentIds({ pageId: houseId, level: 2 })
   }
   const requestCode = async (id?: string) => {
-    let url = 'sub-home/pages/decorate-scene/decorate-scene'
-    let scene = '?houseId=' + id
-    if (storeData.consultantPhoneNum) {
-      scene = scene + '&consultantPhoneNum' + storeData.consultantPhoneNum + '&consultantId' + storeData.consultantId
+    let url = 'pages/house-detail/index'
+    let scene = 'houseId=' + id
+    if (uni.getStorageSync('shareId')) {
+      scene = scene + `&shareId=${uni.getStorageSync('shareId')}`
     }
+    // if (storeData.consultantPhoneNum) {
+    //   scene = scene + '&consultantPhoneNum' + storeData.consultantPhoneNum + '&consultantId' + storeData.consultantId
+    // }
     let res = await getCodeImage(url, scene)
     console.log(res.data)
     if (res.data) codeUrl.value = res.data
