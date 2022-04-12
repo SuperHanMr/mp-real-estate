@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-12 15:48:35
+ * @LastEditTime: 2022-04-12 16:47:08
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -11,7 +11,9 @@
     <navigation-custom title="楼盘详情" :theme="theme" :isBack="false" />
     <estate-detail :estateId="storeData.estateId" />
   </template>
-  <template v-else>
+  <template
+    v-if="storeData.role == 1 || (storeData.role === 2 && !storeData.estateId)"
+  >
     <!-- 楼盘列表 -->
     <navigation-custom
       title="楼盘"

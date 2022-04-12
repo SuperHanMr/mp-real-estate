@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-12 12:11:32
- * @LastEditTime: 2022-04-12 15:17:15
+ * @LastEditTime: 2022-04-12 16:47:39
  * @LastEditors: HanYongHui
 -->
 
@@ -23,12 +23,7 @@ const { requestEstateList, list, loadType } = useEstateListHook();
 const imageBg: string =
   "https://ali-image.dabanjia.com/image/20220412/11/164973351689070.png";
 
-watch(
-  () => storeData.isLogin,
-  () => {
-    requestEstateList();
-  }
-);
+requestEstateList();
 </script>
 <style lang="scss" scoped>
 .list {
