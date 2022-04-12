@@ -57,6 +57,7 @@ const bindgetPhoneNumber = (res: any) => {
     signature: signatureStr.value,
     rawData: rawDataStr.value,
   }).then((res) => {
+    console.log(res)
     // 小程序注册 都是用户
     storeData.role = 2;
     storeData.isLogin = true;
