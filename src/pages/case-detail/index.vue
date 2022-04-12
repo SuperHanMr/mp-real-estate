@@ -72,11 +72,11 @@
               <text class="case-desc">{{item.bagDesc.bagPackageDesc}}</text>
               <view class="case-price">
                 <text class="price-symbol">¥</text>
-                <text class="price-num">{{item.buyItNow.buyItNow}}</text>
+                <text class="price-num">{{item.buyItNow.buyItNow.toFixed(2)}}</text>
               </view>
-              <view class="case-btn" @click="toCheckGood(index)">
-                <image src="../../images/goods-pack.png"></image>
-                <text>查看套餐所含全部商品</text>
+              <view class="case-btn"  @click.stop="toCheckGood(index)">
+                <image :src="hasGoods(index)?goodsPackActive:goodsPack"></image>
+                <text :class="{active:hasGoods(index)}">查看套餐所含全部商品</text>
               </view>
             </view>
           </view>
@@ -86,7 +86,7 @@
             <view class="report-btn" @click="report">
               <text class="text">立即报名</text>
               <view class="symbol">
-                ¥<text class="num">{{goodPrice}}</text>
+                ¥<text class="num">{{goodPrice.toFixed(2)}}</text>
               </view>
               <image src="../../images/report-btn-bg.png" mode="" />
             </view>
@@ -116,6 +116,9 @@ import loadMore from "@/components/load-more/index.vue";
 import codeDialog from "@/components/code-dialog/index.vue";
 import {getCaseDetailHooks} from "./hooks/index"
 import {productItem} from "../../api/case"
+import goodsPack from "../../images/goods-pack.png"
+import goodsPackActive from "../../images/goods-pack-active.png"
+
 export default defineComponent({
   name: "",
   components: {
@@ -141,7 +144,7 @@ export default defineComponent({
       })
       return num
     })
-    const {requestCaseDetail,requestReport,requestCode,requestFindParentIds,caseDetail,imgList,codeUrl} = getCaseDetailHooks()
+    const {requestCaseDetail,requestReport,requestCode,requestFindParentIds,enterNum,caseDetail,imgList,codeUrl} = getCaseDetailHooks()
     onLoad((e) => {
       console.log("---onLoad---", e);
       // e.caseId="140"
@@ -150,6 +153,7 @@ export default defineComponent({
         // storeData.consultantId = +e.shardId
         uni.setStorageSync('shareId',e.shardId)
       }
+      enterNum.value = 0
       requestCaseDetail(caseId.value)
       requestFindParentIds({pageId:caseId.value,level:3})
       getCode()
@@ -232,6 +236,7 @@ export default defineComponent({
         offerPrice:goodPrice.value,
         schemeName:caseDetail.value.schemeName,
         consultantId:uni.getStorageSync('shareId')||'',
+        houseTypeId:0
       }
       requestReport(data,()=>{
         goodList.value = []
@@ -261,6 +266,8 @@ export default defineComponent({
       imgList,
       goodPrice,
       codeUrl,
+      goodsPackActive,
+      goodsPack,
       swiperChange,
       changeCurrent,
       chooseGoods,
@@ -513,6 +520,10 @@ export default defineComponent({
           font-size: 40rpx;
           color: #333;
         }
+      }
+      .active{
+          color: #B88C58 !important;
+
       }
       .case-btn{
         width: 100%;

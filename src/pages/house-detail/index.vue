@@ -74,7 +74,7 @@
   />
 </template>
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, onMounted, ref } from "vue";
 import {
   onLoad,
   onPullDownRefresh,
@@ -95,7 +95,7 @@ export default defineComponent({
   },
   setup() {
     const { storeData } = useUserInfoHooks();
-    const {requestHouseDetail,requestCode,houseCaseCheck,houseDetail,codeUrl} = getHouseDetailHooks()
+    const {requestHouseDetail,requestCode,houseCaseCheck,enterNum,houseDetail,codeUrl} = getHouseDetailHooks()
     const loadType = ref<"succeed" | "error" | "load" | "complete">("succeed");
     const houseId = ref<number>(0)
     onLoad((e) => {
@@ -110,6 +110,10 @@ export default defineComponent({
         uni.setStorageSync('shareId',e.shardId)
       }
     });
+    onMounted(()=>{
+      console.log(11111)
+      enterNum.value = 0
+    })
     onPullDownRefresh(() => {
       requestHouseDetail(houseId.value)
       setTimeout(() => {
@@ -253,6 +257,7 @@ export default defineComponent({
   border-top-left-radius: 40rpx;
   border-top-right-radius: 40rpx;
   width: 100%;
+  padding-bottom: 88rpx;
   .list-title {
     display: flex;
     align-items: center;

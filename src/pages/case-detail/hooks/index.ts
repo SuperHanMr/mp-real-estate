@@ -34,6 +34,8 @@ type tagItem = {
 let imgList = reactive<imgList>({ list: [], bannerNum: 0, tagList: [] } as imgList)
 const codeUrl = ref<string>('')
 const parentId = ref<findParentData>({} as findParentData)
+const enterNum = ref<number>(0)
+
 export const getCaseDetailHooks = () => {
 
   const requestCaseDetail = async (caseId: number) => {
@@ -44,7 +46,22 @@ export const getCaseDetailHooks = () => {
       caseDetailData.caseDetail = data.data as caseDetail
       console.log(caseDetailData.caseDetail, ">>>>>>>")
       addImage(caseDetailData.caseDetail)
-    } catch { }
+    } catch {
+      setTimeout(() => {
+        let pages = getCurrentPages()
+        // console.log(pages.length,'当前栈深度')
+        if (pages.length < 2) {
+          uni.switchTab({
+            url: '/pages/home/index'
+          });
+        } else {
+          uni.navigateBack({
+            delta: 1
+          })
+        }
+      }, 1000)
+
+    }
 
   }
   const addImage = (data: caseDetail) => {
@@ -84,6 +101,7 @@ export const getCaseDetailHooks = () => {
   }
   const requestReport = async (reportData: reportData, callBack: VoidFunction) => {
     reportData.estateId = parentId.value.estateId
+    reportData.houseTypeId = parentId.value.houseTypeId
     let res = await reportRecord(reportData)
     // return res.code
     switch (res.code) {
@@ -121,10 +139,16 @@ export const getCaseDetailHooks = () => {
   const requestFindParentIds = async (params: findParentParams) => {
     let res = await findParentIds(params)
     if (res.data) parentId.value = res.data
-    requestAddBrowseRecord(params.pageId)
+    if (enterNum.value === 0) {
+      requestAddBrowseRecord(params.pageId)
+
+    }
 
   }
   const requestAddBrowseRecord = async (caseId: number) => {
+    if (storeData.role === 1) {
+      return
+    }
     let params = {
       userId: +storeData.userId || 12,
       userNickName: storeData.userName || '丢你个二维码',
@@ -135,6 +159,7 @@ export const getCaseDetailHooks = () => {
       schemeName: caseDetailData.caseDetail.schemeName
     }
     let res = await addBrowseRecord(params)
+    enterNum.value++
     console.log(res)
     // if (res.data) parentId.value = res.data
   }
@@ -153,6 +178,7 @@ export const getCaseDetailHooks = () => {
     ...toRefs(caseDetailData),
     imgList,
     codeUrl,
+    enterNum,
     requestCaseDetail,
     requestReport,
     requestCode,
