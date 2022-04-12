@@ -6,7 +6,7 @@
  * @LastEditors: HanYongHui
 -->
 <template>
-  <navigation-custom title="户型详情" :theme="theme" :share='fromShare'/>
+  <navigation-custom title="户型详情" :theme="theme" :shareBtn='fromShare'/>
   <view class="estate-detail-warp">
     <!-- <img class="bac-image" :src="imageUrl" mode="aspectFill" /> -->
     <swiper class="house-type_image--swipe" :current="0">
@@ -107,10 +107,13 @@ export default defineComponent({
         requestHouseDetail(+e.houseId)
         requestCode(e.houseId)
       }
-      if(e.shardId&&storeData.role===2){
+
+      if(e.shardId){
         // storeData.consultantId = +e.shardId
         fromShare.value =true
-        uni.setStorageSync('shareId',e.shardId)
+        if(storeData.role===2){
+          uni.setStorageSync('shareId',e.shardId)
+        }
       }
     });
     onMounted(()=>{

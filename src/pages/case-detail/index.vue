@@ -6,7 +6,7 @@
  * @LastEditors: HanYongHui
 -->
 <template>
-  <navigation-custom title="方案详情" :theme="theme" :share="fromShare" />
+  <navigation-custom title="方案详情" :theme="theme" :shareBtn="fromShare" />
   <view class="case-detail-warp">
     <!-- <img class="bac-image" :src="imageUrl" mode="aspectFill" /> -->
     <swiper class="house-type_image--swiper" :current="currentIndex" @change="swiperChange">
@@ -151,8 +151,10 @@ export default defineComponent({
       if(e.caseId)caseId.value = +e.caseId
       if(e.shardId&&storeData.role===2){
         // storeData.consultantId = +e.shardId
-        uni.setStorageSync('shareId',e.shardId)
-        fromShare.value = true
+        fromShare.value =true
+        if(storeData.role===2){
+          uni.setStorageSync('shareId',e.shardId)
+        }
       }
       enterNum.value = 0
       requestCaseDetail(caseId.value)
