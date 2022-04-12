@@ -111,7 +111,11 @@ export default defineComponent({
         theme.value = "transparent";
       }
     });
-    const onClickHouseType = (id: number) => {};
+    const onClickHouseType = (id: number) => {
+      uni.navigateTo({
+        url:'/pages/house-detail/index?houseId='+id
+      })
+    };
     const onClickCodeImage = () => {
       requestCodeImage("pages/home/index/index");
     };

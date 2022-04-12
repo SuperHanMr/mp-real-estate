@@ -100,7 +100,6 @@ export default defineComponent({
     const houseId = ref<number>(0)
     onLoad((e) => {
       console.log("---onLoad---", e);
-      e.houseId = '28'
       if(e.houseId){
         houseId.value = +e.houseId
         requestHouseDetail(+e.houseId)
