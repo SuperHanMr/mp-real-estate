@@ -226,6 +226,7 @@ export type BrowerDetail = {
 export function getClueBrowerList(params: BrowerParams) {
   return request.get<ClueBrowerlistInfo>(`/em/applet/browseRecord/list`, params)
 }
+
 //报名列表接口
 export function getSignupRecordList(params: SignupParams) {
   return request.get<SignupRecordListInfo>(`/em/applet/signUpRecord/list`, params)
@@ -236,9 +237,25 @@ export function getSignupRecordDetail(id: number) {
   return request.get<SignupRecordDetail>(`/em/applet/signUpRecord/detail/${id}`)
 }
 
-
-
 //浏览记录详情接口
 export function getBrowerDetail(schemeId: number) {
   return request.get<BrowerDetail>(`/em/applet/browseRecord/detail/${schemeId}`)
 }
+export type BagParams = {
+  spuHelperList: number[],//辅助list
+  bagDesc: {
+    bagPackageDesc: string
+  },
+  buyItNow: {
+    buyItNow: number
+  },
+  productBagName: {
+    productBagName: string
+  },
+}
+
+//调用套包数据接口
+export function getBagInfo(params: BagParams) {
+  return request.post<MaterialItem>(`/em/web/scheme/product/helper/subSpu`, params)
+}
+
