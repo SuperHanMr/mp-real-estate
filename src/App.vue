@@ -2,7 +2,7 @@
  * @Description: 小程序 主入口
  * @Author: HanYongHui
  * @Date: 2022-03-29 16:44:50
- * @LastEditTime: 2022-04-12 16:07:52
+ * @LastEditTime: 2022-04-12 17:57:57
  * @LastEditors: HanYongHui
 -->
 <script setup lang="ts">
@@ -42,7 +42,7 @@ onLaunch(() => {
             if (storeData.role === 2) {
               // 查询浏览记录
               requsetBrowseRecord().then((res) => {
-                storeData.estateId = res.data?.id || 0;
+                storeData.estateId = res.data?.estateId || 0;
               });
             }
             break;

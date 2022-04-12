@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-01 16:13:40
- * @LastEditTime: 2022-04-12 15:47:47
+ * @LastEditTime: 2022-04-12 17:57:50
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -49,6 +49,10 @@ const props = defineProps({
 
   titleColor: {
     type: String,
+  },
+
+  shareBtn: {
+    type: Boolean,
   },
 });
 

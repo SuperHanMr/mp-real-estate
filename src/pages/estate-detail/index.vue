@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-12 17:30:22
+ * @LastEditTime: 2022-04-12 17:38:48
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -30,12 +30,14 @@ export default defineComponent({
       console.log("-----load-------", e);
       id.value = e.estateId;
       uni.setStorageSync("shareId", e.shareId);
+
       if (storeData.role === 2) {
         requestAddBrowseRecord({
           userId: +storeData.userId,
           userNickName: storeData.userName,
           estateId: id.value,
         });
+        storeData.estateId = id.value;
       }
     });
     const theme = ref<"white" | "black" | "transparent">("transparent");
