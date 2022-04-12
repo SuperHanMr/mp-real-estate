@@ -54,9 +54,14 @@ export type caseDetail = {
     {
       schemeTagName: string
     }
-  ]
+  ],
 }
+
+
+
+
 export type productItem = {
+  spuHelperList: number[],//辅助list
   bagDesc: {
     bagPackageDesc: string
   },
