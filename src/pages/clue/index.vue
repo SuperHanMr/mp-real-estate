@@ -154,11 +154,18 @@ export default defineComponent({
 				let params:SignupParams={
 					page: queryData.page[0],
 					rows: queryData.rows[0],
-					consultantId: 1,//销售顾问id
-					userId: 1,//用户id
 					type: 2,//查询入口 （1-业务后台，2-小程序）
 					estateId: 0,//若为业务后台，需要添加此字段 全部楼盘传0，具体楼盘传具体id即可
 				}
+				//role 1.销售 2.C端用户
+				if(storeData.role==1){
+					params.consultantId =storeData.consultantId
+				}else{
+					params.userId = +storeData.userId
+				}
+					// consultantId: 1,//销售顾问id
+					// userId: 1,//用户id
+
 				loading.value = true
 				const res= await getSignupRecordList(params)
 				triggerd.value = false
@@ -368,8 +375,9 @@ export default defineComponent({
 								position: absolute;
 								width: 686rpx;
 								height: 142rpx;
-								left: -1rpx;
+								left: -2rpx;
 								z-index: -1;
+								border-radius: 24rpx 24rpx 0 0;
 							}
 							view{
 								display: flex;
