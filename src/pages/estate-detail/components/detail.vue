@@ -1,24 +1,17 @@
-<!--
- * @Description: 文件内容描述
- * @Author: HanYongHui
- * @Date: 2022-04-11 20:44:18
- * @LastEditTime: 2022-04-11 20:55:05
- * @LastEditors: HanYongHui
--->
+
 <template>
-  <navigation-custom title="楼盘详情" :theme="theme" />
   <view class="estate-detail-warp">
-    <img class="bac-image" :src="url" mode="aspectFill" />
+    <img class="bac-image" :src="estateDetail.url" mode="aspectFill" />
     <view class="estate-content-warp">
       <view class="estate-detail_head">
         <view class="estate-detail_head--left">
           <text class="name">{{ estateDetail.name }}</text>
           <view class="describe">
-            <image src="../../images/estate-icon.png" />
+            <image src="../../../images/estate-icon.png" />
             <text>{{ estateDetail.developerName }}</text>
           </view>
           <view class="describe">
-            <image src="../../images/estate-icon.png" />
+            <image src="../../../images/estate-icon.png" />
             <text
               >{{ estateDetail.provinceName }}{{ estateDetail.cityName
               }}{{ estateDetail.districtName }}{{ estateDetail.address }}</text
@@ -26,7 +19,7 @@
           </view>
         </view>
         <view class="estate-detail_head--right" @click="onClickCodeImage">
-          <image src="../../images/code-icon.png" />
+          <image src="../../../images/code-icon.png" />
           <text>楼盘二维码</text>
         </view>
       </view>
@@ -75,11 +68,10 @@
   <code-dialog :codeUrl="codeImageUrl" v-model:show="codeDialogShow" />
 </template>
 <script lang="ts" setup>
-import { defineComponent, defineProps, ref } from "vue";
+import { defineComponent, defineProps, ref, watch } from "vue";
 import { onLoad, onShareAppMessage, onPageScroll } from "@dcloudio/uni-app";
-import navigationCustom from "../../../components/navigation-custom/index.vue";
 import { useEstateDetailHook } from "../hooks/index";
-import codeDialog from "../../components/code-dialog/index.vue";
+import codeDialog from "../../../components/code-dialog/index.vue";
 const {
   reuqestEstateDetail,
   reuqestHouseTypeList,
@@ -92,16 +84,19 @@ const {
 const props = defineProps({
   estateId: {
     type: Number,
+    required: true,
   },
 });
-const theme = ref<"white" | "black" | "transparent">("transparent");
-onPageScroll((e) => {
-  if (e.scrollTop > 64) {
-    theme.value = "white";
-  } else {
-    theme.value = "transparent";
+onLoad(() => {});
+
+watch(
+  () => props.estateId,
+  () => {
+    reuqestEstateDetail(props.estateId);
+    reuqestHouseTypeList(props.estateId);
   }
-});
+);
+
 const onClickHouseType = (id: number) => {};
 const onClickCodeImage = () => {
   requestCodeImage("pages/home/index/index");

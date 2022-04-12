@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:41:39
- * @LastEditTime: 2022-04-12 10:50:24
+ * @LastEditTime: 2022-04-12 11:36:59
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -57,7 +57,7 @@ const bindgetPhoneNumber = (res: any) => {
     signature: signatureStr.value,
     rawData: rawDataStr.value,
   }).then((res) => {
-    console.log(res)
+    console.log(res);
     // 小程序注册 都是用户
     storeData.role = 2;
     storeData.isLogin = true;
@@ -94,10 +94,13 @@ const chooseIcon = computed(() => {
 });
 
 const clickEvent = (type: string) => {
+  console.log(type);
   switch (type) {
     case "serverAgreement":
+      uni.navigateTo({ url: "/pages/web-view/index?agreementType=1" });
       break;
     case "privacyAgreement":
+      uni.navigateTo({ url: "/pages/web-view/index?agreementType=2" });
       break;
   }
 };
