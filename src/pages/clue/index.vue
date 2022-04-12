@@ -71,7 +71,7 @@
 						<view class="item-container"
 							v-for="(bowerItem, index3) in browerList"
 							:key="index3"
-							@click="gotoRegistrationDetailPage(bowerItem.id, bowerItem.deleteFlag || 0, 'brower')">
+							@click="gotoRegistrationDetailPage(bowerItem.schemeId, bowerItem.deleteFlag || 0, 'brower')">
 							<view class="header">
 								<img class="img" src="../../images/clue_item_bg.png" alt="">
 								<view>
@@ -241,9 +241,17 @@ export default defineComponent({
 					duration: 1000
 				})
 			} else {
-				uni.navigateTo({
-					url: `signup-detail/signup-detail?id=${id}&type=${type}`
-				})
+				if (type == "signup") {
+					// 去报名详情页面
+					uni.navigateTo({
+						url: `signup-detail/signup-detail?id=${id}&type=${type}`
+					})
+				} else {
+					// 去方案详情页面
+					uni.navigateTo({
+						url: `../case-detail/index?caseId=${id}`
+					})
+				}
 			}
 		}
 		const formatDate = (time: number) =>
