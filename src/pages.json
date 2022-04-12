@@ -103,14 +103,14 @@
 	},
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
-		"navigationBarTitleText": "uni-app",
+		"navigationBarTitleText": "",
 		"navigationBarBackgroundColor": "#F8F8F8",
 		"backgroundColor": "#F8F8F8"
 	},
 	"tabBar": {
 		"color": "#999999",
 		"selectedColor": "#333333",
-		"borderStyle": "white",
+		"borderStyle": "black",
 		"backgroundColor": "#FFFFFF",
 		"fontSize": "20px",
 		"list": [

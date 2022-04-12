@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:02:49
- * @LastEditTime: 2022-04-09 15:22:38
+ * @LastEditTime: 2022-04-12 15:40:51
  * @LastEditors: HanYongHui
  */
 
@@ -12,6 +12,8 @@ import {
   getHouseTypeList, HouseTypeList,
   getCodeImage
 } from "../../../api/estate-detail";
+import { addBrowseRecord, addBrowseType } from "../../../api/case";
+
 
 export const useEstateDetailHook = () => {
   const data = reactive<{
@@ -43,10 +45,14 @@ export const useEstateDetailHook = () => {
     data.codeDialogShow = true
   }
 
+  const requestAddBrowseRecord = async (parmas: addBrowseType) => {
+    const res = await addBrowseRecord(parmas)
+  }
   return {
     ...toRefs(data),
     reuqestEstateDetail,
     reuqestHouseTypeList,
     requestCodeImage,
+    requestAddBrowseRecord,
   }
 }

@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-12 12:05:15
+ * @LastEditTime: 2022-04-12 15:40:53
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -14,7 +14,8 @@ import { defineComponent, ref } from "vue";
 import { onLoad, onShareAppMessage, onPageScroll } from "@dcloudio/uni-app";
 import detail from "./components/detail.vue";
 import navigationCustom from "../../components/navigation-custom/index.vue";
-
+import { useEstateDetailHook } from "./hooks/index";
+import { useUserInfoHooks } from "../../hoosk/index";
 export default defineComponent({
   name: "",
   components: {
@@ -22,9 +23,18 @@ export default defineComponent({
     navigationCustom,
   },
   setup() {
+    const { storeData } = useUserInfoHooks();
+    const { requestAddBrowseRecord } = useEstateDetailHook();
     const id = ref<number>(0);
     onLoad((e: any) => {
       id.value = e.id;
+      if (storeData.role === 2) {
+        requestAddBrowseRecord({
+          userId: +storeData.userId,
+          userNickName: storeData.userName,
+          estateId: id.value,
+        });
+      }
     });
     const theme = ref<"white" | "black" | "transparent">("transparent");
     onPageScroll((e) => {

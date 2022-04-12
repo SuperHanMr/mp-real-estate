@@ -2,7 +2,7 @@
  * @Description: 小程序 主入口
  * @Author: HanYongHui
  * @Date: 2022-03-29 16:44:50
- * @LastEditTime: 2022-04-12 14:37:51
+ * @LastEditTime: 2022-04-12 15:28:58
  * @LastEditors: HanYongHui
 -->
 <script setup lang="ts">
@@ -12,8 +12,10 @@ import { useUserInfoHooks } from "./hoosk/index";
 import { useLoginHooks } from "../src/pages/login/hooks/index";
 const { requestLogin, loginData, requsetBrowseRecord } = useLoginHooks();
 const { storeData } = useUserInfoHooks();
+
 onLaunch(() => {
   console.log("App Launch");
+
   uni.getSystemInfo({
     success: (result) => {
       console.log("statusBarHeight", result.statusBarHeight);

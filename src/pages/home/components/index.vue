@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-12 12:11:32
- * @LastEditTime: 2022-04-12 14:34:12
+ * @LastEditTime: 2022-04-12 15:17:15
  * @LastEditors: HanYongHui
 -->
 
@@ -10,7 +10,7 @@
   <image :src="imageBg" class="image-bg" />
   <view class="list">
     <estate-list v-for="item in list" :key="item.id" :item="item" />
-    <!-- <load-more :loadType="loadType" /> -->
+    <load-more :loadType="loadType" />
   </view>
 </template>
 <script lang="ts" setup>

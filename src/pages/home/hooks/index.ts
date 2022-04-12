@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 17:45:38
- * @LastEditTime: 2022-04-12 12:37:12
+ * @LastEditTime: 2022-04-12 15:17:15
  * @LastEditors: HanYongHui
  */
 import { ref, reactive, toRefs } from "vue";
@@ -29,9 +29,15 @@ export const useEstateListHook = () => {
       // maxId 用于分页加载 默认传0
       maxId.value = data.list[data.list.length - 1].id
     } catch {
+      uni.stopPullDownRefresh();
       loadType.value = "error"
     }
   }
+
+
+
+
+
   return {
     loadType,
     maxId,

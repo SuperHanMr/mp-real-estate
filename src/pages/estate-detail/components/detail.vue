@@ -105,11 +105,10 @@ const onClickHouseType = (id: number) => {
     url: "/pages/house-detail/index?houseId=" + id,
   });
 };
+// 分享二维码
 const onClickCodeImage = () => {
-  requestCodeImage("pages/home/index/index");
+  requestCodeImage("pages/home/index/index", `estateId=${props.estateId}`);
 };
-const url: string =
-  "https://dbj-test.oss-cn-beijing.aliyuncs.com/res/20220409/17/1649495698628_7274801.jpg";
 </script>
 <style lang="scss" scoped>
 .estate-detail-warp {
