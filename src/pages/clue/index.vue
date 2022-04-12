@@ -159,7 +159,7 @@ export default defineComponent({
 				}
 				//role 1.销售 2.C端用户
 				if(storeData.role==1){
-					params.consultantId =storeData.consultantId
+					params.consultantId =+storeData.userId
 				}else{
 					params.userId = +storeData.userId
 				}
