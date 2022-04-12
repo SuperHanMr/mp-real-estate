@@ -105,7 +105,7 @@ export default defineComponent({
         requestHouseDetail(+e.houseId)
         requestCode(e.houseId)
       }
-      if(e.shardId){
+      if(e.shardId&&storeData.role===2){
         // storeData.consultantId = +e.shardId
         uni.setStorageSync('shareId',e.shardId)
       }
