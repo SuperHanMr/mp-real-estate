@@ -74,15 +74,9 @@ export default defineComponent({
 			source.value = e.source
 			index.value = +e.index
 
-			console.log("e.index===", index.value)
-			console.log("e.source===", source.value)
-
 			// })
 			if (!source.value) {
 				const { signupDetailInfo } = getRecordDetail()
-				console.log("detailInfo", signupDetailInfo)
-				console.log("detailInfo.productBagVOS====", signupDetailInfo.detailInfo.productBagVOS)
-				console.log("需要用的数据====", signupDetailInfo.detailInfo.productBagVOS[index.value])
 				materialInfo.data = signupDetailInfo.detailInfo.productBagVOS[index.value]
 			} else {
 				const { caseDetail } = getCaseDetailHooks()
@@ -91,6 +85,7 @@ export default defineComponent({
 				bagPackageDesc.value = caseDetail.value.productBagVOS[index.value].bagDesc.bagPackageDesc
 				productBagName.value = caseDetail.value.productBagVOS[index.value].productBagName.productBagName
 				spuHelperList.value = caseDetail.value.productBagVOS[index.value].spuHelperList
+				reqBagInfo()
 			}
 
 
