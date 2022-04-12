@@ -2,7 +2,7 @@
  * @Description: 小程序 主入口
  * @Author: HanYongHui
  * @Date: 2022-03-29 16:44:50
- * @LastEditTime: 2022-04-12 10:51:30
+ * @LastEditTime: 2022-04-12 14:37:51
  * @LastEditors: HanYongHui
 -->
 <script setup lang="ts">
@@ -10,7 +10,7 @@ import { watch, reactive } from "vue";
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
 import { useUserInfoHooks } from "./hoosk/index";
 import { useLoginHooks } from "../src/pages/login/hooks/index";
-const { requestLogin, loginData } = useLoginHooks();
+const { requestLogin, loginData, requsetBrowseRecord } = useLoginHooks();
 const { storeData } = useUserInfoHooks();
 onLaunch(() => {
   console.log("App Launch");
@@ -30,12 +30,19 @@ onLaunch(() => {
             uni.reLaunch({ url: "/pages/login/index" });
             break;
           case 1:
-            storeData.userId = data?.id
+            storeData.userId = data?.id;
             storeData.userName = data?.name;
             storeData.role = data?.role;
             storeData.isLogin = true;
-            if(storeData.role===1){
-              uni.setStorageSync('shareId',storeData.userId)
+            if (storeData.role === 1) {
+              uni.setStorageSync("shareId", storeData.userId);
+            }
+
+            if (storeData.role === 2) {
+              // 查询浏览记录
+              requsetBrowseRecord().then((res) => {
+                storeData.estateId = res.data?.id || 0;
+              });
             }
             break;
           case 2:

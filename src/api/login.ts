@@ -2,7 +2,7 @@
  * @Description: login and register
  * @Author: HanYongHui
  * @Date: 2022-04-06 16:48:34
- * @LastEditTime: 2022-04-08 14:25:48
+ * @LastEditTime: 2022-04-12 14:35:57
  * @LastEditors: HanYongHui
  */
 import createRequest from "../utils/create-request"
@@ -27,4 +27,21 @@ export type RegisterParams = {
 }
 export function register(params: RegisterParams) {
   return request.post('/em/applet/wx/register', params)
+}
+
+
+export type BrowseRecordRes = {
+  browseTime: number,
+  consultantId: number,
+  consultantPhoneNum: number,
+  estateId: number,
+  houseTypeId: number,
+  id: number,
+  phoneNum: number,
+  schemeId: number,
+  userId: number,
+  userNickName: string
+}
+export function queryBrowseRecord() {
+  return request.get<BrowseRecordRes>('/em/applet/browseRecord/getLatest')
 }

@@ -2,57 +2,51 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-12 12:27:03
+ * @LastEditTime: 2022-04-12 14:17:46
  * @LastEditors: HanYongHui
 -->
 <template>
-  <template v-if="storeData.role === 2 && storeData.estateId">
+  <template v-if="storeData.role === 1 && storeData.estateId">
     <!-- 用户且有楼盘详情浏览记录 -->
-    <navigation-custom title="楼盘详情" theme="transparent" />
+    <navigation-custom title="楼盘详情" :theme="theme" :isBack="false" />
     <estate-detail :estateId="storeData.estateId" />
   </template>
   <template v-else>
-    <navigation-custom title="楼盘" theme="transparent" />
-    <image :src="imageBg" class="image-bg" />
-    <view class="list">
-      <estate-list v-for="item in list" :key="item.id" :item="item" />
-      <load-more :loadType="loadType" />
-    </view>
+    <!-- 楼盘列表 -->
+    <navigation-custom title="楼盘" theme="transparent" :isBack="false" />
+    <estate-list />
   </template>
 </template>
 <script lang="ts">
-import { defineComponent, watch } from "vue";
+import { defineComponent, watch, ref } from "vue";
 import {
   onLoad,
-  onShow,
+  onPageScroll,
   onPullDownRefresh,
   onReachBottom,
+  onShareAppMessage,
 } from "@dcloudio/uni-app";
-import estateList from "./components/estate-list.vue";
-import loadMore from "../../components/load-more/index.vue";
 import { useUserInfoHooks } from "../../hoosk/index";
 import { useEstateListHook } from "./hooks/index";
 import estateDetail from "../estate-detail/components/detail.vue";
 import navigationCustom from "../../components/navigation-custom/index.vue";
+import estateList from "./components/index.vue";
 
 export default defineComponent({
   name: "",
   components: {
-    estateList,
-    loadMore,
     navigationCustom,
+    estateList,
     estateDetail,
   },
   setup() {
     const { storeData } = useUserInfoHooks();
-    const { requestEstateList, list, loadType } = useEstateListHook();
-    const imageBg: string =
-      "https://ali-image.dabanjia.com/image/20220412/11/164973351689070.png";
+    const { requestEstateList, loadType } = useEstateListHook();
     onLoad((e) => {});
+
     watch(
       () => storeData.isLogin,
       () => {
-        requestEstateList();
         if (storeData.role === 2) {
           uni.setTabBarItem({
             index: 1,
@@ -63,7 +57,16 @@ export default defineComponent({
         }
       }
     );
-    onShow(() => {});
+
+    const theme = ref<"white" | "black" | "transparent">("transparent");
+    onPageScroll((e) => {
+      if (e.scrollTop > 64) {
+        theme.value = "white";
+      } else {
+        theme.value = "transparent";
+      }
+    });
+
     onPullDownRefresh(() => {
       requestEstateList();
     });
@@ -74,11 +77,16 @@ export default defineComponent({
       loadType.value = "load";
       requestEstateList(true);
     });
+
+    onShareAppMessage(() => {
+      return {
+        title: "楼盘详情",
+        path: `/pages/estate-detail/index?id=${10}`,
+      };
+    });
     return {
       storeData,
-      loadType,
-      list,
-      imageBg,
+      theme,
     };
   },
 });
