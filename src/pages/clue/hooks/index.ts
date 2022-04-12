@@ -24,7 +24,7 @@ export const getRecordDetail = () => {
   }
   return {
     requestSignupDetail,
-    ...toRefs(signupDetailInfo)
+    signupDetailInfo,
   }
 }
 
@@ -51,6 +51,6 @@ export const getBrowerDetailInfo = () => {
   }
   return {
     requestBrowerDetail,
-    ...toRefs(browerDetailInfo)
+    browerDetailInfo,
   }
 }
