@@ -96,6 +96,8 @@ export type productItem = {
 }
 
 export type reportData = {
+  houseTypeId: number,
+  userId: string,
   estateId: number,
   schemeId: number,
   schemeSnapshot: string,

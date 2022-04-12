@@ -16,12 +16,14 @@ const { storeData } = useUserInfoHooks();
 const houseDetailData = reactive<{ houseDetail: houseDetail }>({ houseDetail: {} as houseDetail })
 const parentId = ref<findParentData>({} as findParentData)
 const codeUrl = ref<string>('')
+const enterNum = ref<number>(0)
 export const getHouseDetailHooks = () => {
   const requestHouseDetail = async (houseId: number) => {
     let res = await houseDetailHooks(houseId)
     houseDetailData.houseDetail = res.data as houseDetail
     // requestCaseList(houseId)
     requestFindParentIds({ pageId: houseId, level: 2 })
+
   }
   const requestCode = async (id?: string) => {
     let url = 'pages/house-detail/index'
@@ -40,9 +42,15 @@ export const getHouseDetailHooks = () => {
   const requestFindParentIds = async (params: findParentParams) => {
     let res = await findParentIds(params)
     if (res.data) parentId.value = res.data
-    requestAddBrowseRecord()
+    console.log(enterNum.value, "/////////")
+    if (enterNum.value === 0) {
+      requestAddBrowseRecord()
+    }
   }
   const requestAddBrowseRecord = async () => {
+    if (storeData.role === 1) {
+      return
+    }
     let params = {
       userId: +storeData.userId,
       userNickName: storeData.userName,
@@ -51,6 +59,7 @@ export const getHouseDetailHooks = () => {
       houseTypeId: parentId.value.houseTypeId,
     }
     let res = await addBrowseRecord(params)
+    enterNum.value++
     console.log(res)
     // if (res.data) parentId.value = res.data
   }
@@ -73,8 +82,10 @@ export const getHouseDetailHooks = () => {
   return {
     ...toRefs(houseDetailData),
     codeUrl,
+    enterNum,
     requestCode,
     requestHouseDetail,
     houseCaseCheck
+
   }
 }
