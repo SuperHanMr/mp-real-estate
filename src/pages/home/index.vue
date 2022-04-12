@@ -2,18 +2,25 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-12 14:17:46
+ * @LastEditTime: 2022-04-12 16:47:08
  * @LastEditors: HanYongHui
 -->
 <template>
-  <template v-if="storeData.role === 1 && storeData.estateId">
+  <template v-if="storeData.role === 2 && storeData.estateId">
     <!-- 用户且有楼盘详情浏览记录 -->
     <navigation-custom title="楼盘详情" :theme="theme" :isBack="false" />
     <estate-detail :estateId="storeData.estateId" />
   </template>
-  <template v-else>
+  <template
+    v-if="storeData.role == 1 || (storeData.role === 2 && !storeData.estateId)"
+  >
     <!-- 楼盘列表 -->
-    <navigation-custom title="楼盘" theme="transparent" :isBack="false" />
+    <navigation-custom
+      title="楼盘"
+      theme="transparent"
+      :isBack="false"
+      titleColor="#333"
+    />
     <estate-list />
   </template>
 </template>
@@ -68,20 +75,24 @@ export default defineComponent({
     });
 
     onPullDownRefresh(() => {
-      requestEstateList();
+      if (!storeData.estateId) {
+        requestEstateList();
+      }
     });
     onReachBottom(() => {
-      if (loadType.value === "complete") {
-        return;
+      if (!storeData.estateId) {
+        if (loadType.value === "complete") {
+          return;
+        }
+        loadType.value = "load";
+        requestEstateList(true);
       }
-      loadType.value = "load";
-      requestEstateList(true);
     });
 
     onShareAppMessage(() => {
       return {
         title: "楼盘详情",
-        path: `/pages/estate-detail/index?id=${10}`,
+        path: `/pages/home/index?shareId=${storeData.userId}`,
       };
     });
     return {

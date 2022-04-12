@@ -64,6 +64,8 @@ function createRequest(baseURL: string): Request {
   // 请求拦截器
   service.interceptors.request.use(
     config => {
+      uni.showLoading({ mask: true })
+
       // 设置登录Token
       const token = uni.getStorageSync('token')
       if (token) {
@@ -79,6 +81,7 @@ function createRequest(baseURL: string): Request {
   // 响应拦截器
   service.interceptors.response.use(
     response => {
+      uni.hideLoading();
       if (response.data.code !== 1) {
         return Promise.reject(response)
       } else {
@@ -88,6 +91,7 @@ function createRequest(baseURL: string): Request {
       }
     },
     error => {
+      uni.hideLoading();
       console.error("------response-error-----", error);
       // if (error.response.status === 401) {
       //   return new Promise((resolve, reject) => {
@@ -114,6 +118,21 @@ function createRequest(baseURL: string): Request {
               // 跳转登录页
               uni.reLaunch({ url: '/pages/login/index' })
               break
+            case 403:
+              setTimeout(() => {
+                let pages = getCurrentPages()
+                // console.log(pages.length,'当前栈深度')
+                if (pages.length < 2) {
+                  uni.switchTab({
+                    url: '/pages/home/index'
+                  });
+                } else {
+                  uni.navigateBack({
+                    delta: 1
+                  })
+                }
+              }, 1000)
+
             default:
               if (err.data && err.data.message) {
                 uni.showToast({

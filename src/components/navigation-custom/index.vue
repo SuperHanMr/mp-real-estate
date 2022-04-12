@@ -2,15 +2,15 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-01 16:13:40
- * @LastEditTime: 2022-04-11 10:38:30
+ * @LastEditTime: 2022-04-12 15:47:47
  * @LastEditors: HanYongHui
 -->
 <template>
   <view
     class="navigation-bar"
     :class="{
-      white: props.theme === 'white',
-      transparent: props.theme === 'transparent',
+      white: theme === 'white',
+      transparent: theme === 'transparent',
     }"
     :style="`padding-top: ${storeData.statusBarHeight}px;`"
   >
@@ -18,7 +18,7 @@
       <view class="back-icon" @click="backPage" v-if="isBack">
         <image :src="backIcon" />
       </view>
-      <text class="title">{{ props.title }}</text>
+      <text class="title" :style="`color:${titleColor}`">{{ title }}</text>
     </view>
   </view>
 </template>
@@ -46,6 +46,10 @@ const props = defineProps({
     type: Boolean,
     default: true,
   },
+
+  titleColor: {
+    type: String,
+  },
 });
 
 const backIcon = computed(() => {
@@ -53,17 +57,17 @@ const backIcon = computed(() => {
 });
 const backPage = () => {
   // uni.navigateBack({ delta: 1 });
-  let pages = getCurrentPages()
-        // console.log(pages.length,'当前栈深度')
-        if (pages.length < 2) {
-          uni.switchTab({
-            url: '/pages/home/index'
-          });
-        } else {
-          uni.navigateBack({
-            delta: 1
-          })
-        }
+  let pages = getCurrentPages();
+  // console.log(pages.length,'当前栈深度')
+  if (pages.length < 2) {
+    uni.switchTab({
+      url: "/pages/home/index",
+    });
+  } else {
+    uni.navigateBack({
+      delta: 1,
+    });
+  }
 };
 </script>
 <style lang="scss" scoped>

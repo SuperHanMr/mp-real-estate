@@ -2,7 +2,7 @@
  * @Description: 公共数据
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:48:27
- * @LastEditTime: 2022-04-12 12:09:45
+ * @LastEditTime: 2022-04-12 15:20:26
  * @LastEditors: HanYongHui
  */
 import { reactive } from "vue";
@@ -17,7 +17,9 @@ type Store = {
   statusBarHeight: number,
   consultantId: number,
   consultantPhoneNum: string,
+  // 是否登录
   isLogin: boolean,
+  // 用户浏览的楼盘详情Id
   estateId: number,
 
 }

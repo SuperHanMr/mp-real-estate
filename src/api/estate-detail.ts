@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-04-08 16:42:31
- * @LastEditTime: 2022-04-09 12:28:39
+ * @LastEditTime: 2022-04-12 14:54:33
  * @LastEditors: HanYongHui
  */
 
@@ -51,7 +51,7 @@ export function getCodeImage(pagePath: string, scene?: string) {
   let params = {
     page: pagePath,
     scene: scene,
-    envVersion: import.meta.env.VITE_URL_BASE_API === "https://design-dev.meiwu365.com"
+    envVersion: import.meta.env.VITE_URL_BASE_API === "https://design-stage.meiwu365.com"
   }
   return request.get<string>(`/em/applet/share/getWxCodeForEM`, params)
 }
