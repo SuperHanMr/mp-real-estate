@@ -51,11 +51,11 @@ export default defineComponent({
 
 			// })
 			if(!source.value){
-				const {detailInfo} = getRecordDetail()
-				console.log("detailInfo",detailInfo)
-				console.log("detailInfo.productBagVOS====",detailInfo.value.productBagVOS)
-				console.log("需要用的数据====",detailInfo.value.productBagVOS[index.value])
-				materialInfo.data = detailInfo.value.productBagVOS[index.value]
+				const {signupDetailInfo} = getRecordDetail()
+				console.log("detailInfo",signupDetailInfo)
+				console.log("detailInfo.productBagVOS====",signupDetailInfo.detailInfo.productBagVOS)
+				console.log("需要用的数据====",signupDetailInfo.detailInfo.productBagVOS[index.value])
+				materialInfo.data =signupDetailInfo.detailInfo.productBagVOS[index.value]
 			}else{
 				const {caseDetail}  = getCaseDetailHooks()
 				materialInfo.data = caseDetail.value.productBagVOS[index.value]

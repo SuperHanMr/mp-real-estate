@@ -41,7 +41,8 @@
 								<img class="img" src="../../images/clue_item_bg.png" alt="">
 								<view>
 									<view class="projectName">{{ signupItem.estateName }}</view>
-									<view class="customerName" v-if="storeData.role == 1">报名用户：{{ signupItem.userNickName }}</view>
+									<view class="customerName" v-if="storeData.role == 1">
+										报名用户：{{ signupItem.userNickName }}/{{ signupItem.userPhoneNum }}</view>
 								</view>
 							</view>
 							<view class="caseInfo-container">
@@ -69,27 +70,29 @@
 
 					<view class="list-container" v-if="currentIndex == 1 && browerList && browerList.length">
 						<view class="item-container"
-							v-for="(bowerItem, index3) in browerList"
+							v-for="(browerItem, index3) in browerList"
 							:key="index3"
-							@click="gotoRegistrationDetailPage(bowerItem.id, bowerItem.deleteFlag || 0, 'brower')">
+							@click="gotoRegistrationDetailPage(browerItem.schemeId, browerItem.deleteFlag || 0, 'brower')">
 							<view class="header">
 								<img class="img" src="../../images/clue_item_bg.png" alt="">
 								<view>
-									<view class="projectName">{{ bowerItem.estateName }}</view>
-									<view class="customerName" v-if="storeData.role == 1">报名用户： {{ bowerItem.userNickName }}</view>
+									<view class="projectName">{{ browerItem.estateName }}</view>
+									<view class="customerName" v-if="storeData.role == 1">
+										报名用户： {{ browerItem.userNickName }}/{{ browerItem.phoneNum }}
+									</view>
 								</view>
 							</view>
 							<view class="caseInfo-container">
-								<image class="caseImg" :src="bowerItem.coverImg" />
+								<image class="caseImg" :src="browerItem.coverImg" />
 								<view class="caseInfo">
-									<view class="caseName">{{ bowerItem.schemeName }}</view>
-									<view class="address">{{ bowerItem.houseTypeName }}</view>
+									<view class="caseName">{{ browerItem.schemeName }}</view>
+									<view class="address">{{ browerItem.houseTypeName }}</view>
 								</view>
 							</view>
 							<view class="bottomInfo">
 								<view class="itemInfo">
 									<view class="left">浏览时间</view>
-									<view class="right">{{ formatDate(bowerItem.browseTime) }}</view>
+									<view class="right">{{ formatDate(browerItem.browseTime) }}</view>
 								</view>
 							</view>
 						</view>
@@ -241,9 +244,17 @@ export default defineComponent({
 					duration: 1000
 				})
 			} else {
-				uni.navigateTo({
-					url: `signup-detail/signup-detail?id=${id}&type=${type}`
-				})
+				if (type == "signup") {
+					// 去报名详情页面
+					uni.navigateTo({
+						url: `signup-detail/signup-detail?id=${id}&type=${type}`
+					})
+				} else {
+					// 去方案详情页面
+					uni.navigateTo({
+						url: `../case-detail/index?caseId=${id}`
+					})
+				}
 			}
 		}
 		const formatDate = (time: number) =>

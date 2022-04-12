@@ -2,7 +2,7 @@
  * @Description: 公共数据
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:48:27
- * @LastEditTime: 2022-04-11 20:37:55
+ * @LastEditTime: 2022-04-12 12:09:45
  * @LastEditors: HanYongHui
  */
 import { reactive } from "vue";
@@ -16,13 +16,19 @@ type Store = {
   avatarUrl: string,
   statusBarHeight: number,
   consultantId: number,
-  consultantPhoneNum: string
+  consultantPhoneNum: string,
+  isLogin: boolean,
+  estateId: number,
+
 }
 const storeData = reactive<Store>(
   {
     token: '',
     userName: '',
     userId: '',
+    role: 2,
+    isLogin: false,
+    estateId: 0,
   } as Store
 )
 export const useUserInfoHooks = () => {

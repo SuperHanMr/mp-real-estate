@@ -36,7 +36,7 @@
 				<view class="content-item">
 					<text class="left">报名时间</text>
 					<view class="right">
-						<text>{{ formatDate(data.signUpTime) }}</text>
+						<text>{{ formatDate(detailInfo.signUpTime) }}</text>
 					</view>
 				</view>
 			</view>
@@ -65,13 +65,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, ref, toRefs } from "vue"
+import { defineComponent, ref, toRefs } from "vue"
 import {
 	onPageScroll,
 	onLoad,
 	onShow,
 } from "@dcloudio/uni-app";
-import { getRecordDetail, getBrowerDetailInfo } from "../hooks/index"
+import { getRecordDetail } from "../hooks/index"
 import moment from "moment";
 import navigationCustom from "@/components/navigation-custom/index.vue"
 import loadMore from "@/components/load-more/index.vue";
@@ -83,21 +83,16 @@ export default defineComponent({
 	},
 	setup() {
 		const { requestSignupDetail, signupDetailInfo } = getRecordDetail()
-		const { requestBrowerDetail, browerDetailInfo } = getBrowerDetailInfo()
 		const theme = ref<"white" | "black" | "transparent">("transparent");
 		const id = ref<number>(0)
 		const type = ref<string>('')
-		// const signupDetailInfo = reactive<{ data: SignupRecordDetail }>({ data: {} as SignupRecordDetail })
 		onLoad((e: any) => {
 			console.log("---onLoad---", e);
 			id.value = +e.id
 			type.value = e.type
 			console.log(id.value)
-			if (type.value == 'signup') {
-				requestSignupDetail(e.id)
-			} else {
-				requestBrowerDetail(e.id)
-			}
+			requestSignupDetail(e.id)
+
 		});
 		onPageScroll((e) => {
 			if (e.scrollTop > 64) {
@@ -149,7 +144,6 @@ export default defineComponent({
 			duplicate,
 			gotoNextPage,
 			...toRefs(signupDetailInfo),
-			...toRefs(browerDetailInfo),
 			formatDate,
 		}
 	}

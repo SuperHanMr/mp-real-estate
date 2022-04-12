@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 17:47:35
- * @LastEditTime: 2022-04-08 16:22:41
+ * @LastEditTime: 2022-04-12 12:04:52
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -44,13 +44,14 @@ const props = defineProps({
   },
 });
 const eventEstateDetail = () => {
-  uni.navigateTo({ url: `/pages/estate-detail/index?id=${props.item.id}` });
+  uni.navigateTo({
+    url: `/pages/estate-detail/index?id=${props.item.id}`,
+  });
 };
 </script>
 <style lang="scss" scoped>
 .house-item {
   margin-bottom: 32rpx;
-  background: #fff;
   display: flex;
 
   .cover-iamge {
