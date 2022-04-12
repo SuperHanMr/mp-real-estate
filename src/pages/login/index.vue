@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:41:39
- * @LastEditTime: 2022-04-12 10:31:22
+ * @LastEditTime: 2022-04-12 10:50:24
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -59,6 +59,7 @@ const bindgetPhoneNumber = (res: any) => {
   }).then((res) => {
     // 小程序注册 都是用户
     storeData.role = 2;
+    storeData.isLogin = true;
     uni.switchTab({ url: "/pages/home/index" });
   });
 };

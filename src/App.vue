@@ -2,7 +2,7 @@
  * @Description: 小程序 主入口
  * @Author: HanYongHui
  * @Date: 2022-03-29 16:44:50
- * @LastEditTime: 2022-04-11 20:41:25
+ * @LastEditTime: 2022-04-12 10:51:30
  * @LastEditors: HanYongHui
 -->
 <script setup lang="ts">
@@ -32,8 +32,9 @@ onLaunch(() => {
           case 1:
             storeData.userName = data?.name;
             storeData.role = data?.role;
+            storeData.isLogin = true;
             break;
-          case 1:
+          case 2:
             break;
         }
       });
