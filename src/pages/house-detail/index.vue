@@ -40,7 +40,7 @@
           <text>全部方案（{{houseDetail.schemeSimpleItemVOS.length}}）</text>
         </view>
         <view class="house-type-warp" v-for="(item,index) in houseDetail.schemeSimpleItemVOS" @click="toCasedetail(item.schemeId,houseDetail.id)" :key="index">
-          <image class="left-img" src="../../images/case-left.png" v-if="storeData.role===1" mode="" />
+          <image class="left-img" src="../../images/case-left.png" v-if="storeData.role===2" mode="" />
           <view class="house-type_image">
             <image
               class="house-type_image--cover"

@@ -30,8 +30,12 @@ onLaunch(() => {
             uni.reLaunch({ url: "/pages/login/index" });
             break;
           case 1:
+            storeData.userId = data?.id
             storeData.userName = data?.name;
             storeData.role = data?.role;
+            if(storeData.role===1){
+              uni.setStorageSync('shareId',storeData.userId)
+            }
             break;
           case 1:
             break;

@@ -12,6 +12,7 @@ export type LoginRes = {
   name: string //名字,
   role: number //角色
   isRegister: number,
+  id: string,
 }
 
 export function login(code: string) {
