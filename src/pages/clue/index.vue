@@ -228,7 +228,7 @@ export default defineComponent({
 			currentIndex.value = index
 		}
 		const handlePrice = (price: number) => {
-			if (!price) return ['0', '00']
+			if (!price) return '0.00'
 			let list = String(price).split(".")
 			if (list.length == 1) {
 				return list[0] + '.' + '00'
