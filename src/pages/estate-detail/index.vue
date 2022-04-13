@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-12 19:12:29
+ * @LastEditTime: 2022-04-13 12:36:31
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -41,7 +41,7 @@ export default defineComponent({
     onLoad((e: any) => {
       console.log("-----load-------", e);
       id.value = +e.estateId;
-      uni.setStorageSync("shareId", +e.shareId ? e.estateId : "");
+      uni.setStorageSync("shareId", +e.shareId ? e.shareId : "");
       shareBtn.value = e.shareId ? true : false;
       if (storeData.role === 2) {
         requestAddBrowseRecord({
@@ -67,6 +67,10 @@ export default defineComponent({
       } else {
         shareId = +storeData.userId;
       }
+      console.log(
+        "onShareAppMessage",
+        `/pages/estate-detail/index?estateId=${id.value}&shareId=${shareId}`
+      );
       return {
         title: "楼盘详情",
         path: `/pages/estate-detail/index?estateId=${id.value}&shareId=${shareId}`,
