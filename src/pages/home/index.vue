@@ -2,26 +2,30 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-12 19:12:45
+ * @LastEditTime: 2022-04-13 10:25:18
  * @LastEditors: HanYongHui
 -->
 <template>
-  <template v-if="storeData.role === 2 && storeData.estateId">
-    <!-- 用户且有楼盘详情浏览记录 -->
-    <navigation-custom title="楼盘详情" :theme="theme" :isBack="false" />
-    <estate-detail :estateId="storeData.estateId" ref="estateDetailDom" />
-  </template>
-  <template
-    v-if="storeData.role == 1 || (storeData.role === 2 && !storeData.estateId)"
-  >
-    <!-- 楼盘列表 -->
-    <navigation-custom
-      title="楼盘"
-      theme="transparent"
-      :isBack="false"
-      titleColor="#333"
-    />
-    <estate-list />
+  <template v-if="storeData.isLogin">
+    <template v-if="storeData.role === 2 && storeData.estateId">
+      <!-- 用户且有楼盘详情浏览记录 -->
+      <navigation-custom title="楼盘详情" :theme="theme" :isBack="false" />
+      <estate-detail :estateId="storeData.estateId" ref="estateDetailDom" />
+    </template>
+    <template
+      v-if="
+        storeData.role == 1 || (storeData.role === 2 && !storeData.estateId)
+      "
+    >
+      <!-- 楼盘列表 -->
+      <navigation-custom
+        title="楼盘"
+        theme="transparent"
+        :isBack="false"
+        titleColor="#333"
+      />
+      <estate-list />
+    </template>
   </template>
 </template>
 <script lang="ts">
