@@ -158,6 +158,7 @@ export const getCaseDetailHooks = () => {
       schemeId: caseId,
       schemeName: caseDetailData.caseDetail.schemeName
     }
+    console.log(params, '浏览记录')
     let res = await addBrowseRecord(params)
     enterNum.value++
     console.log(res)

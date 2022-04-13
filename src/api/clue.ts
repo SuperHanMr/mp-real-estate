@@ -256,6 +256,6 @@ export type BagParams = {
 
 //调用套包数据接口
 export function getBagInfo(params: BagParams) {
-  return request.post<MaterialItem>(`/em/web/scheme/product/helper/subBag`, params)
+  return request.post<MaterialItem>(`/em/applet/scheme/product/helper/subBag`, params)
 }
 
