@@ -109,6 +109,7 @@ import {
   onPullDownRefresh,
   onReachBottom,
   onPageScroll,
+  onShareAppMessage
 } from "@dcloudio/uni-app";
 import navigationCustom from "@/components/navigation-custom/index.vue";
 import { useUserInfoHooks } from "../../hoosk/index";
@@ -163,6 +164,18 @@ export default defineComponent({
     });
     // onMounted(()=>{
     // })
+    onShareAppMessage(() => {
+      let shareId: number;
+      if (storeData.role === 2) {
+        shareId = uni.getStorageSync("shareId") || 0;
+      } else {
+        shareId = +storeData.userId;
+      }
+      return {
+        title: "户型详情",
+        path: `/pages/case-detail/index?caseId=${caseId.value}&shareId=${shareId}`,
+      };
+    });
     onPullDownRefresh(() => {
       goodList.value = []
       requestCaseDetail(caseId.value)
@@ -241,6 +254,7 @@ export default defineComponent({
         consultantId:uni.getStorageSync('shareId')||'',
         houseTypeId:0
       }
+      console.log(data,'报名')
       requestReport(data,()=>{
         goodList.value = []
       })

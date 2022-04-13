@@ -80,6 +80,7 @@ import {
   onPullDownRefresh,
   onReachBottom,
   onPageScroll,
+  onShareAppMessage
 } from "@dcloudio/uni-app";
 import navigationCustom from "@/components/navigation-custom/index.vue";
 import { useUserInfoHooks } from "../../hoosk/index";
@@ -115,6 +116,18 @@ export default defineComponent({
           uni.setStorageSync('shareId',e.shardId)
         }
       }
+    });
+    onShareAppMessage(() => {
+      let shareId: number;
+      if (storeData.role === 2) {
+        shareId = uni.getStorageSync("shareId") || 0;
+      } else {
+        shareId = +storeData.userId;
+      }
+      return {
+        title: "户型详情",
+        path: `/pages/house-detail/index?houseId=${houseId.value}&shareId=${shareId}`,
+      };
     });
     onMounted(()=>{
       console.log(11111)

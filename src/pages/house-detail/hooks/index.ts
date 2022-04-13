@@ -13,7 +13,7 @@ import { getCodeImage } from "../../../api/estate-detail";
 import { useUserInfoHooks } from "../../../hoosk/index";
 
 const { storeData } = useUserInfoHooks();
-const houseDetailData = reactive<{ houseDetail: houseDetail }>({ houseDetail: {} as houseDetail })
+const houseDetailData = reactive<{ houseDetail: houseDetail }>({ houseDetail: { schemeSimpleItemVOS: {} } as houseDetail })
 const parentId = ref<findParentData>({} as findParentData)
 const codeUrl = ref<string>('')
 const enterNum = ref<number>(0)
