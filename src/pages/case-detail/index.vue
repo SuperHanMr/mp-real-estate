@@ -250,7 +250,7 @@ export default defineComponent({
         estateId:0,
         schemeId:caseId.value,
         schemeSnapshot:JSON.stringify(goodList.value),
-        offerPrice:goodPrice.value,
+        offerPrice:goodPrice.value*100,
         schemeName:caseDetail.value.schemeName,
         consultantId:uni.getStorageSync('shareId')||'',
         houseTypeId:0
