@@ -51,7 +51,7 @@ export function getCodeImage(pagePath: string, scene?: string) {
   let params = {
     page: pagePath,
     scene: scene,
-    envVersion: import.meta.env.VITE_URL_BASE_API === "https://design-stage.meiwu365.com"
+    envVersion: import.meta.env.VITE_URL_BASE_API === "https://est-stage.meiwu365.com"
   }
   return request.get<string>(`/em/applet/share/getWxCodeForEM`, params)
 }
