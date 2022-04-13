@@ -200,7 +200,7 @@ export default defineComponent({
 				console.log("error!!", error)
 			}
 		}
-		onShow(() => {
+		onLoad((e:any) => {
 			if (currentIndex.value == 0) {
 				reqSignupRecordList()
 			} else {
