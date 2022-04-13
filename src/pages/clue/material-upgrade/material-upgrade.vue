@@ -17,11 +17,9 @@
 							{{ procuctItem.spuName }}
 						</view>
 						<view class="icon">
-							<text>
-								<text style="max-width:238rpx">{{ procuctItem.categoryName }}</text>
-								<text>&nbsp;｜&nbsp;</text>
-								<text style="max-width:2238rpx">{{ procuctItem.brandName }}</text>
-							</text>
+							<text class="text">{{ procuctItem.categoryName }}&nbsp;</text>
+							<text v-if="procuctItem.brandName" class="text">|</text>
+							<text v-if="procuctItem.brandName" class="text">&nbsp;{{ procuctItem.brandName }}</text>
 						</view>
 					</view>
 				</view>
@@ -145,7 +143,6 @@ export default defineComponent({
 				width: 176rpx;
 				height: 176rpx;
 				border-radius: 8rpx;
-				background-color: pink;
 				margin-right: 24rpx;
 			}
 
@@ -170,13 +167,21 @@ export default defineComponent({
 				}
 
 				.icon {
-					text{
+					.text{
+						max-width: 238rpx;
+						display: inline-block;
+						overflow: hidden;
+						text-overflow: ellipsis;
+						white-space: nowrap;
 						height: 24rpx;
 						line-height: 24rpx;
 						color: #586E85;
 						font-size: 22rpx;
-
 					}
+
+					display: flex;
+					align-items: center;
+					flex-flow: row nowrap;
 					max-width: 486rpx;
 					overflow: hidden;
 					text-overflow: ellipsis;
