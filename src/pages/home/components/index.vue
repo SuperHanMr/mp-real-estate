@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-12 12:11:32
- * @LastEditTime: 2022-04-13 16:35:44
+ * @LastEditTime: 2022-04-13 16:49:07
  * @LastEditors: HanYongHui
 -->
 
@@ -11,6 +11,7 @@
   <view class="list">
     <view :style="`height:${44 + storeData.statusBarHeight}px`"></view>
     <estate-list v-for="item in list" :key="item.id" :item="item" />
+    <!-- <view class="guide-dbj-map"> </view> -->
     <load-more :loadType="loadType" />
   </view>
 </template>
@@ -28,7 +29,6 @@ requestEstateList();
 </script>
 <style lang="scss" scoped>
 .list {
-  // padding-top: 88rpx;
   height: 100%;
   width: 100%;
   position: absolute;
@@ -39,5 +39,14 @@ requestEstateList();
   position: absolute;
   top: 0;
   height: 268rpx;
+}
+
+.guide-dbj-map {
+  position: absolute;
+  bottom: 32rpx;
+  width: calc(100% - 64rpx);
+  display: flex;
+  align-items: center;
+  line-height: 120rpx;
 }
 </style>
