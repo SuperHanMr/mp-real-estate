@@ -55,7 +55,7 @@
 					<view class="content">{{ materialItem.bagDesc.bagPackageDesc }}</view>
 					<view class="price">
 						<text style="font-size:26rpx">￥</text>
-						<text>{{ materialItem.buyItNow.buyItNow }}</text>
+						<text>{{handlePrice(materialItem.buyItNow.buyItNow)}}</text>
 					</view>
 					<view class="showMoreMaterial">
 						<image class="iconImg" src="../../../images/code-icon.png" />
@@ -126,9 +126,18 @@ export default defineComponent({
 		const toBack = () => {
 			uni.navigateBack({})
 		}
+
 		const formatDate = (time: number) =>
 			moment(time).format("YYYY-MM-DD  HH:mm:ss")
-
+		const handlePrice = (price: number) => {
+			if (!price) return '0.00'
+			let list = String(price).split(".")
+			if (list.length == 1) {
+				return list[0] + '.' + '00'
+			} else {
+				return list[0] + '.' + list[1]
+			}
+		}
 		// const sliceArray = (array: number[], size: number) => {
 		// 	var result = [];
 		// 	for (var i = 0; i < Math.ceil(array.length / size); i++) {
@@ -149,6 +158,7 @@ export default defineComponent({
 			gotoNextPage,
 			...toRefs(signupDetailInfo),
 			formatDate,
+			handlePrice,
 		}
 	}
 
