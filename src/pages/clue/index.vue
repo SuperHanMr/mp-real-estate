@@ -72,7 +72,7 @@
 						<view class="item-container"
 							v-for="(browerItem, index3) in browerList"
 							:key="index3"
-							@click="gotoRegistrationDetailPage(browerItem.schemeId, browerItem.deleteFlag || 0, 'brower')">
+							@click="gotoRegistrationDetailPage(browerItem.schemeId, browerItem.estateId || 0, 'brower')">
 							<view class="header">
 								<img class="img" src="../../images/clue_item_bg.png" alt="">
 								<view>
@@ -112,8 +112,9 @@ import {
 	SignupParams,
 	BrowerParams,
 	BrowerItem,
-	SignupRecordItem
+	SignupRecordItem,
 } from "../../api/clue"
+import {reqhouseCaseCheck} from "../clue/hooks/index"
 import { useUserInfoHooks } from "../../hoosk/index";
 
 export default defineComponent({
@@ -127,6 +128,7 @@ export default defineComponent({
 		const signupList = ref<SignupRecordItem[]>([])
 		const triggerd = ref<boolean>(false)
 		const loading = ref<boolean>(false)
+		const {houseCaseCheck} =reqhouseCaseCheck()
 		const tabList = [
 			{ tabName: "报名记录", key: 1 },
 			{ tabName: "浏览记录", key: 2 },
@@ -235,26 +237,20 @@ export default defineComponent({
 			}
 		}
 
-		const gotoRegistrationDetailPage = (id: number, deleteFlag: number, type: string) => {
+		const gotoRegistrationDetailPage = (id: number, estateId: number, type: string) => {
 			console.log("去报名详情页面！！！", id)
-			if (deleteFlag == -1) {
-				uni.showToast({
-					title: "方案已下架！",
-					icon: "none",
-					duration: 1000
+
+			if (type == "signup") {
+				// 去报名详情页面
+				uni.navigateTo({
+					url: `signup-detail/signup-detail?id=${id}&type=${type}`
 				})
 			} else {
-				if (type == "signup") {
-					// 去报名详情页面
-					uni.navigateTo({
-						url: `signup-detail/signup-detail?id=${id}&type=${type}`
-					})
-				} else {
-					// 去方案详情页面
-					uni.navigateTo({
-						url: `../case-detail/index?caseId=${id}`
-					})
-				}
+				// 去方案详情页面
+				houseCaseCheck(id)
+				// uni.navigateTo({
+				// 	url: `../case-detail/index?caseId=${id}`
+				// })
 			}
 		}
 		const formatDate = (time: number) =>

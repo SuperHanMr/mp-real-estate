@@ -259,3 +259,6 @@ export function getBagInfo(params: BagParams) {
   return request.post<MaterialItem>(`/em/applet/scheme/product/helper/subBag`, params)
 }
 
+export function requestHouseCaseCheck(houseId: number) {
+  return request.get<{ status: number }>('/em/applet/client/checkScheme?schemeId=' + houseId)
+}
