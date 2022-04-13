@@ -150,11 +150,12 @@ export default defineComponent({
       console.log("---onLoad---", e);
       // e.caseId="140"
       if(e.caseId)caseId.value = +e.caseId
-      if(e.shardId&&storeData.role===2){
+      if(e.shareId){
         // storeData.consultantId = +e.shardId
         fromShare.value =true
+        console.log('路径参数',storeData.role,)
         if(storeData.role===2){
-          uni.setStorageSync('shareId',e.shardId)
+          uni.setStorageSync('shareId',e.shareId)
         }
       }
       enterNum.value = 0
@@ -172,7 +173,7 @@ export default defineComponent({
         shareId = +storeData.userId;
       }
       return {
-        title: "户型详情",
+        title: "方案详情",
         path: `/pages/case-detail/index?caseId=${caseId.value}&shareId=${shareId}`,
       };
     });

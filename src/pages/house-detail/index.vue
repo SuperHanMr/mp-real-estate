@@ -109,11 +109,11 @@ export default defineComponent({
         requestCode(e.houseId)
       }
 
-      if(e.shardId){
+      if(e.shareId){
         // storeData.consultantId = +e.shardId
         fromShare.value =true
         if(storeData.role===2){
-          uni.setStorageSync('shareId',e.shardId)
+          uni.setStorageSync('shareId',e.shareId)
         }
       }
     });
