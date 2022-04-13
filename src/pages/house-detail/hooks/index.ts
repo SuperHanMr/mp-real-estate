@@ -67,7 +67,7 @@ export const getHouseDetailHooks = () => {
     console.log(res)
     if (res.data && res.data.status === 1) {
       uni.navigateTo({
-        url: `/pages/case-detail/index?caseId=${caseId}&houseId=${houseId}`
+        url: `/pages/case-detail/index?caseId=${caseId}`
       })
     } else {
       uni.showToast({

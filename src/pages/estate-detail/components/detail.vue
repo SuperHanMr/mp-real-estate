@@ -150,6 +150,7 @@ const onClickCodeImage = () => {
     display: flex;
 
     .estate-detail_head--left {
+      width: calc(100% - 184rpx - 24rpx);
       display: flex;
       flex-direction: column;
       .name {
