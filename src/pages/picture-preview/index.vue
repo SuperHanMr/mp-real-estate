@@ -60,12 +60,11 @@ export default defineComponent({
       e.index?currentIndex.value = +e.index:""
     })
 
-    onMounted(()=>{
-        nextTick(()=>{
+    setTimeout(()=>{
+      nextTick(()=>{
         setSwiperHeight()
       })
-    })
-
+    },100)
     const openIntorduce = () => {
       isHidden.value = !isHidden.value
     }
