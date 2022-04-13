@@ -137,7 +137,7 @@ function createRequest(baseURL: string): Request {
               if (err.data && err.data.message) {
                 uni.showToast({
                   title: err.data.message,
-                  icon: 'error',
+                  icon: 'none',
                   mask: true
                 })
               } else {
