@@ -26,6 +26,7 @@ export type BrowerItem = {
   coverImg: string, //封面图片",
   browseTime: number,//浏览时间"
   deleteFlag?: number,//是否下架 0正常 -1 已删除
+  estateImg: string,//图片
 }
 
 export type SignupParams = {
@@ -75,7 +76,7 @@ export type SignupRecordItem = {
   schemeName: string, //方案名称,
   coverImg: string, //方案封面图,
   signTime: number, //报名时间
-
+  estateImg: string,//图片
 }
 
 export type SignupRecordDetail = {
@@ -259,3 +260,6 @@ export function getBagInfo(params: BagParams) {
   return request.post<MaterialItem>(`/em/applet/scheme/product/helper/subBag`, params)
 }
 
+export function requestHouseCaseCheck(schemeId: number) {
+  return request.get<{ status: number }>('/em/applet/client/checkScheme?schemeId=' + schemeId)
+}

@@ -198,7 +198,6 @@ export default defineComponent({
 		}
 
 		.projectName {
-			height: 56rpx;
 			line-height: 56rpx;
 			font-size: 40rpx;
 			font-weight: 500;

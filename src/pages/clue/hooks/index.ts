@@ -1,4 +1,11 @@
-import { getSignupRecordDetail, SignupRecordDetail, MaterialItem, BrowerDetail, getBrowerDetail, } from "../../../api/clue"
+import {
+  getSignupRecordDetail,
+  SignupRecordDetail,
+  MaterialItem,
+  BrowerDetail,
+  getBrowerDetail,
+  requestHouseCaseCheck,
+} from "../../../api/clue"
 import { reactive, toRefs } from "vue"
 // const data = reactive < browerList: ClueBrowerList>
 
@@ -53,4 +60,24 @@ export const getBrowerDetailInfo = () => {
     requestBrowerDetail,
     browerDetailInfo,
   }
+}
+
+export const reqhouseCaseCheck = () => {
+
+  const houseCaseCheck = async ( caseId: number) => {
+    let res = await requestHouseCaseCheck(caseId)
+    console.log(res)
+    if (res.data && res.data.status === 1) {
+      uni.navigateTo({
+        url: `/pages/case-detail/index?caseId=${caseId}`
+      })
+    } else {
+      uni.showToast({
+        title: "方案已被禁用或下架",
+        icon: "none",
+        duration: 1000
+      })
+    }
+  }
+  return {houseCaseCheck}
 }
