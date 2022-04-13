@@ -2,13 +2,14 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-12 12:11:32
- * @LastEditTime: 2022-04-12 16:47:39
+ * @LastEditTime: 2022-04-13 16:35:44
  * @LastEditors: HanYongHui
 -->
 
 <template>
   <image :src="imageBg" class="image-bg" />
   <view class="list">
+    <view :style="`height:${44 + storeData.statusBarHeight}px`"></view>
     <estate-list v-for="item in list" :key="item.id" :item="item" />
     <load-more :loadType="loadType" />
   </view>
@@ -27,8 +28,8 @@ requestEstateList();
 </script>
 <style lang="scss" scoped>
 .list {
-  padding-top: 128rpx;
-  height: calc(100% - 128rpx);
+  // padding-top: 88rpx;
+  height: 100%;
   width: 100%;
   position: absolute;
 }
