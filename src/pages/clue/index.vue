@@ -38,7 +38,7 @@
 							:key="index2"
 							@click="gotoRegistrationDetailPage(signupItem.id, 0, 'signup')">
 							<view class="header">
-								<img class="img" src="../../images/clue_item_bg.png" alt="">
+								<img class="img" :src="signupItem.estateImg" alt="">
 								<view>
 									<view class="projectName">{{ signupItem.estateName }}</view>
 									<view class="customerName" v-if="storeData.role == 1">
@@ -74,7 +74,7 @@
 							:key="index3"
 							@click="gotoRegistrationDetailPage(browerItem.schemeId, browerItem.estateId || 0, 'brower')">
 							<view class="header">
-								<img class="img" src="../../images/clue_item_bg.png" alt="">
+								<img class="img" :src="browerItem.estateImg" alt="">
 								<view>
 									<view class="projectName">{{ browerItem.estateName }}</view>
 									<view class="customerName" v-if="storeData.role == 1">
