@@ -37,8 +37,8 @@
 							v-for="(signupItem, index2) in signupList"
 							:key="index2"
 							@click="gotoRegistrationDetailPage(signupItem.id, 0, 'signup')">
-							<view class="header">
-								<img class="img" :src="signupItem.estateImg" alt="">
+							<view class="header" :style="{backgroundImage:`url(${signupItem.estateImg})`}">
+								<!-- <img class="img" :src="signupItem.estateImg" alt=""> -->
 								<view>
 									<view class="projectName">{{ signupItem.estateName }}</view>
 									<view class="customerName" v-if="storeData.role == 1">
@@ -73,8 +73,8 @@
 							v-for="(browerItem, index3) in browerList"
 							:key="index3"
 							@click="gotoRegistrationDetailPage(browerItem.schemeId, browerItem.estateId || 0, 'brower')">
-							<view class="header">
-								<img class="img" :src="browerItem.estateImg" alt="">
+							<view class="header" :style="{backgroundImage:`url(${browerItem.estateImg})`}">
+								<!-- <img class="img" :src="browerItem.estateImg" alt=""> -->
 								<view>
 									<view class="projectName">{{ browerItem.estateName }}</view>
 									<view class="customerName" v-if="storeData.role == 1">
@@ -383,6 +383,8 @@ export default defineComponent({
 						box-sizing: border-box;
 						align-items: center;
 						position: relative;
+						background-repeat: no-repeat;
+						background-size: cover;
 
 						.img {
 							position: absolute;
