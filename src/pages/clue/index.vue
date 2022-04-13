@@ -204,17 +204,34 @@ export default defineComponent({
 		}
 		onLoad((e:any) => {
 			if (currentIndex.value == 0) {
+				signupList.value = []
+				queryData.page[0] = 1
+				queryData.totalPage[0] = 1
 				reqSignupRecordList()
 			} else {
+				browerList.value = []
+				queryData.page[1] = 1
+				queryData.totalPage[1] = 1
 				reqBrowerList()
 			}
 		})
 		watch(currentIndex, () => {
+			// if (currentIndex.value == 0) {
+			// 	if (signupList.value.length) return
+			// 	reqSignupRecordList()
+			// } else {
+			// 	if (browerList.value.length) return
+			// 	reqBrowerList()
+			// }
 			if (currentIndex.value == 0) {
-				if (signupList.value.length) return
+				signupList.value = []
+				queryData.page[0] = 1
+				queryData.totalPage[0] = 1
 				reqSignupRecordList()
 			} else {
-				if (browerList.value.length) return
+				browerList.value = []
+				queryData.page[1] = 1
+				queryData.totalPage[1] = 1
 				reqBrowerList()
 			}
 		})
