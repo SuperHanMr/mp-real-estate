@@ -35,7 +35,6 @@ export const getHouseDetailHooks = () => {
     //   scene = scene + '&consultantPhoneNum' + storeData.consultantPhoneNum + '&consultantId' + storeData.consultantId
     // }
     let res = await getCodeImage(url, scene)
-    console.log(res.data)
     if (res.data) codeUrl.value = res.data
   }
   //查询父级id
