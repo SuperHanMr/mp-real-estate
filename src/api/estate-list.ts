@@ -2,15 +2,15 @@
  * @Description: 楼盘列表
  * @Author: HanYongHui
  * @Date: 2022-04-08 15:51:40
- * @LastEditTime: 2022-04-12 10:43:46
+ * @LastEditTime: 2022-04-13 10:36:51
  * @LastEditors: HanYongHui
  */
 
 import createRequest from "../utils/create-request"
 const baseURL = import.meta.env.VITE_URL_BASE_API
 const request = createRequest(baseURL as string)
-import { useUserInfoHooks } from "../hoosk/index";
-const { storeData } = useUserInfoHooks()
+
+
 export type EstateList = {
   id: number,
   name: string //楼盘名称,
@@ -24,7 +24,5 @@ export type EstateList = {
 }[]
 
 export function getEstateList(maxId: number) {
-  console.log('getEstateList', storeData)
-  const url: string = storeData.role === 2 ? '/em/applet/client/findHouses' : '/em/applet/sales/findHouses'
-  return request.get<EstateList>(url, { maxId: maxId, pageSize: 10 })
+  return request.get<EstateList>(`/em/applet/client/findHouses`, { maxId: maxId, pageSize: 10 })
 }
