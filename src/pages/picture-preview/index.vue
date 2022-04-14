@@ -25,7 +25,7 @@
         </scroll-view>
       </view>
       <view class="introduce-content">
-        <view class="content-text" id="content-text" :class="{'is-hidden':isHidden&&hasControl}">
+        <view class="content-text" id="content-text" :class="{'is-hidden':isHidden&&hasControl,'is-visable':isVisable}">
           {{imgList.tagList[currentTagIndex].desc}}
         </view>
         <view class="control-text">
@@ -48,6 +48,7 @@ export default defineComponent({
     const isHidden = ref<Boolean>(true)
     const currentIndex = ref<number>(0)
     const swiperHeight = ref<number>(0)
+    const isVisable = ref<Boolean>(false)
     const currentTagIndex = computed(()=>{
       return imgList.tagList.findIndex(item=>{
         return currentIndex.value>=item.index&&currentIndex.value<item.index+item.length
@@ -69,7 +70,10 @@ export default defineComponent({
       isHidden.value = !isHidden.value
     }
     const swiperChange = (e:any) => {
+      isVisable.value = true
       isHidden.value = true
+      hasControl.value = false
+
       currentIndex.value = e.detail.current
       // swiperHeight.value = currentIndex.value*200
       nextTick(()=>{
@@ -90,7 +94,8 @@ export default defineComponent({
         }
         if(res&&res[1]){
           hasControl.value = (res[1].height/18)>4
-          // console.log(res[1])
+          console.log(hasControl.value ,'hascontrol')
+          isVisable.value = false
         }
       });
     }
@@ -113,6 +118,7 @@ export default defineComponent({
       swiperHeight,
       whiteBack,
       hasControl,
+      isVisable,
       swiperChange,
       openIntorduce,
       toTagImage,
@@ -194,6 +200,9 @@ page{
         font-size: 28rpx;
         // line-height: 0.22rem;
         letter-spacing: 0.3px;
+      }
+      .is-visable{
+        visibility: hidden;
       }
       .is-hidden{
         overflow : hidden;

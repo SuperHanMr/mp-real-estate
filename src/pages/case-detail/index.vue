@@ -47,7 +47,7 @@
             <text>{{caseDetail.houseWithSchemeInfo.houseTypeName}} </text>
           </view>
           <view class="describe">
-            <image src="../../images/house-icon.png" />
+            <image class="special" src="../../images/house-icon.png" />
             <text>{{caseDetail.houseWithSchemeInfo.specification}}｜面积：{{caseDetail.houseWithSchemeInfo.floorAreaInside}}㎡ ｜{{caseDetail.houseWithSchemeInfo.direction}} </text>
           </view>
         </view>
@@ -250,7 +250,7 @@ export default defineComponent({
         estateId:0,
         schemeId:caseId.value,
         schemeSnapshot:JSON.stringify(goodList.value),
-        offerPrice:goodPrice.value,
+        offerPrice:goodPrice.value*100,
         schemeName:caseDetail.value.schemeName,
         consultantId:uni.getStorageSync('shareId')||'',
         houseTypeId:0
@@ -422,9 +422,14 @@ export default defineComponent({
         display: flex;
         align-items: center;
         image {
-          width: 24rpx;
-          height: 24rpx;
+          width: 28rpx;
+          height: 28rpx;
           margin-right: 11rpx;
+        }
+        .special{
+          width: 30rpx;
+          height: 30rpx;
+          margin-left: -2rpx;
         }
         text {
           font-weight: 400;
