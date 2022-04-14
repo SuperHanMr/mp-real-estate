@@ -24,7 +24,7 @@
         />
         <image class="code" :src="codeUrl" mode="aspectFit"></image>
         <view class="code-tip">
-          <text>扫描二维码，查看户型详情</text>
+          <text>扫描二维码，查看{{from}}详情</text>
         </view>
       </view>
     </view>
@@ -42,6 +42,10 @@ const props = defineProps({
   codeUrl: {
     type: String,
     required: true,
+  },
+  from:{
+    type:String,
+    default:'户型'
   },
   show: {
     type: Boolean,

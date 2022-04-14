@@ -165,7 +165,7 @@ export const getCaseDetailHooks = () => {
     // if (res.data) parentId.value = res.data
   }
   const requestCode = async (sence?: string) => {
-    let url = '/pages/case-detail/index'
+    let url = 'pages/case-detail/index'
     let res = await getCodeImage(url, sence)
     // console.log(res.data)
     if (res.data) codeUrl.value = res.data
