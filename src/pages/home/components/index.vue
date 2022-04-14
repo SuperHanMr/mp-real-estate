@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-12 12:11:32
- * @LastEditTime: 2022-04-14 10:30:55
+ * @LastEditTime: 2022-04-14 10:40:05
  * @LastEditors: HanYongHui
 -->
 
@@ -11,11 +11,11 @@
   <view class="list">
     <view :style="`height:${44 + storeData.statusBarHeight}px`"></view>
     <estate-list v-for="item in list" :key="item.id" :item="item" />
-    <view class="guide-dbj-mp" @click="">
-      <image src="logo-icon" />
+    <view class="guide-dbj-mp" @click="" v-if="storeData.role === 2">
+      <image class="logo-icon" src="../../../images/mini-logo.png" />
       <view class="dec">
-        <text></text>
-        <text></text>
+        <text>打开“打扮家装修”小程序</text>
+        <text>查看更多精彩案例</text>
       </view>
       <button class="opne-button">立即打开</button>
     </view>
@@ -54,9 +54,10 @@ requestEstateList();
   width: calc(100% - 64rpx);
   display: flex;
   align-items: center;
-  line-height: 120rpx;
+  height: 120rpx;
   background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(5px);
+  border-radius: 10rpx;
+  margin-left: 32rpx;
 
   .logo-icon {
     margin-left: 40rpx;
@@ -66,16 +67,36 @@ requestEstateList();
   .dec {
     display: flex;
     flex-direction: column;
-    text:nth-child(1) {
-    }
+    margin-left: 16rpx;
 
     text:nth-child(1) {
+      font-weight: bold;
+      font-size: 26rpx;
+      line-height: 36rpx;
+      color: #ffffff;
+    }
+    text:nth-child(2) {
+      font-weight: 400;
+      font-size: 20rpx;
+      line-height: 28rpx;
+      color: #ffffff;
     }
   }
 
   .opne-button {
-  }
+    padding: 0;
+    background: linear-gradient(116.19deg, #f83112 16.48%, #fd6421 83.52%);
+    border-radius: 16rpx;
+    height: 56rpx;
+    width: 140rpx;
+    margin-left: auto;
+    margin-right: 48rpx;
+    font-weight: bold;
+    font-size: 24rpx;
+    line-height: 56rpx;
 
+    color: #ffffff;
+  }
   .close-icon {
   }
 }
