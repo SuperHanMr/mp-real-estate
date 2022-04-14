@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-13 10:25:18
+ * @LastEditTime: 2022-04-14 11:09:50
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -11,6 +11,14 @@
       <!-- 用户且有楼盘详情浏览记录 -->
       <navigation-custom title="楼盘详情" :theme="theme" :isBack="false" />
       <estate-detail :estateId="storeData.estateId" ref="estateDetailDom" />
+      <view class="guide-dbj-mp" @click="openDbjMp" v-if="storeData.role !== 2">
+        <image class="logo-icon" src="../../images/mini-logo.png" />
+        <view class="dec">
+          <text>打开“打扮家装修”小程序</text>
+          <text>查看更多精彩案例</text>
+        </view>
+        <button class="opne-button">立即打开</button>
+      </view>
     </template>
     <template
       v-if="
@@ -102,10 +110,20 @@ export default defineComponent({
         path: `/pages/home/index?shareId=${storeData.userId}`,
       };
     });
+
+    const openDbjMp = () => {
+      uni.navigateToMiniProgram({
+        appId: "wx2e14a7847b8047b5",
+        path: "pages/home/index/index",
+        success: (result) => {},
+        fail: (error) => {},
+      });
+    };
     return {
       storeData,
       theme,
       estateDetailDom,
+      openDbjMp,
     };
   },
 });
@@ -123,6 +141,59 @@ export default defineComponent({
   position: absolute;
   top: 0;
   height: 268rpx;
+}
+
+.guide-dbj-mp {
+  position: absolute;
+  bottom: 32rpx;
+  width: calc(100% - 64rpx);
+  display: flex;
+  align-items: center;
+  height: 120rpx;
+  background: rgba(0, 0, 0, 0.75);
+  border-radius: 10rpx;
+  margin-left: 32rpx;
+
+  .logo-icon {
+    margin-left: 40rpx;
+    height: 72rpx;
+    width: 72rpx;
+  }
+  .dec {
+    display: flex;
+    flex-direction: column;
+    margin-left: 16rpx;
+
+    text:nth-child(1) {
+      font-weight: bold;
+      font-size: 26rpx;
+      line-height: 36rpx;
+      color: #ffffff;
+    }
+    text:nth-child(2) {
+      font-weight: 400;
+      font-size: 20rpx;
+      line-height: 28rpx;
+      color: #ffffff;
+    }
+  }
+
+  .opne-button {
+    padding: 0;
+    background: linear-gradient(116.19deg, #f83112 16.48%, #fd6421 83.52%);
+    border-radius: 16rpx;
+    height: 56rpx;
+    width: 140rpx;
+    margin-left: auto;
+    margin-right: 48rpx;
+    font-weight: bold;
+    font-size: 24rpx;
+    line-height: 56rpx;
+
+    color: #ffffff;
+  }
+  .close-icon {
+  }
 }
 </style>
 
