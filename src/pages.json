@@ -7,7 +7,6 @@
 				"enablePullDownRefresh": true,
 				"navigationBarBackgroundColor": "#ffffff",
 				"navigationStyle": "custom"
-
 			}
 		},
 		{
@@ -18,7 +17,6 @@
 				"navigationStyle": "custom"
 			}
 		},
-
 		{
 			"path": "pages/clue/index",
 			"style": {
@@ -60,8 +58,6 @@
 			"style": {
 				"navigationStyle": "custom",
 				"enablePullDownRefresh": true
-
-
 			}
 		},
 		{
@@ -99,7 +95,7 @@
 		"list": [
 			{
 				"name": "lyb",
-				"path": "/pages/house-detail/index",
+				"path": "/pages/case-detail/index",
 				"query": ""
 			}
 		]

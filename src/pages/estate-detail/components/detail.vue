@@ -65,7 +65,7 @@
       </view>
     </view>
   </view>
-  <code-dialog :codeUrl="codeImageUrl" v-model:show="codeDialogShow" />
+  <code-dialog :codeUrl="codeImageUrl" from="楼盘" v-model:show="codeDialogShow" />
 </template>
 <script lang="ts" setup>
 import { defineComponent, defineProps, ref, watch, defineExpose } from "vue";
