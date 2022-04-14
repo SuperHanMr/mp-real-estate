@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:02:49
- * @LastEditTime: 2022-04-12 18:46:05
+ * @LastEditTime: 2022-04-14 14:45:02
  * @LastEditors: HanYongHui
  */
 
@@ -31,9 +31,18 @@ export const useEstateDetailHook = () => {
     }
   )
   const reuqestEstateDetail = async (estateId: number) => {
-    const res = await getEstateDetail(estateId)
-    data.estateDetail = res.data as EstateDetail
-    uni.stopPullDownRefresh()
+    try {
+      const res = await getEstateDetail(estateId)
+      data.estateDetail = res.data as EstateDetail
+      uni.stopPullDownRefresh()
+    } catch (err) {
+      uni.showToast({
+        title: '楼盘已下架',
+        icon: 'error',
+        mask: true
+      })
+      uni.navigateBack({ delta: 1 })
+    }
   }
   const reuqestHouseTypeList = async (estateId: number) => {
     const res = await getHouseTypeList(estateId)

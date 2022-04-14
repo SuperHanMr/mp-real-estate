@@ -52,7 +52,7 @@
               <text>{{ item.name }}</text>
               <text
                 >{{ item.specification }}｜面积：{{ item.floorAreaInside }}㎡
-                ｜{{ item.direction }}
+                ｜朝向：{{ item.direction }}
               </text>
             </view>
             <view class="house-type_describe--number">
@@ -64,11 +64,16 @@
       </view>
     </view>
   </view>
-  <code-dialog :codeUrl="codeImageUrl" from="楼盘" v-model:show="codeDialogShow" />
+  <code-dialog
+    :codeUrl="codeImageUrl"
+    from="楼盘"
+    v-model:show="codeDialogShow"
+  />
 </template>
 <script lang="ts" setup>
 import { defineComponent, defineProps, ref, watch, defineExpose } from "vue";
 import { useEstateDetailHook } from "../hooks/index";
+import { useUserInfoHooks } from "../../../hoosk/index";
 import codeDialog from "../../../components/code-dialog/index.vue";
 const {
   reuqestEstateDetail,
@@ -110,9 +115,20 @@ const onClickHouseType = (id: number) => {
     url: "/pages/house-detail/index?houseId=" + id,
   });
 };
+
+const { storeData } = useUserInfoHooks();
 // 分享二维码
 const onClickCodeImage = () => {
-  requestCodeImage("pages/home/index/index", `estateId=${props.estateId}`);
+  let shareId: number;
+  if (storeData.role === 2) {
+    shareId = uni.getStorageSync("shareId") || 0;
+  } else {
+    shareId = +storeData.userId;
+  }
+  requestCodeImage(
+    "pages/estate-detail/index",
+    `estateId=${props.estateId}&shareId=${shareId}`
+  );
 };
 </script>
 <style lang="scss" scoped>

@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-14 11:09:50
+ * @LastEditTime: 2022-04-14 12:36:33
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -11,7 +11,7 @@
       <!-- 用户且有楼盘详情浏览记录 -->
       <navigation-custom title="楼盘详情" :theme="theme" :isBack="false" />
       <estate-detail :estateId="storeData.estateId" ref="estateDetailDom" />
-      <view class="guide-dbj-mp" @click="openDbjMp" v-if="storeData.role !== 2">
+      <view class="guide-dbj-mp" @click="openDbjMp" v-if="storeData.role === 2">
         <image class="logo-icon" src="../../images/mini-logo.png" />
         <view class="dec">
           <text>打开“打扮家装修”小程序</text>
@@ -144,7 +144,7 @@ export default defineComponent({
 }
 
 .guide-dbj-mp {
-  position: absolute;
+  position: fixed;
   bottom: 32rpx;
   width: calc(100% - 64rpx);
   display: flex;
