@@ -99,6 +99,7 @@
   <code-dialog
     style="width: 100%; height: 100%"
     :codeUrl="codeUrl"
+    from="方案"
     v-model:show="codeDialogShow"
   />
 </template>

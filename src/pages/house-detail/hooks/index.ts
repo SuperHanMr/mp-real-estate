@@ -75,7 +75,9 @@ export const getHouseDetailHooks = () => {
         icon: "none",
         duration: 1000
       })
-      requestHouseDetail(houseId)
+      setTimeout(() => {
+        requestHouseDetail(houseId)
+      }, 1000)
     }
   }
   return {
