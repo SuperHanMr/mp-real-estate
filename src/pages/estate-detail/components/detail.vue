@@ -51,9 +51,8 @@
             <view class="house-type_describe--info">
               <text>{{ item.name }}</text>
               <text
-                >{{ item.specification }}｜面积：{{ item.floorArea }}㎡ ｜{{
-                  item.direction
-                }}
+                >{{ item.specification }}｜面积：{{ item.floorAreaInside }}㎡
+                ｜{{ item.direction }}
               </text>
             </view>
             <view class="house-type_describe--number">
