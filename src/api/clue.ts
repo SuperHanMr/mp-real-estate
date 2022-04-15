@@ -161,6 +161,7 @@ export type MaterialItem = {
     brandName: string, //【品牌】取商品关联品牌【品牌名称】,
     supplierName: string, //【供应商】取商品关联供应商【供应商名称】，无显示--,
     storeName: string, //所属店铺】取商品关联店铺【店铺名称】
+    firstTwoFrontCategories4String: string,
   }]
 }
 export type BrowerDetail = {

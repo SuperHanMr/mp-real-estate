@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:41:39
- * @LastEditTime: 2022-04-12 16:07:06
+ * @LastEditTime: 2022-04-15 14:42:28
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -86,6 +86,11 @@ const login = () => {
       break;
     case 2:
       // 处理封禁
+      uni.showToast({
+        title: "账号被禁用",
+        icon: "error",
+        mask: true,
+      });
       break;
   }
 };
