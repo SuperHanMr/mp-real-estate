@@ -1,3 +1,10 @@
+/*
+ * @Description: 文件内容描述
+ * @Author: HanYongHui
+ * @Date: 2022-04-14 11:45:16
+ * @LastEditTime: 2022-04-15 11:53:04
+ * @LastEditors: HanYongHui
+ */
 import { defineComponent, reactive, ref, toRefs } from "vue";
 
 import {
@@ -10,32 +17,33 @@ import {
   addBrowseRecord,
 } from "../../../api/case";
 import { getCodeImage } from "../../../api/estate-detail";
-import { useUserInfoHooks } from "../../../hoosk/index";
+import { useUserInfoHooks, switchHome } from "../../../hoosk/index";
 
 const { storeData } = useUserInfoHooks();
 const houseDetailData = reactive<{ houseDetail: houseDetail }>({ houseDetail: { schemeSimpleItemVOS: {} } as houseDetail })
 const parentId = ref<findParentData>({} as findParentData)
 const codeUrl = ref<string>('')
 const enterNum = ref<number>(0)
+const codeDialogShow = ref<boolean>(false)
 export const getHouseDetailHooks = () => {
   const requestHouseDetail = async (houseId: number) => {
     let res = await houseDetailHooks(houseId)
     houseDetailData.houseDetail = res.data as houseDetail
-    // requestCaseList(houseId)
+    if (houseDetailData.houseDetail.status === 2) {
+      switchHome("该户型已下架")
+      return
+    }
     requestFindParentIds({ pageId: houseId, level: 2 })
 
   }
-  const requestCode = async (id?: string) => {
+  const requestCode = async (id?: string | number, shareId?: number) => {
     let url = 'pages/house-detail/index'
-    let scene = 'houseId=' + id
-    if (uni.getStorageSync('shareId')) {
-      scene = scene + `&shareId=${uni.getStorageSync('shareId')}`
-    }
-    // if (storeData.consultantPhoneNum) {
-    //   scene = scene + '&consultantPhoneNum' + storeData.consultantPhoneNum + '&consultantId' + storeData.consultantId
-    // }
+    let scene = `houseId=${id}&shareId=${shareId}`
     let res = await getCodeImage(url, scene)
-    if (res.data) codeUrl.value = res.data
+    if (res.data) {
+      codeUrl.value = res.data
+      codeDialogShow.value = true
+    }
   }
   //查询父级id
   const requestFindParentIds = async (params: findParentParams) => {
@@ -84,6 +92,7 @@ export const getHouseDetailHooks = () => {
     ...toRefs(houseDetailData),
     codeUrl,
     enterNum,
+    codeDialogShow,
     requestCode,
     requestHouseDetail,
     houseCaseCheck

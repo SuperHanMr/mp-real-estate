@@ -2,16 +2,25 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-02 18:34:44
+ * @LastEditTime: 2022-04-15 11:13:20
  * @LastEditors: HanYongHui
 -->
 <template>
   <navigation-custom title="方案详情" :theme="theme" :shareBtn="fromShare" />
   <view class="case-detail-warp">
     <!-- <img class="bac-image" :src="imageUrl" mode="aspectFill" /> -->
-    <swiper class="house-type_image--swiper" :current="currentIndex" @change="swiperChange">
-      <swiper-item v-for="(item,index) of imgList.list" :key="index">
-        <image class="bac-image" :src="item" mode="widthFix" @click="toImage(index)"/>
+    <swiper
+      class="house-type_image--swiper"
+      :current="currentIndex"
+      @change="swiperChange"
+    >
+      <swiper-item v-for="(item, index) of imgList.list" :key="index">
+        <image
+          class="bac-image"
+          :src="item"
+          mode="widthFix"
+          @click="toImage(index)"
+        />
       </swiper-item>
       <!-- <swiper-item>
         <image class="bac-image" src="https://ali-res-test.dabanjia.com/res/20220322/15/1647934285886_9412%2403.jpg" mode="widthFix" />
@@ -22,40 +31,55 @@
     </swiper>
     <view class="swiper-control">
       <view class="control-btn">
-        <view :class="{active:currentIndex<=imgList.bannerNum}" @click="changeCurrent(0)">效果图</view>
-        <view :class="{active:currentIndex>imgList.bannerNum}" @click="changeCurrent(imgList.bannerNum+1)">户型图</view>
+        <view
+          :class="{ active: currentIndex <= imgList.bannerNum }"
+          @click="changeCurrent(0)"
+          >效果图</view
+        >
+        <view
+          :class="{ active: currentIndex > imgList.bannerNum }"
+          @click="changeCurrent(imgList.bannerNum + 1)"
+          >户型图</view
+        >
       </view>
       <view class="swiper-num">
-        {{currentIndex+1}}/{{imgList.list.length}}
+        {{ currentIndex + 1 }}/{{ imgList.list.length }}
       </view>
     </view>
     <view class="case-content-warp">
-
       <view class="case-detail_head">
         <view class="case-detail-title">
-        <text class="title">{{caseDetail.schemeName}}</text>
-        <view>
-        <view class="case-type_describe--info" v-for="(item, index) in caseDetail.schemeTags" :key="index">
-              <text>{{item.schemeTagName}}</text>
+          <text class="title">{{ caseDetail.schemeName }}</text>
+          <view>
+            <view
+              class="case-type_describe--info"
+              v-for="(item, index) in caseDetail.schemeTags"
+              :key="index"
+            >
+              <text>{{ item.schemeTagName }}</text>
             </view>
-        </view>
-      </view>
-      <view class="case-detail_head-content">
-        <view class="case-detail_head--left">
-          <view class="describe">
-            <image src="../../images/estate-icon.png" />
-            <text>{{caseDetail.houseWithSchemeInfo.houseTypeName}} </text>
-          </view>
-          <view class="describe">
-            <image class="special" src="../../images/house-icon.png" />
-            <text>{{caseDetail.houseWithSchemeInfo.specification}}｜面积：{{caseDetail.houseWithSchemeInfo.floorAreaInside}}㎡ ｜{{caseDetail.houseWithSchemeInfo.direction}} </text>
           </view>
         </view>
-        <view class="case-detail_head--right" @click="codeDialogShow = true">
-          <image src="../../images/code-icon.png" />
-          <text>方案二维码</text>
+        <view class="case-detail_head-content">
+          <view class="case-detail_head--left">
+            <view class="describe">
+              <image src="../../images/estate-icon.png" />
+              <text>{{ caseDetail.houseWithSchemeInfo.houseTypeName }} </text>
+            </view>
+            <view class="describe">
+              <image class="special" src="../../images/house-icon.png" />
+              <text
+                >{{ caseDetail.houseWithSchemeInfo.specification }}｜面积：{{
+                  caseDetail.houseWithSchemeInfo.floorAreaInside
+                }}㎡ ｜{{ caseDetail.houseWithSchemeInfo.direction }}
+              </text>
+            </view>
+          </view>
+          <view class="case-detail_head--right" @click="getCodeImage">
+            <image src="../../images/code-icon.png" />
+            <text>方案二维码</text>
+          </view>
         </view>
-      </view>
       </view>
 
       <view class="house-type-list">
@@ -64,29 +88,51 @@
           <text>装修报价</text>
         </view>
         <view class="case-type-conetnt">
-          <view class="case-type-warp" v-for="(item,index) in caseDetail.productBagVOS" :key="index" :class="{'is-user':storeData.role===2,'active-choose':hasGoods(index)}" @click="chooseGoods(item,index)">
+          <view
+            class="case-type-warp"
+            v-for="(item, index) in caseDetail.productBagVOS"
+            :key="index"
+            :class="{
+              'is-user': storeData.role === 2,
+              'active-choose': hasGoods(index),
+            }"
+            @click="chooseGoods(item, index)"
+          >
             <image src="../../images/case-bg.png" class="case-bg" mode="" />
-            <image src="../../images/choose-bg.png" v-if="hasGoods(index)" class="choose-bg" mode="" />
-            <view  class="case-content">
-              <text class="case-name">{{item.productBagName.productBagName}}</text>
-              <text class="case-desc">{{item.bagDesc.bagPackageDesc}}</text>
+            <image
+              src="../../images/choose-bg.png"
+              v-if="hasGoods(index)"
+              class="choose-bg"
+              mode=""
+            />
+            <view class="case-content">
+              <text class="case-name">{{
+                item.productBagName.productBagName
+              }}</text>
+              <text class="case-desc">{{ item.bagDesc.bagPackageDesc }}</text>
               <view class="case-price">
                 <text class="price-symbol">¥</text>
-                <text class="price-num">{{item.buyItNow.buyItNow.toFixed(2)}}</text>
+                <text class="price-num">{{
+                  item.buyItNow.buyItNow.toFixed(2)
+                }}</text>
               </view>
-              <view class="case-btn"  @click.stop="toCheckGood(index)">
-                <image :src="hasGoods(index)?goodsPackActive:goodsPack"></image>
-                <text :class="{active:hasGoods(index)}">查看套餐所含全部商品</text>
+              <view class="case-btn" @click.stop="toCheckGood(index)">
+                <image
+                  :src="hasGoods(index) ? goodsPackActive : goodsPack"
+                ></image>
+                <text :class="{ active: hasGoods(index) }"
+                  >查看套餐所含全部商品</text
+                >
               </view>
             </view>
           </view>
-          <view class="report" v-if="storeData.role===2">
+          <view class="report" v-if="storeData.role === 2">
             <view class="report-text">精选装修套餐 限时参团享优惠</view>
             <view class="report-shadow"></view>
             <view class="report-btn" @click="report">
               <text class="text">立即报名</text>
               <view class="symbol">
-                ¥<text class="num">{{goodPrice.toFixed(2)}}</text>
+                ¥<text class="num">{{ goodPrice.toFixed(2) }}</text>
               </view>
               <image src="../../images/report-btn-bg.png" mode="" />
             </view>
@@ -110,16 +156,16 @@ import {
   onPullDownRefresh,
   onReachBottom,
   onPageScroll,
-  onShareAppMessage
+  onShareAppMessage,
 } from "@dcloudio/uni-app";
 import navigationCustom from "@/components/navigation-custom/index.vue";
 import { useUserInfoHooks } from "../../hoosk/index";
 import loadMore from "@/components/load-more/index.vue";
 import codeDialog from "@/components/code-dialog/index.vue";
-import {getCaseDetailHooks} from "./hooks/index"
-import {productItem} from "../../api/case"
-import goodsPack from "../../images/goods-pack.png"
-import goodsPackActive from "../../images/goods-pack-active.png"
+import { getCaseDetailHooks } from "./hooks/index";
+import { productItem } from "../../api/case";
+import goodsPack from "../../images/goods-pack.png";
+import goodsPackActive from "../../images/goods-pack-active.png";
 
 export default defineComponent({
   name: "",
@@ -130,42 +176,62 @@ export default defineComponent({
   },
   setup() {
     const { storeData } = useUserInfoHooks();
-    console.log(storeData)
-    const codeDialogShow = ref<boolean>(false);
+    console.log(storeData);
     const loadType = ref<"succeed" | "error" | "load" | "complete">("succeed");
     const theme = ref<"white" | "black" | "transparent">("transparent");
     //轮播banner激活控制
-    const currentIndex = ref<number>(0)
-    const caseId = ref<number>(0)
-    const fromShare = ref<Boolean>(false)
-    const goodList = ref<productItem[]>([])
-    const goodPrice = computed(()=>{
-      let num = 0
-      goodList.value.forEach(item=>{
-        num = num+ item.buyItNow.buyItNow
-      })
-      return num
-    })
-    const {requestCaseDetail,requestReport,requestCode,requestFindParentIds,enterNum,caseDetail,imgList,codeUrl} = getCaseDetailHooks()
-    onLoad((e) => {
-      console.log("---onLoad---", e);
-      // e.caseId="140"
-      if(e.caseId)caseId.value = +e.caseId
-      if(e.shareId){
-        // storeData.consultantId = +e.shardId
-        fromShare.value =true
-        console.log('路径参数',storeData.role,)
-        if(storeData.role===2){
-          uni.setStorageSync('shareId',e.shareId)
-        }
-      }
-      enterNum.value = 0
-      requestCaseDetail(caseId.value)
-      requestFindParentIds({pageId:caseId.value,level:3})
-      getCode()
+    const currentIndex = ref<number>(0);
+    const caseId = ref<number>(0);
+    const fromShare = ref<Boolean>(false);
+    const goodList = ref<productItem[]>([]);
+    const goodPrice = computed(() => {
+      let num = 0;
+      goodList.value.forEach((item) => {
+        num = num + item.buyItNow.buyItNow;
+      });
+      return num;
     });
-    // onMounted(()=>{
-    // })
+    const {
+      requestCaseDetail,
+      requestReport,
+      requestCode,
+      requestFindParentIds,
+      enterNum,
+      caseDetail,
+      imgList,
+      codeUrl,
+      codeDialogShow,
+    } = getCaseDetailHooks();
+    onLoad((e: any) => {
+      console.log("---onLoad---", e);
+      if (e.scene) {
+        // 二维码  分享进入
+        const scene = decodeURIComponent(e.scene).split("&");
+        console.log("二维码分享进入", scene);
+        caseId.value = +scene[0].split("=")[1];
+        const sahreId = +scene[1].split("=")[1];
+        uni.setStorageSync("shareId", +sahreId ? sahreId : "");
+        fromShare.value = sahreId ? true : false;
+      } else {
+        caseId.value = +e.caseId;
+        fromShare.value = e.shareId ? true : false;
+        uni.setStorageSync("shareId", +e.shareId ? e.shareId : "");
+      }
+
+      enterNum.value = 0;
+      requestCaseDetail(caseId.value);
+      requestFindParentIds({ pageId: caseId.value, level: 3 });
+    });
+
+    const getCodeImage = () => {
+      let shareId: number;
+      if (storeData.role === 2) {
+        shareId = uni.getStorageSync("shareId") || 0;
+      } else {
+        shareId = +storeData.userId;
+      }
+      requestCode(`caseId=${caseId.value}&shareId=${shareId}`);
+    };
     onShareAppMessage(() => {
       let shareId: number;
       if (storeData.role === 2) {
@@ -179,21 +245,12 @@ export default defineComponent({
       };
     });
     onPullDownRefresh(() => {
-      goodList.value = []
-      requestCaseDetail(caseId.value)
+      goodList.value = [];
+      requestCaseDetail(caseId.value);
       setTimeout(() => {
         uni.stopPullDownRefresh();
       }, 500);
     });
-    // onReachBottom(() => {
-    //   if (loadType.value === "complete" || loadType.value === "load") {
-    //     return;
-    //   }
-    //   loadType.value = "load";
-    //   setTimeout(() => {
-    //     loadType.value = "error";
-    //   }, 1000);
-    // });
     onPageScroll((e) => {
       if (e.scrollTop > 64) {
         theme.value = "white";
@@ -202,78 +259,73 @@ export default defineComponent({
       }
     });
     type swiper = {
-      detail:{
-        current:number
-      }
-    }
+      detail: {
+        current: number;
+      };
+    };
     watch(caseDetail, () => {
       // goodList.value.push(caseDetail.value.productBagVOS[0])
-      chooseGoods(caseDetail.value.productBagVOS[0],0)
-    })
-    const swiperChange = (e:swiper)=>{
-      currentIndex.value = e.detail.current
-    }
-    const changeCurrent = (num:number) =>{
-      currentIndex.value = num
-    }
-    const chooseGoods = (item:productItem,index:number) =>{
-      if(storeData.role!==2){
-        return
+      chooseGoods(caseDetail.value.productBagVOS[0], 0);
+    });
+    const swiperChange = (e: swiper) => {
+      currentIndex.value = e.detail.current;
+    };
+    const changeCurrent = (num: number) => {
+      currentIndex.value = num;
+    };
+    const chooseGoods = (item: productItem, index: number) => {
+      if (storeData.role !== 2) {
+        return;
       }
-      let has = goodList.value.findIndex(item=>{
-        return item.index===index
-      })
-      if(has>=0){
-        goodList.value.splice(has,1)
-      }else{
-        item.index = index
-        goodList.value.push(item)
+      let has = goodList.value.findIndex((item) => {
+        return item.index === index;
+      });
+      if (has >= 0) {
+        goodList.value.splice(has, 1);
+      } else {
+        item.index = index;
+        goodList.value.push(item);
       }
-
-    }
-    const hasGoods = (index:number) =>{
-      let num = goodList.value.findIndex(item=>{
-        return item.index===index
-      })
-      return num>=0
-    }
-    const toImage = (index:number) =>{
+    };
+    const hasGoods = (index: number) => {
+      let num = goodList.value.findIndex((item) => {
+        return item.index === index;
+      });
+      return num >= 0;
+    };
+    const toImage = (index: number) => {
       uni.navigateTo({
-        url:'/pages/picture-preview/index?index='+index,
-      })
-    }
-    const report = ()=>{
-      if(goodList.value.length===0){
-        return
+        url: "/pages/picture-preview/index?index=" + index,
+      });
+    };
+    const report = () => {
+      if (goodList.value.length === 0) {
+        return;
       }
       let data = {
-        userId:storeData.userId,
-        estateId:0,
-        schemeId:caseId.value,
-        schemeSnapshot:JSON.stringify(goodList.value),
-        offerPrice:goodPrice.value*100,
-        schemeName:caseDetail.value.schemeName,
-        consultantId:uni.getStorageSync('shareId')||'',
-        houseTypeId:0
-      }
-      console.log(data,'报名')
-      requestReport(data,()=>{
-        goodList.value = []
-      })
-    }
+        userId: storeData.userId,
+        estateId: 0,
+        schemeId: caseId.value,
+        schemeSnapshot: JSON.stringify(goodList.value),
+        offerPrice: goodPrice.value * 100,
+        schemeName: caseDetail.value.schemeName,
+        consultantId: uni.getStorageSync("shareId") || "",
+        houseTypeId: 0,
+      };
+      console.log(data, "报名");
+      requestReport(data, () => {
+        goodList.value = [];
+      });
+    };
 
-    const getCode = () => {
-      let url = `caseId=${caseId.value}`
-      if(uni.getStorageSync('shareId')){
-        url = url+`&shareId=${uni.getStorageSync('shareId')}`
-      }
-      requestCode(url)
-    }
-    const toCheckGood = (index:number) =>{
+    const toCheckGood = (index: number) => {
       uni.navigateTo({
-        url:'/pages/clue/material-upgrade/material-upgrade?index='+index+'&source=true'
-      })
-    }
+        url:
+          "/pages/clue/material-upgrade/material-upgrade?index=" +
+          index +
+          "&source=true",
+      });
+    };
     return {
       // imageUrl,
       loadType,
@@ -294,8 +346,9 @@ export default defineComponent({
       toImage,
       hasGoods,
       report,
-      toCheckGood
-      };
+      toCheckGood,
+      getCodeImage,
+    };
   },
 });
 </script>
@@ -306,58 +359,57 @@ export default defineComponent({
   background: #fff;
   position: relative;
 
-.house-type_image--swiper{
-  height: 562rpx;
-}
-.swiper-control{
-  position: absolute;
-  top: 362rpx;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  justify-content: center;
-  .control-btn{
-    width: 204rpx;
-    height: 44rpx;
-    background: rgba(0, 0, 0, 0.35);
-    backdrop-filter: blur(5px);
-    /* Note: backdrop-filter has minimal browser support */
-    border-radius: 60px;
+  .house-type_image--swiper {
+    height: 562rpx;
+  }
+  .swiper-control {
+    position: absolute;
+    top: 362rpx;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    justify-content: center;
+    .control-btn {
+      width: 204rpx;
+      height: 44rpx;
+      background: rgba(0, 0, 0, 0.35);
+      backdrop-filter: blur(5px);
+      /* Note: backdrop-filter has minimal browser support */
+      border-radius: 60px;
       line-height: 44rpx;
 
-    view{
-      display: inline-block;
-      width: 50%;
-      text-align: center;
+      view {
+        display: inline-block;
+        width: 50%;
+        text-align: center;
+        color: #fff;
+        font-size: 20rpx;
+        font-weight: 500;
+        letter-spacing: 0.1px;
+        vertical-align: top;
+      }
+      .active {
+        background-color: #fff;
+        border-radius: 120rpx;
+        color: #333;
+      }
+    }
+    .swiper-num {
+      position: absolute;
+      right: 32rpx;
+      height: 44rpx;
+      line-height: 44rpx;
+      padding: 0 20rpx;
       color: #fff;
       font-size: 20rpx;
-      font-weight: 500;
       letter-spacing: 0.1px;
-      vertical-align: top;
-    }
-    .active{
-      background-color: #fff;
-      border-radius: 120rpx;
-      color: #333;
+      background: rgba(0, 0, 0, 0.22);
+      border-radius: 120px;
     }
   }
-  .swiper-num{
-    position: absolute;
-    right: 32rpx;
-    height: 44rpx;
-    line-height: 44rpx;
-    padding: 0 20rpx;
-    color: #fff;
-    font-size: 20rpx;
-    letter-spacing: 0.1px;
-    background: rgba(0, 0, 0, 0.22);
-    border-radius: 120px;
+  .swiper-item {
+    // height: 562rpx;
   }
-}
-.swiper-item{
-  // height: 562rpx;
-
-}
   .bac-image {
     width: 100%;
     // height: 462rpx;
@@ -385,30 +437,30 @@ export default defineComponent({
     border-top-right-radius: 40rpx;
     border-top-left-radius: 40rpx;
     // display: flex;
-    .case-detail-title{
+    .case-detail-title {
       padding-bottom: 40rpx;
-      border-bottom: 0.5px solid #F1F1F1;
+      border-bottom: 0.5px solid #f1f1f1;
       // border-image:linear-gradient(270deg, rgba(223, 223, 223, 0) 0%, #000 100%);
-      .title{
+      .title {
         margin-bottom: 16rpx;
         color: #222;
         font-size: 40rpx;
         font-weight: 500;
         line-height: 56rpx;
       }
-      .case-type_describe--info{
+      .case-type_describe--info {
         display: inline-block;
         height: 40rpx;
         padding: 0 12rpx;
         line-height: 40rpx;
-        background: #F7F3F0;
+        background: #f7f3f0;
         border-radius: 3px;
         margin-right: 16rpx;
-        color: #B27436;
+        color: #b27436;
         font-size: 22rpx;
       }
     }
-    .case-detail_head-content{
+    .case-detail_head-content {
       display: flex;
       padding-top: 13rpx;
       // height: 116rpx;
@@ -427,7 +479,7 @@ export default defineComponent({
           height: 28rpx;
           margin-right: 11rpx;
         }
-        .special{
+        .special {
           width: 30rpx;
           height: 30rpx;
           margin-left: -2rpx;
@@ -497,33 +549,33 @@ export default defineComponent({
       color: #333333;
     }
   }
-  .is-user{
-    border: 0.5px solid #ECECEC;
+  .is-user {
+    border: 0.5px solid #ececec;
   }
-  view .active-choose{
-    background: linear-gradient(281.11deg, #FFFFFF 0%, #FFF8F7 100%) !important;
-    border: 0.5px solid #FA4D32;
+  view .active-choose {
+    background: linear-gradient(281.11deg, #ffffff 0%, #fff8f7 100%) !important;
+    border: 0.5px solid #fa4d32;
     box-sizing: border-box;
     box-shadow: 0px 3px 5px rgba(250, 77, 50, 0.06);
   }
-  .case-type-conetnt{
+  .case-type-conetnt {
     padding: 8rpx 32rpx 250rpx;
-    .case-type-warp{
+    .case-type-warp {
       position: relative;
       padding: 32rpx 40rpx;
-      background: #FAFAFA;
+      background: #fafafa;
       border-radius: 12px;
       box-sizing: border-box;
-    margin: 24rpx 0;
+      margin: 24rpx 0;
 
-      .case-name{
+      .case-name {
         margin-bottom: 1px;
         color: #333;
         font-weight: 500;
         font-size: 30rpx;
         letter-spacing: 0.1px;
       }
-      .case-desc{
+      .case-desc {
         width: 100%;
         color: #999;
         letter-spacing: 0.2px;
@@ -533,53 +585,52 @@ export default defineComponent({
         white-space: nowrap;
         display: block;
       }
-      .case-price{
+      .case-price {
         margin-top: 32rpx;
         margin-bottom: 24rpx;
-        .price-symbol{
+        .price-symbol {
           color: #333;
           font-size: 26rpx;
           margin-right: 8rpx;
         }
-        .price-num{
+        .price-num {
           font-size: 40rpx;
           color: #333;
         }
       }
-      .active{
-          color: #B88C58 !important;
-
+      .active {
+        color: #b88c58 !important;
       }
-      .case-btn{
+      .case-btn {
         width: 100%;
         height: 68rpx;
         text-align: center;
         background-color: #fff;
-        border: 0.5px solid #EDEDED;
+        border: 0.5px solid #ededed;
         border-radius: 6px;
         display: flex;
         align-items: center;
         justify-content: center;
-        image{
+        image {
           width: 20rpx;
           height: 20rpx;
           margin-right: 12rpx;
           vertical-align: middle;
         }
-        text{
+        text {
           font-size: 24rpx;
           letter-spacing: 0.1px;
           color: #666;
         }
       }
-      .case-bg{
+      .case-bg {
         position: absolute;
         right: 0;
         top: 0;
         width: 188rpx;
         height: 174rpx;
       }
-      .choose-bg{
+      .choose-bg {
         position: absolute;
         right: 0;
         top: 0;
@@ -587,42 +638,42 @@ export default defineComponent({
         height: 30rpx;
       }
     }
-    .report{
+    .report {
       position: fixed;
       bottom: 82rpx;
       width: calc(100% - 64rpx);
       z-index: 1;
-      .report-text{
+      .report-text {
         height: 88rpx;
         line-height: 88rpx;
         padding: 0 24rpx;
-        background: linear-gradient(124.17deg, #4F4F4F 29.41%, #363636 81.43%);
+        background: linear-gradient(124.17deg, #4f4f4f 29.41%, #363636 81.43%);
         border-radius: 8px;
         color: #fff;
         font-size: 28rpx;
       }
-      .report-shadow{
+      .report-shadow {
         position: absolute;
         top: 0;
         right: 60rpx;
         height: 88rpx;
         transform: skewX(-15deg);
-        background: linear-gradient(126.14deg, #FA3B34 30.84%, #FF6A33 87.02%);
+        background: linear-gradient(126.14deg, #fa3b34 30.84%, #ff6a33 87.02%);
         width: 200rpx;
         box-shadow: #222;
       }
-      .report-btn{
+      .report-btn {
         position: absolute;
         bottom: 0;
         right: 0;
         height: 104rpx;
-        background: linear-gradient(126.14deg, #FA3B34 30.84%, #FF6A33 87.02%);
+        background: linear-gradient(126.14deg, #fa3b34 30.84%, #ff6a33 87.02%);
         width: 248rpx;
         color: #fff;
         border-radius: 16rpx;
         box-sizing: border-box;
         padding: 16rpx 30rpx;
-        image{
+        image {
           position: absolute;
           width: 248rpx;
           height: 104rpx;
@@ -630,19 +681,19 @@ export default defineComponent({
           top: 0;
           left: 0;
         }
-        text{
+        text {
           letter-spacing: 0.1px;
         }
-        .text{
+        .text {
           font-size: 30rpx;
           display: block;
           text-align: center;
         }
-        view{
+        view {
           font-size: 20rpx;
-          letter-spacing: 0,1px;
+          letter-spacing: 0, 1px;
           text-align: center;
-          .num{
+          .num {
             font-size: 26rpx;
             display: inline-block;
             margin-left: 4rpx;
@@ -651,10 +702,5 @@ export default defineComponent({
       }
     }
   }
-
-
-
-
-
 }
 </style>

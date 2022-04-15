@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-14 12:36:33
+ * @LastEditTime: 2022-04-15 15:06:53
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -11,13 +11,16 @@
       <!-- 用户且有楼盘详情浏览记录 -->
       <navigation-custom title="楼盘详情" :theme="theme" :isBack="false" />
       <estate-detail :estateId="storeData.estateId" ref="estateDetailDom" />
-      <view class="guide-dbj-mp" @click="openDbjMp" v-if="storeData.role === 2">
+      <view v-if="storeData.role === 2 && showOpenDbjMp" class="guide-dbj-mp">
         <image class="logo-icon" src="../../images/mini-logo.png" />
         <view class="dec">
           <text>打开“打扮家装修”小程序</text>
           <text>查看更多精彩案例</text>
         </view>
-        <button class="opne-button">立即打开</button>
+        <button class="opne-button" @click="openDbjMp">立即打开</button>
+        <view class="close-warp" @click.stop="showOpenDbjMp = false">
+          <image src="../../images/close-icon.png" />
+        </view>
       </view>
     </template>
     <template
@@ -41,11 +44,13 @@ import { defineComponent, watch, ref } from "vue";
 import {
   onLoad,
   onPageScroll,
+  onShow,
   onPullDownRefresh,
   onReachBottom,
   onShareAppMessage,
 } from "@dcloudio/uni-app";
 import { useUserInfoHooks } from "../../hoosk/index";
+import { useLoginHooks } from "../login/hooks/index";
 import { useEstateListHook } from "./hooks/index";
 import estateDetail from "../estate-detail/components/detail.vue";
 import navigationCustom from "../../components/navigation-custom/index.vue";
@@ -61,6 +66,7 @@ export default defineComponent({
   setup() {
     const { storeData } = useUserInfoHooks();
     const { requestEstateList, loadType } = useEstateListHook();
+    const { requsetBrowseRecord } = useLoginHooks();
     const estateDetailDom = ref<any>(null);
     onLoad((e) => {});
     watch(
@@ -76,6 +82,15 @@ export default defineComponent({
         }
       }
     );
+
+    onShow(() => {
+      if (storeData.role === 2 && storeData.isLogin) {
+        // 查询浏览记录
+        requsetBrowseRecord().then((res) => {
+          storeData.estateId = res.data?.estateId || 0;
+        });
+      }
+    });
 
     const theme = ref<"white" | "black" | "transparent">("transparent");
     onPageScroll((e) => {
@@ -111,6 +126,7 @@ export default defineComponent({
       };
     });
 
+    const showOpenDbjMp = ref<boolean>(true);
     const openDbjMp = () => {
       uni.navigateToMiniProgram({
         appId: "wx2e14a7847b8047b5",
@@ -124,6 +140,7 @@ export default defineComponent({
       theme,
       estateDetailDom,
       openDbjMp,
+      showOpenDbjMp,
     };
   },
 });
@@ -192,7 +209,23 @@ export default defineComponent({
 
     color: #ffffff;
   }
-  .close-icon {
+  .close-warp {
+    position: absolute;
+    width: 44rpx;
+    height: 30rpx;
+    top: 5rpx;
+    right: 0;
+    background: rgba(65, 52, 52, 0.23);
+    border-top-right-radius: 10rpx;
+    border-bottom-left-radius: 10rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    image {
+      height: 15rpx;
+      width: 15rpx;
+    }
   }
 }
 </style>

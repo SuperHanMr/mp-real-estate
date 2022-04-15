@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:02:49
- * @LastEditTime: 2022-04-14 14:45:02
+ * @LastEditTime: 2022-04-14 15:00:33
  * @LastEditors: HanYongHui
  */
 
@@ -36,12 +36,6 @@ export const useEstateDetailHook = () => {
       data.estateDetail = res.data as EstateDetail
       uni.stopPullDownRefresh()
     } catch (err) {
-      uni.showToast({
-        title: '楼盘已下架',
-        icon: 'error',
-        mask: true
-      })
-      uni.navigateBack({ delta: 1 })
     }
   }
   const reuqestHouseTypeList = async (estateId: number) => {

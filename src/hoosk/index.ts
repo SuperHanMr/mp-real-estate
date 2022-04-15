@@ -2,7 +2,7 @@
  * @Description: 公共数据
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:48:27
- * @LastEditTime: 2022-04-12 15:20:26
+ * @LastEditTime: 2022-04-15 11:37:31
  * @LastEditors: HanYongHui
  */
 import { reactive } from "vue";
@@ -39,4 +39,24 @@ export const useUserInfoHooks = () => {
   }
 }
 
+
+export function switchHome(message?: string) {
+  uni.showToast({
+    title: message,
+    icon: "error",
+    mask: true,
+  });
+  setTimeout(() => {
+    let pages = getCurrentPages()
+    if (pages.length < 2) {
+      uni.switchTab({
+        url: '/pages/home/index'
+      });
+    } else {
+      uni.navigateBack({
+        delta: 1
+      })
+    }
+  }, 1000)
+}
 

@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-13 12:36:31
+ * @LastEditTime: 2022-04-14 19:00:55
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -40,9 +40,19 @@ export default defineComponent({
     const estateDetail = ref<any>(null);
     onLoad((e: any) => {
       console.log("-----load-------", e);
-      id.value = +e.estateId;
-      uni.setStorageSync("shareId", +e.shareId ? e.shareId : "");
-      shareBtn.value = e.shareId ? true : false;
+      if (e.scene) {
+        // 二维码  分享进入
+        const scene = decodeURIComponent(e.scene).split("&");
+        console.log("二维码分享进入", scene);
+        id.value = +scene[0].split("=")[1];
+        const sahreId = +scene[1].split("=")[1];
+        uni.setStorageSync("shareId", +sahreId ? sahreId : "");
+        shareBtn.value = sahreId ? true : false;
+      } else {
+        id.value = +e.estateId;
+        uni.setStorageSync("shareId", +e.shareId ? e.shareId : "");
+        shareBtn.value = e.shareId ? true : false;
+      }
       if (storeData.role === 2) {
         requestAddBrowseRecord({
           userId: +storeData.userId,
@@ -51,6 +61,8 @@ export default defineComponent({
         });
         storeData.estateId = id.value;
       }
+      let pages = getCurrentPages();
+      console.log("当前栈深度", pages.length);
     });
     const theme = ref<"white" | "black" | "transparent">("transparent");
     onPageScroll((e) => {

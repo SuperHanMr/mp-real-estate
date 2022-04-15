@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-04-08 16:42:31
- * @LastEditTime: 2022-04-12 14:54:33
+ * @LastEditTime: 2022-04-15 10:45:34
  * @LastEditors: HanYongHui
  */
 
@@ -48,6 +48,7 @@ export function getHouseTypeList(houseId: number) {
 
 // 获取分享二维码
 export function getCodeImage(pagePath: string, scene?: string) {
+  console.log('二维码分享参数', scene)
   let params = {
     page: pagePath,
     scene: scene,

@@ -2,7 +2,7 @@
  * @Description: login and register
  * @Author: HanYongHui
  * @Date: 2022-04-06 16:48:34
- * @LastEditTime: 2022-04-07 18:24:48
+ * @LastEditTime: 2022-04-15 11:52:26
  * @LastEditors: HanYongHui
  */
 import createRequest from "../utils/create-request"
@@ -150,7 +150,8 @@ export type houseDetail = {
   floorAreaInside: number,
   floorPlanFirst: string,
   floorPlans: string[],
-  schemeSimpleItemVOS: houseCaseItem[]
+  schemeSimpleItemVOS: houseCaseItem[],
+  status: number,
 }
 export type houseCaseItem = {
   houseTypeId: number,

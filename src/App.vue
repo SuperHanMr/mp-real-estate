@@ -2,7 +2,7 @@
  * @Description: 小程序 主入口
  * @Author: HanYongHui
  * @Date: 2022-03-29 16:44:50
- * @LastEditTime: 2022-04-12 17:57:57
+ * @LastEditTime: 2022-04-15 14:42:29
  * @LastEditors: HanYongHui
 -->
 <script setup lang="ts">
@@ -47,6 +47,7 @@ onLaunch(() => {
             }
             break;
           case 2:
+            uni.reLaunch({ url: "/pages/login/index" });
             break;
         }
       });

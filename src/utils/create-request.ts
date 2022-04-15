@@ -132,12 +132,11 @@ function createRequest(baseURL: string): Request {
                   })
                 }
               }, 1000)
-
             default:
               if (err.data && err.data.message) {
                 uni.showToast({
                   title: err.data.message,
-                  icon: 'none',
+                  icon: 'error',
                   mask: true
                 })
               } else {

@@ -2,7 +2,7 @@
  * @Description: login
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:42:10
- * @LastEditTime: 2022-04-07 19:14:36
+ * @LastEditTime: 2022-04-15 11:09:48
  * @LastEditors: HanYongHui
  */
 import { defineComponent, reactive, ref, toRefs } from "vue";
@@ -35,6 +35,9 @@ let imgList = reactive<imgList>({ list: [], bannerNum: 0, tagList: [] } as imgLi
 const codeUrl = ref<string>('')
 const parentId = ref<findParentData>({} as findParentData)
 const enterNum = ref<number>(0)
+const codeDialogShow = ref<boolean>(false)
+
+
 
 export const getCaseDetailHooks = () => {
 
@@ -168,18 +171,17 @@ export const getCaseDetailHooks = () => {
     let url = 'pages/case-detail/index'
     let res = await getCodeImage(url, sence)
     // console.log(res.data)
-    if (res.data) codeUrl.value = res.data
+    if (res.data) {
+      codeUrl.value = res.data
+      codeDialogShow.value = true
+    }
   }
-  // const requestRegister = async (parmas: RegisterParams) => {
-  //   const res = await register(parmas)
-  //   return res
-  // }
-
   return {
     ...toRefs(caseDetailData),
     imgList,
     codeUrl,
     enterNum,
+    codeDialogShow,
     requestCaseDetail,
     requestReport,
     requestCode,

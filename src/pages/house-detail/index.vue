@@ -2,15 +2,15 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-02 18:34:44
+ * @LastEditTime: 2022-04-15 10:47:49
  * @LastEditors: HanYongHui
 -->
 <template>
-  <navigation-custom title="户型详情" :theme="theme" :shareBtn='fromShare'/>
+  <navigation-custom title="户型详情" :theme="theme" :shareBtn="fromShare" />
   <view class="estate-detail-warp">
     <!-- <img class="bac-image" :src="imageUrl" mode="aspectFill" /> -->
     <swiper class="house-type_image--swipe" :current="0">
-      <swiper-item v-for="(item,index) of houseDetail.floorPlans" :key="index">
+      <swiper-item v-for="(item, index) of houseDetail.floorPlans" :key="index">
         <image class="bac-image" :src="item" mode="widthFix" />
       </swiper-item>
       <!-- <swiper-item>
@@ -23,12 +23,16 @@
     <view class="estate-content-warp">
       <view class="estate-detail_head">
         <view class="estate-detail_head--left">
-          <text class="name">{{houseDetail.name}}</text>
+          <text class="name">{{ houseDetail.name }}</text>
           <view class="describe">
-            <text>{{houseDetail.specification}}｜面积：{{houseDetail.floorAreaInside}}㎡ ｜{{houseDetail.direction}} </text>
+            <text
+              >{{ houseDetail.specification }}｜面积：{{
+                houseDetail.floorAreaInside
+              }}㎡ ｜{{ houseDetail.direction }}
+            </text>
           </view>
         </view>
-        <view class="estate-detail_head--right" @click="codeDialogShow = true">
+        <view class="estate-detail_head--right" @click="getCodeImage">
           <image src="../../images/code-icon.png" />
           <text>户型二维码</text>
         </view>
@@ -37,10 +41,20 @@
       <view class="house-type-list">
         <view class="list-title">
           <view></view>
-          <text>全部方案（{{houseDetail.schemeSimpleItemVOS.length}}）</text>
+          <text>全部方案（{{ houseDetail.schemeSimpleItemVOS.length }}）</text>
         </view>
-        <view class="house-type-warp" v-for="(item,index) in houseDetail.schemeSimpleItemVOS" @click="toCasedetail(item.schemeId,houseDetail.id)" :key="index">
-          <image class="left-img" src="../../images/case-left.png" v-if="storeData.role===2" mode="" />
+        <view
+          class="house-type-warp"
+          v-for="(item, index) in houseDetail.schemeSimpleItemVOS"
+          @click="toCasedetail(item.schemeId, houseDetail.id)"
+          :key="index"
+        >
+          <image
+            class="left-img"
+            src="../../images/case-left.png"
+            v-if="storeData.role === 2"
+            mode=""
+          />
           <view class="house-type_image">
             <image
               class="house-type_image--cover"
@@ -54,13 +68,18 @@
             </swiper> -->
           </view>
           <view class="house-type_describe">
-            <view class="house-type_describe--title" >{{item.schemeName}}</view>
+            <view class="house-type_describe--title">{{
+              item.schemeName
+            }}</view>
           </view>
           <view class="house-type_describe">
-            <view class="house-type_describe--info" v-for="(el, index) in item.schemeStyles" :key="index">
-              <text>{{el}}</text>
+            <view
+              class="house-type_describe--info"
+              v-for="(el, index) in item.schemeStyles"
+              :key="index"
+            >
+              <text>{{ el }}</text>
             </view>
-
           </view>
         </view>
         <!-- <load-more :loadType="loadType" /> -->
@@ -80,11 +99,11 @@ import {
   onPullDownRefresh,
   onReachBottom,
   onPageScroll,
-  onShareAppMessage
+  onShareAppMessage,
 } from "@dcloudio/uni-app";
 import navigationCustom from "@/components/navigation-custom/index.vue";
 import { useUserInfoHooks } from "../../hoosk/index";
-import {getHouseDetailHooks} from "./hooks/index"
+import { getHouseDetailHooks } from "./hooks/index";
 import loadMore from "@/components/load-more/index.vue";
 import codeDialog from "@/components/code-dialog/index.vue";
 export default defineComponent({
@@ -96,27 +115,37 @@ export default defineComponent({
   },
   setup() {
     const { storeData } = useUserInfoHooks();
-    const {requestHouseDetail,requestCode,houseCaseCheck,enterNum,houseDetail,codeUrl} = getHouseDetailHooks()
+    const {
+      requestHouseDetail,
+      requestCode,
+      houseCaseCheck,
+      enterNum,
+      houseDetail,
+      codeUrl,
+      codeDialogShow,
+    } = getHouseDetailHooks();
     const loadType = ref<"succeed" | "error" | "load" | "complete">("succeed");
-    const houseId = ref<number>(0)
-        const fromShare = ref<Boolean>(false)
+    const houseId = ref<number>(0);
+    const fromShare = ref<Boolean>(false);
 
-    onLoad((e) => {
+    onLoad((e: any) => {
       console.log("---onLoad---", e);
-      if(e.houseId){
-        houseId.value = +e.houseId
-        requestHouseDetail(+e.houseId)
-        requestCode(e.houseId)
+      if (e.scene) {
+        // 二维码  分享进入
+        const scene = decodeURIComponent(e.scene).split("&");
+        console.log("二维码分享进入", scene);
+        houseId.value = +scene[0].split("=")[1];
+        const sahreId = +scene[1].split("=")[1];
+        uni.setStorageSync("shareId", +sahreId ? sahreId : "");
+        fromShare.value = sahreId ? true : false;
+      } else {
+        houseId.value = +e.houseId;
+        fromShare.value = e.shareId ? true : false;
+        uni.setStorageSync("shareId", +e.shareId ? e.shareId : "");
       }
-
-      if(e.shareId){
-        // storeData.consultantId = +e.shardId
-        fromShare.value =true
-        if(storeData.role===2){
-          uni.setStorageSync('shareId',e.shareId)
-        }
-      }
+      requestHouseDetail(houseId.value);
     });
+
     onShareAppMessage(() => {
       let shareId: number;
       if (storeData.role === 2) {
@@ -129,12 +158,12 @@ export default defineComponent({
         path: `/pages/house-detail/index?houseId=${houseId.value}&shareId=${shareId}`,
       };
     });
-    onMounted(()=>{
-      console.log(11111)
-      enterNum.value = 0
-    })
+    onMounted(() => {
+      console.log(11111);
+      enterNum.value = 0;
+    });
     onPullDownRefresh(() => {
-      requestHouseDetail(houseId.value)
+      requestHouseDetail(houseId.value);
       setTimeout(() => {
         uni.stopPullDownRefresh();
       }, 500);
@@ -157,20 +186,30 @@ export default defineComponent({
         theme.value = "transparent";
       }
     });
-    const codeDialogShow = ref<boolean>(false);
-    const toCasedetail = (caseId:number,houseId:number)=>{
-      houseCaseCheck(houseId,caseId)
-    }
+    const toCasedetail = (caseId: number, houseId: number) => {
+      houseCaseCheck(houseId, caseId);
+    };
+
+    const getCodeImage = () => {
+      let shareId: number;
+      if (storeData.role === 2) {
+        shareId = uni.getStorageSync("shareId") || 0;
+      } else {
+        shareId = +storeData.userId;
+      }
+      requestCode(houseId.value, shareId);
+    };
     return {
       toCasedetail,
+      getCodeImage,
       houseDetail,
       fromShare,
       storeData,
       loadType,
       theme,
-      codeDialogShow,
       codeUrl,
-      };
+      codeDialogShow,
+    };
   },
 });
 </script>
@@ -180,7 +219,7 @@ export default defineComponent({
   height: 100%;
   background: #fff;
   position: relative;
-  .house-type_image--swipe{
+  .house-type_image--swipe {
     height: 562rpx;
     background-color: #eee;
   }
@@ -299,7 +338,7 @@ export default defineComponent({
     position: relative;
     margin-top: 100rpx;
     padding: 0 32rpx;
-    .left-img{
+    .left-img {
       position: absolute;
       left: 32rpx;
       top: -62rpx;
@@ -340,7 +379,7 @@ export default defineComponent({
         // width: 570rpx;
         display: flex;
         flex-direction: column;
-        background: #F7F3F0;
+        background: #f7f3f0;
         border-radius: 3px;
         padding: 6rpx 8rpx;
         height: 36rpx;
@@ -348,10 +387,10 @@ export default defineComponent({
         margin-right: 12rpx;
         text {
           font-size: 22rpx;
-          color: #B27436;
+          color: #b27436;
         }
       }
-      .house-type_describe--title{
+      .house-type_describe--title {
         margin-top: 10rpx;
         width: 100%;
         overflow: hidden;

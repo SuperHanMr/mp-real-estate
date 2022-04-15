@@ -11,7 +11,7 @@
             <text>{{ estateDetail.developerName }}</text>
           </view>
           <view class="describe">
-            <image src="../../../images/estate-icon.png" />
+            <image src="../../../images/address-icon.png" />
             <text
               >{{ estateDetail.provinceName }}{{ estateDetail.cityName
               }}{{ estateDetail.districtName }}{{ estateDetail.address }}</text
@@ -36,13 +36,23 @@
           @click="onClickHouseType(item.id)"
         >
           <view class="house-type_image">
-            <image
-              class="house-type_image--cover"
-              :src="item.floorPlanFirst"
-              mode="aspectFill"
-            />
-            <swiper class="house-type_image--swiper">
-              <swiper-item v-for="urlItem in item.schemeURLList" :key="urlItem">
+            <view class="house-type_image--cover">
+              <image :src="item.floorPlanFirst" mode="aspectFill" />
+              <view v-if="storeData.role === 2" class="marking-warp"
+                >报名参团
+              </view>
+            </view>
+            <swiper
+              class="house-type_image--swiper"
+              indicator-color="rgba(255, 255, 255, .5)"
+              :indicator-dots="true"
+              indicator-active-color="#fff"
+            >
+              <swiper-item
+                class="swiper-item-warp"
+                v-for="urlItem in item.schemeURLList"
+                :key="urlItem"
+              >
                 <image :src="urlItem" mode="aspectFill" />
               </swiper-item>
             </swiper>
@@ -73,7 +83,7 @@
 <script lang="ts" setup>
 import { defineComponent, defineProps, ref, watch, defineExpose } from "vue";
 import { useEstateDetailHook } from "../hooks/index";
-import { useUserInfoHooks } from "../../../hoosk/index";
+import { useUserInfoHooks, switchHome } from "../../../hoosk/index";
 import codeDialog from "../../../components/code-dialog/index.vue";
 const {
   reuqestEstateDetail,
@@ -110,6 +120,14 @@ defineExpose({
   refreshPage,
 });
 
+watch(
+  () => estateDetail.value.status,
+  (val) => {
+    if (val === 2) {
+      switchHome("该楼盘未启用");
+    }
+  }
+);
 const onClickHouseType = (id: number) => {
   uni.navigateTo({
     url: "/pages/house-detail/index?houseId=" + id,
@@ -253,11 +271,32 @@ const onClickCodeImage = () => {
     padding: 0 32rpx;
     .house-type_image {
       display: flex;
+      position: relative;
       .house-type_image--cover {
         width: 216rpx;
         height: 216rpx;
         border-radius: 16rpx;
         border: 1rpx solid #e8e8e8;
+        overflow: hidden;
+        position: relative;
+        image {
+          width: 100%;
+          height: 100%;
+        }
+        .marking-warp {
+          position: absolute;
+          width: 118rpx;
+          height: 40rpx;
+          line-height: 40rpx;
+          left: 0px;
+          top: 0px;
+          background: linear-gradient(96.56deg, #ff4326 0%, #ff9f46 100%);
+          text-align: center;
+          font-weight: 500;
+          font-size: 22rpx;
+          color: #ffffff;
+          border-bottom-right-radius: 16rpx;
+        }
       }
 
       .house-type_image--swiper {
@@ -266,11 +305,31 @@ const onClickCodeImage = () => {
         height: 216rpx;
         border-radius: 16rpx;
         overflow: hidden;
-
+        position: relative;
         image {
           width: 100%;
           height: 100%;
           border-radius: 16rpx;
+        }
+      }
+
+      .indicator-warp {
+        position: absolute;
+        display: flex;
+        top: 186rpx;
+        right: 24rpx;
+
+        view {
+          margin-left: 8rpx;
+          width: 10rpx;
+          height: 10rpx;
+          background: #ffffff;
+
+          border-radius: 50%;
+        }
+
+        .currer-indicator {
+          opacity: 0.5;
         }
       }
     }
