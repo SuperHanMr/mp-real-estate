@@ -2,7 +2,7 @@
  * @Description: login and register
  * @Author: HanYongHui
  * @Date: 2022-04-06 16:48:34
- * @LastEditTime: 2022-04-15 11:52:26
+ * @LastEditTime: 2022-04-19 14:30:28
  * @LastEditors: HanYongHui
  */
 import createRequest from "../utils/create-request"
@@ -30,6 +30,8 @@ export type caseDetail = {
       }
     }
   ],
+  // 楼盘状态
+  estateState: number,
   //户型图
   houseTypeImageUrls: [],
   //方案信息
@@ -41,7 +43,11 @@ export type caseDetail = {
     //户型
     specification: string,
     //面积
-    floorAreaInside: number
+    floorAreaInside: number,
+    // 户型Id
+    housesId: number,
+    // 户型状态
+    status: number,
   },
   //平面图
   planeImages: [],

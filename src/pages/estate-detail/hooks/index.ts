@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:02:49
- * @LastEditTime: 2022-04-18 15:09:42
+ * @LastEditTime: 2022-04-19 16:13:11
  * @LastEditors: HanYongHui
  */
 
@@ -13,9 +13,10 @@ import {
   getCodeImage
 } from "../../../api/estate-detail";
 import { addBrowseRecord, addBrowseType } from "../../../api/case";
+import { switchHome } from "../../../hoosk/index";
 
 
-export const useEstateDetailHook = () => {
+export const useEstateDetailHook = (page?: string) => {
   const data = reactive<{
     estateDetail: EstateDetail,
     houseTypeList: HouseTypeList,
@@ -34,6 +35,10 @@ export const useEstateDetailHook = () => {
     try {
       const res = await getEstateDetail(estateId)
       data.estateDetail = res.data as EstateDetail
+      // 重复弹窗
+      if (data.estateDetail.status !== 1 && page !== 'home') {
+        switchHome(`该楼盘已下架`);
+      }
       uni.stopPullDownRefresh()
     } catch (err) {
     }

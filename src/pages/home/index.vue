@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-18 17:41:17
+ * @LastEditTime: 2022-04-19 16:16:18
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -10,7 +10,11 @@
     <template v-if="storeData.role === 2 && storeData.estateId">
       <!-- 用户且有楼盘详情浏览记录 -->
       <navigation-custom title="楼盘详情" :theme="theme" :isBack="false" />
-      <estate-detail :estateId="storeData.estateId" ref="estateDetailDom" />
+      <estate-detail
+        :estateId="storeData.estateId"
+        ref="estateDetailDom"
+        page-type="home"
+      />
       <view v-if="storeData.role === 2 && showOpenDbjMp" class="guide-dbj-mp">
         <image class="logo-icon" src="../../images/mini-logo.png" />
         <view class="dec">
@@ -82,7 +86,6 @@ export default defineComponent({
         }
       }
     );
-
     onShow(() => {
       if (storeData.role === 2 && storeData.isLogin) {
         // 查询浏览记录

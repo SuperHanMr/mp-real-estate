@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-19 10:48:57
+ * @LastEditTime: 2022-04-19 16:44:31
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -10,7 +10,7 @@
   <view class="estate-detail-warp">
     <swiper class="house-type_image--swipe" :current="0">
       <swiper-item v-for="(item, index) of houseDetail.floorPlans" :key="index">
-        <image class="bac-image" :src="item" mode="widthFix" />
+        <image class="bac-image" :src="item" />
       </swiper-item>
     </swiper>
     <view class="estate-content-warp">
@@ -219,7 +219,7 @@ export default defineComponent({
   }
   .bac-image {
     width: 100%;
-    height: 462rpx;
+    height: 100%;
   }
 
   .estate-content-warp {
@@ -344,7 +344,7 @@ export default defineComponent({
     }
 
     .house-content-warp {
-      margin-top: -36rpx;
+      margin-top: -40rpx;
     }
     .house-type_image {
       display: flex;

@@ -2,7 +2,7 @@
  * @Description: login
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:42:10
- * @LastEditTime: 2022-04-18 12:15:24
+ * @LastEditTime: 2022-04-19 12:35:00
  * @LastEditors: HanYongHui
  */
 import { defineComponent, reactive, ref, toRefs } from "vue";
@@ -15,6 +15,7 @@ import {
   findParentParams,
   findParentData,
   addBrowseRecord,
+  houseDetailHooks,
 } from "../../../api/case";
 import { getCodeImage } from "../../../api/estate-detail";
 import { useUserInfoHooks, switchHome } from "../../../hoosk/index";
@@ -40,7 +41,6 @@ const codeDialogShow = ref<boolean>(false)
 
 
 export const getCaseDetailHooks = () => {
-
   const requestCaseDetail = async (caseId: number) => {
     caseDetailData.caseDetail = { houseWithSchemeInfo: {} } as caseDetail
     console.log(caseDetailData.caseDetail, ">>>>>>>")
@@ -50,7 +50,7 @@ export const getCaseDetailHooks = () => {
       console.log(caseDetailData.caseDetail, ">>>>>>>")
       addImage(caseDetailData.caseDetail)
     } catch {
-      switchHome("该方案未启用")
+      switchHome("该方案已下架")
     }
 
   }

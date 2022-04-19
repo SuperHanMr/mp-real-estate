@@ -19,15 +19,22 @@
               {{ procuctItem.spuName }}
             </view>
             <view
-              v-if="procuctItem.firstTwoFrontCategories4String"
+              v-if="
+                procuctItem.firstTwoFrontCategories4String ||
+                procuctItem.brandName !== '--'
+              "
               class="icon"
             >
-              <text class="text">{{
-                procuctItem.firstTwoFrontCategories4String
-              }}</text>
-              <text v-if="procuctItem.brandName !== '--'" class="text"
-                >&nbsp;|&nbsp;{{ procuctItem.brandName }}</text
+              <text
+                class="text"
+                v-if="procuctItem.firstTwoFrontCategories4String"
+                >{{
+                  procuctItem.firstTwoFrontCategories4String
+                }}&nbsp;|&nbsp;</text
               >
+              <text v-if="procuctItem.brandName !== '--'" class="text">{{
+                procuctItem.brandName
+              }}</text>
             </view>
           </view>
         </view>

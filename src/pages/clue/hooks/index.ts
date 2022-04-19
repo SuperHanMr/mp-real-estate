@@ -1,3 +1,10 @@
+/*
+ * @Description: 文件内容描述
+ * @Author: HanYongHui
+ * @Date: 2022-04-13 16:37:01
+ * @LastEditTime: 2022-04-19 11:19:54
+ * @LastEditors: HanYongHui
+ */
 import {
   getSignupRecordDetail,
   SignupRecordDetail,
@@ -64,7 +71,7 @@ export const getBrowerDetailInfo = () => {
 
 export const reqhouseCaseCheck = () => {
 
-  const houseCaseCheck = async ( caseId: number) => {
+  const houseCaseCheck = async (caseId: number) => {
     let res = await requestHouseCaseCheck(caseId)
     console.log(res)
     if (res.data && res.data.status === 1) {
@@ -73,11 +80,11 @@ export const reqhouseCaseCheck = () => {
       })
     } else {
       uni.showToast({
-        title: "方案已被禁用或下架",
+        title: "该方案已下架",
         icon: "none",
         duration: 1000
       })
     }
   }
-  return {houseCaseCheck}
+  return { houseCaseCheck }
 }

@@ -2,7 +2,7 @@
  * @Description: 公共数据
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:48:27
- * @LastEditTime: 2022-04-19 10:42:54
+ * @LastEditTime: 2022-04-19 14:39:38
  * @LastEditors: HanYongHui
  */
 import { reactive } from "vue";
@@ -27,7 +27,7 @@ const storeData = reactive<Store>(
     token: '',
     userName: '',
     userId: '',
-    role: 2,
+    role: -1,
     isLogin: false,
     estateId: 0,
   } as Store

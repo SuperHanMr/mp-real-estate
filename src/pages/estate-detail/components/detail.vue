@@ -88,6 +88,17 @@ import { defineComponent, defineProps, ref, watch, defineExpose } from "vue";
 import { useEstateDetailHook } from "../hooks/index";
 import { useUserInfoHooks, switchHome } from "../../../hoosk/index";
 import codeDialog from "../../../components/code-dialog/index.vue";
+
+const props = defineProps({
+  estateId: {
+    type: Number,
+    required: true,
+  },
+  pageType: {
+    type: String,
+    default: "detail",
+  },
+});
 const {
   reuqestEstateDetail,
   reuqestHouseTypeList,
@@ -96,13 +107,8 @@ const {
   houseTypeList,
   codeImageUrl,
   codeDialogShow,
-} = useEstateDetailHook();
-const props = defineProps({
-  estateId: {
-    type: Number,
-    required: true,
-  },
-});
+} = useEstateDetailHook(props.pageType);
+
 if (props.estateId) {
   reuqestEstateDetail(props.estateId);
   reuqestHouseTypeList(props.estateId);
@@ -127,8 +133,7 @@ defineExpose({
 watch(
   () => estateDetail.value.status,
   (val) => {
-    if (val === 2) {
-      switchHome("该楼盘未启用");
+    if (val !== 1) {
     }
   }
 );
@@ -276,6 +281,7 @@ const onClickCodeImage = () => {
   .house-type-warp {
     margin-top: 32rpx;
     padding: 0 32rpx;
+    padding-bottom: 32rpx;
     .house-type_image {
       display: flex;
       position: relative;

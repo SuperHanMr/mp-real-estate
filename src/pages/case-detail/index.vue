@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-19 10:52:33
+ * @LastEditTime: 2022-04-19 16:43:12
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -14,12 +14,7 @@
       @change="swiperChange"
     >
       <swiper-item v-for="(item, index) of imgList.list" :key="index">
-        <image
-          class="bac-image"
-          :src="item"
-          mode="widthFix"
-          @click="toImage(index)"
-        />
+        <image class="bac-image" :src="item" @click="toImage(index)" />
       </swiper-item>
     </swiper>
     <view class="swiper-control">
@@ -105,7 +100,7 @@
               <view class="case-desc">{{ item.bagDesc.bagPackageDesc }}</view>
               <view class="case-price">
                 <text class="price-symbol">¥</text>
-                <text class="price-num">{{
+                <text class="price-num price-font">{{
                   item.buyItNow.buyItNow.toFixed(2)
                 }}</text>
               </view>
@@ -152,14 +147,13 @@ import {
   onShareAppMessage,
 } from "@dcloudio/uni-app";
 import navigationCustom from "@/components/navigation-custom/index.vue";
-import { useUserInfoHooks } from "../../hoosk/index";
+import { useUserInfoHooks, switchHome } from "../../hoosk/index";
 import loadMore from "@/components/load-more/index.vue";
 import codeDialog from "@/components/code-dialog/index.vue";
 import { getCaseDetailHooks } from "./hooks/index";
 import { productItem } from "../../api/case";
 import goodsPack from "../../images/goods-pack.png";
 import goodsPackActive from "../../images/goods-pack-active.png";
-
 export default defineComponent({
   name: "",
   components: {
@@ -169,7 +163,6 @@ export default defineComponent({
   },
   setup() {
     const { storeData } = useUserInfoHooks();
-    console.log(storeData);
     const loadType = ref<"succeed" | "error" | "load" | "complete">("succeed");
     const theme = ref<"white" | "black" | "transparent">("transparent");
     //轮播banner激活控制
@@ -262,6 +255,13 @@ export default defineComponent({
     watch(caseDetail, () => {
       // goodList.value.push(caseDetail.value.productBagVOS[0])
       chooseGoods(caseDetail.value.productBagVOS[0], 0);
+      //分享进入的  需要查询一下房屋是否启用
+      if (
+        caseDetail.value.houseWithSchemeInfo.status !== 1 ||
+        caseDetail.value.estateState !== 1
+      ) {
+        switchHome("该方案已下架");
+      }
     });
     const swiperChange = (e: swiper) => {
       currentIndex.value = e.detail.current;
@@ -409,7 +409,8 @@ export default defineComponent({
   .bac-image {
     width: 100%;
     // height: 462rpx;
-    min-height: 470rpx;
+    // min-height: 470rpx;
+    height: 100%;
   }
 
   .case-content-warp {
@@ -561,7 +562,7 @@ export default defineComponent({
       position: relative;
       padding: 32rpx 40rpx;
       background: #fafafa;
-      border-radius: 12px;
+      border-radius: 24rpx;
       box-sizing: border-box;
       margin: 24rpx 0;
 

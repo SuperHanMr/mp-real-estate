@@ -2,12 +2,7 @@
   <navigation-custom title="报名详情" :theme="theme"></navigation-custom>
 
   <view class="container">
-    <view
-      class="bgImg"
-      :style="{
-        backgroundImage: `url(${detailInfo.coverPictureInfoVO.coverImageUrl})`,
-      }"
-    ></view>
+    <image class="bgImg" :src="detailInfo.coverPictureInfoVO.coverImageUrl" />
     <!-- <img class="bgImg" @click="toBack" :src="detailInfo.coverPictureInfoVO.coverImageUrl" alt=""> -->
     <view class="header-container">
       <view class="header-bg"></view>
@@ -23,7 +18,7 @@
             <text>{{ detailInfo.houseWithSchemeInfo.specification }}</text>
             <text
               >&nbsp;| &nbsp;{{
-                detailInfo.houseWithSchemeInfo.floorArea
+                detailInfo.houseWithSchemeInfo.floorAreaInside
               }}m²</text
             >
             <text
@@ -82,12 +77,12 @@
             materialItem.productBagName.productBagName
           }}</view>
           <view class="content">{{ materialItem.bagDesc.bagPackageDesc }}</view>
-          <view class="price">
+          <view class="price price-font">
             <text style="font-size: 26rpx">￥</text>
             <text>{{ handlePrice(materialItem.buyItNow.buyItNow) }}</text>
           </view>
           <view class="showMoreMaterial">
-            <image class="iconImg" src="../../../images/code-icon.png" />
+            <image class="iconImg" src="../../../images/shopping-icon.png" />
             <text>查看套餐所含全部商品</text>
           </view>
         </view>
@@ -196,25 +191,22 @@ export default defineComponent({
 
   .bgImg {
     width: 100%;
-    height: 462rpx;
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-
-    .img {
-      width: 100%;
-      height: 100%;
-    }
+    height: 562rpx;
+    // .img {
+    //   width: 100%;
+    //   height: 100%;
+    // }
   }
 
   .header-container {
     width: 100%;
-    margin-top: -32rpx;
-    // height: 300rpx;
+    margin-top: -46rpx;
     background: linear-gradient(
       180deg,
       rgba(255, 255, 255, 0.81) 0%,
       rgba(242, 242, 242, 0.9) 100%
     );
+    backdrop-filter: blur(20px);
     border: 2rpx solid #ffffff;
     box-sizing: border-box;
     border-radius: 32rpx 32rpx 0 0;

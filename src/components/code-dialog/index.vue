@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-02 16:29:52
- * @LastEditTime: 2022-04-18 18:17:17
+ * @LastEditTime: 2022-04-19 14:34:50
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -58,7 +58,7 @@ const close = () => {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 10;
+  z-index: 100;
   display: flex;
   align-items: center;
   justify-content: center;
