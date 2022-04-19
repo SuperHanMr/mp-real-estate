@@ -114,14 +114,14 @@
 		"fontSize": "20px",
 		"list": [
 			{
-				"iconPath": "static/tab-image/tab-estate-un-icon.png",
-				"selectedIconPath": "static/tab-image/tab-estate-icon.png",
+				"iconPath": "static/tab-image/estate-un-icon.png",
+				"selectedIconPath": "static/tab-image/estate-icon.png",
 				"pagePath": "pages/home/index",
 				"text": "楼盘"
 			},
 			{
-				"iconPath": "static/tab-image/tab-clue-un-icon.png",
-				"selectedIconPath": "static/tab-image/tab-clue-icon.png",
+				"iconPath": "static/tab-image/clue-un-icon.png",
+				"selectedIconPath": "static/tab-image/clue-icon.png",
 				"pagePath": "pages/clue/index",
 				"text": "线索"
 			}

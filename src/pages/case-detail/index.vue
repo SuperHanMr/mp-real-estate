@@ -2,13 +2,12 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-15 11:13:20
+ * @LastEditTime: 2022-04-19 10:52:33
  * @LastEditors: HanYongHui
 -->
 <template>
   <navigation-custom title="方案详情" :theme="theme" :shareBtn="fromShare" />
   <view class="case-detail-warp">
-    <!-- <img class="bac-image" :src="imageUrl" mode="aspectFill" /> -->
     <swiper
       class="house-type_image--swiper"
       :current="currentIndex"
@@ -22,12 +21,6 @@
           @click="toImage(index)"
         />
       </swiper-item>
-      <!-- <swiper-item>
-        <image class="bac-image" src="https://ali-res-test.dabanjia.com/res/20220322/15/1647934285886_9412%2403.jpg" mode="widthFix" />
-      </swiper-item>
-      <swiper-item>
-        <image class="bac-image" src="https://ali-res-test.dabanjia.com/res/20220322/15/1647934285886_9412%2403.jpg" mode="widthFix" />
-      </swiper-item> -->
     </swiper>
     <view class="swiper-control">
       <view class="control-btn">
@@ -109,7 +102,7 @@
               <text class="case-name">{{
                 item.productBagName.productBagName
               }}</text>
-              <text class="case-desc">{{ item.bagDesc.bagPackageDesc }}</text>
+              <view class="case-desc">{{ item.bagDesc.bagPackageDesc }}</view>
               <view class="case-price">
                 <text class="price-symbol">¥</text>
                 <text class="price-num">{{
@@ -215,7 +208,9 @@ export default defineComponent({
       } else {
         caseId.value = +e.caseId;
         fromShare.value = e.shareId ? true : false;
-        uni.setStorageSync("shareId", +e.shareId ? e.shareId : "");
+        if (e.shareId) {
+          uni.setStorageSync("shareId", +e.shareId ? e.shareId : "");
+        }
       }
 
       enterNum.value = 0;
@@ -240,7 +235,8 @@ export default defineComponent({
         shareId = +storeData.userId;
       }
       return {
-        title: "方案详情",
+        imageUrl: imgList.list[0],
+        title: caseDetail.value.schemeName,
         path: `/pages/case-detail/index?caseId=${caseId.value}&shareId=${shareId}`,
       };
     });
@@ -364,7 +360,7 @@ export default defineComponent({
   }
   .swiper-control {
     position: absolute;
-    top: 362rpx;
+    top: 446rpx;
     display: flex;
     align-items: center;
     width: 100%;
@@ -418,7 +414,7 @@ export default defineComponent({
 
   .case-content-warp {
     position: absolute;
-    margin-top: -128rpx;
+    margin-top: -37rpx;
     width: 100%;
   }
 
@@ -475,14 +471,13 @@ export default defineComponent({
         display: flex;
         align-items: center;
         image {
-          width: 28rpx;
-          height: 28rpx;
+          width: 22rpx;
+          height: 22rpx;
           margin-right: 11rpx;
         }
         .special {
-          width: 30rpx;
-          height: 30rpx;
-          margin-left: -2rpx;
+          width: 20rpx;
+          height: 22rpx;
         }
         text {
           font-weight: 400;
@@ -540,6 +535,8 @@ export default defineComponent({
       width: 6rpx;
       height: 28rpx;
       background: #333333;
+      border-top-right-radius: 6rpx;
+      border-bottom-right-radius: 6rpx;
     }
     :nth-child(2) {
       margin-left: 24rpx;
@@ -553,10 +550,10 @@ export default defineComponent({
     border: 0.5px solid #ececec;
   }
   view .active-choose {
-    background: linear-gradient(281.11deg, #ffffff 0%, #fff8f7 100%) !important;
-    border: 0.5px solid #fa4d32;
+    background: linear-gradient(281.11deg, #ffffff 0%, #fffbf7 100%);
+    border: 0.5px solid #222;
     box-sizing: border-box;
-    box-shadow: 0px 3px 5px rgba(250, 77, 50, 0.06);
+    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.06);
   }
   .case-type-conetnt {
     padding: 8rpx 32rpx 250rpx;
@@ -599,6 +596,7 @@ export default defineComponent({
         }
       }
       .active {
+        font-weight: bold;
         color: #b88c58 !important;
       }
       .case-btn {
@@ -647,7 +645,7 @@ export default defineComponent({
         height: 88rpx;
         line-height: 88rpx;
         padding: 0 24rpx;
-        background: linear-gradient(124.17deg, #4f4f4f 29.41%, #363636 81.43%);
+        background: linear-gradient(124.17deg, #333333 29.41%, #222222 81.43%);
         border-radius: 8px;
         color: #fff;
         font-size: 28rpx;
@@ -658,7 +656,7 @@ export default defineComponent({
         right: 60rpx;
         height: 88rpx;
         transform: skewX(-15deg);
-        background: linear-gradient(126.14deg, #fa3b34 30.84%, #ff6a33 87.02%);
+        background: linear-gradient(126.14deg, #f0cca2 30.84%, #e0a968 87.02%);
         width: 200rpx;
         box-shadow: #222;
       }
@@ -667,9 +665,9 @@ export default defineComponent({
         bottom: 0;
         right: 0;
         height: 104rpx;
-        background: linear-gradient(126.14deg, #fa3b34 30.84%, #ff6a33 87.02%);
+        background: linear-gradient(126.14deg, #f0cca2 30.84%, #e0a968 87.02%);
         width: 248rpx;
-        color: #fff;
+        color: #222;
         border-radius: 16rpx;
         box-sizing: border-box;
         padding: 16rpx 30rpx;
@@ -685,6 +683,7 @@ export default defineComponent({
           letter-spacing: 0.1px;
         }
         .text {
+          font-weight: bold;
           font-size: 30rpx;
           display: block;
           text-align: center;

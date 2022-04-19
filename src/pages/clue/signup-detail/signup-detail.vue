@@ -44,7 +44,9 @@
         <view class="content-item">
           <text class="left">报名用户</text>
           <view class="right">
-            <text>{{ detailInfo.userNickName }}</text>
+            <text
+              >{{ detailInfo.userNickName }}/{{ detailInfo.userPhone }}</text
+            >
           </view>
         </view>
 

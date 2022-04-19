@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-14 19:00:55
+ * @LastEditTime: 2022-04-19 10:50:47
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -12,7 +12,7 @@
     :isBack="!shareBtn"
     :shareBtn="shareBtn"
   />
-  <detail :estateId="id" ref="estateDetail" />
+  <detail :estateId="id" ref="estateDetailDom" />
 </template>
 <script lang="ts">
 import { defineComponent, ref } from "vue";
@@ -37,7 +37,8 @@ export default defineComponent({
     const { requestAddBrowseRecord } = useEstateDetailHook();
     const id = ref<number>(0);
     const shareBtn = ref<boolean>(false);
-    const estateDetail = ref<any>(null);
+    const estateDetailDom = ref<any>(null);
+
     onLoad((e: any) => {
       console.log("-----load-------", e);
       if (e.scene) {
@@ -50,7 +51,9 @@ export default defineComponent({
         shareBtn.value = sahreId ? true : false;
       } else {
         id.value = +e.estateId;
-        uni.setStorageSync("shareId", +e.shareId ? e.shareId : "");
+        if (e.shareId) {
+          uni.setStorageSync("shareId", +e.shareId ? e.shareId : "");
+        }
         shareBtn.value = e.shareId ? true : false;
       }
       if (storeData.role === 2) {
@@ -79,24 +82,21 @@ export default defineComponent({
       } else {
         shareId = +storeData.userId;
       }
-      console.log(
-        "onShareAppMessage",
-        `/pages/estate-detail/index?estateId=${id.value}&shareId=${shareId}`
-      );
       return {
-        title: "楼盘详情",
+        imageUrl: estateDetailDom.value?.estateDetail.url,
+        title: estateDetailDom.value?.estateDetail.name,
         path: `/pages/estate-detail/index?estateId=${id.value}&shareId=${shareId}`,
       };
     });
 
     onPullDownRefresh(() => {
-      estateDetail.value?.refreshPage();
+      estateDetailDom.value?.refreshPage();
     });
     return {
       id,
       theme,
       shareBtn,
-      estateDetail,
+      estateDetailDom,
     };
   },
 });

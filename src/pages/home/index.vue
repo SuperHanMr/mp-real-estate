@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-15 15:06:53
+ * @LastEditTime: 2022-04-18 17:41:17
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -168,7 +168,7 @@ export default defineComponent({
   align-items: center;
   height: 120rpx;
   background: rgba(0, 0, 0, 0.75);
-  border-radius: 10rpx;
+  border-radius: 16rpx;
   margin-left: 32rpx;
 
   .logo-icon {
@@ -192,13 +192,14 @@ export default defineComponent({
       font-size: 20rpx;
       line-height: 28rpx;
       color: #ffffff;
+      opacity: 0.8;
     }
   }
 
   .opne-button {
     padding: 0;
-    background: linear-gradient(116.19deg, #f83112 16.48%, #fd6421 83.52%);
-    border-radius: 16rpx;
+    background: linear-gradient(297.2deg, #e0a968 18.79%, #f0cca2 86.66%);
+    border-radius: 8rpx;
     height: 56rpx;
     width: 140rpx;
     margin-left: auto;
@@ -206,8 +207,7 @@ export default defineComponent({
     font-weight: bold;
     font-size: 24rpx;
     line-height: 56rpx;
-
-    color: #ffffff;
+    color: #222;
   }
   .close-warp {
     position: absolute;

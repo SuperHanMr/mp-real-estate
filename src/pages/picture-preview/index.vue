@@ -1,19 +1,20 @@
 <template>
-<!-- <navigation-custom title="相册" theme="transparent" /> -->
+  <!-- <navigation-custom title="相册" theme="transparent" /> -->
 
   <view class="picture-preview">
     <view class="back">
-      <image :src="whiteBack" alt="" @click="backPage"/>
+      <image :src="whiteBack" alt="" @click="backPage" />
     </view>
     <view class="content">
-      <swiper class="swiper"
+      <swiper
+        class="swiper"
         :current="currentIndex"
         @change="swiperChange"
         :style="{ height: swiperHeight + 'px' }"
       >
-        <swiper-item v-for="(item,index) of imgList.list" :key="index">
+        <swiper-item v-for="(item, index) of imgList.list" :key="index">
           <view class="swiper-item uni-bg-red">
-          <image :id="'content-wrap' + index" :src="item" mode="widthFix" />
+            <image :id="'content-wrap' + index" :src="item" mode="widthFix" />
           </view>
         </swiper-item>
       </swiper>
@@ -21,15 +22,30 @@
     <view class="img-introduce">
       <view class="introduce-list">
         <scroll-view :scroll-x="true" class="scroll-list">
-          <view v-for="(item,index) of imgList.tagList" :class="{active:currentTagIndex===index}" :key="index" @click="toTagImage(index)">{{item.name}}</view>
+          <view
+            v-for="(item, index) of imgList.tagList"
+            :class="{ active: currentTagIndex === index }"
+            :key="index"
+            @click="toTagImage(index)"
+            >{{ item.name }}</view
+          >
         </scroll-view>
       </view>
       <view class="introduce-content">
-        <view class="content-text" id="content-text" :class="{'is-hidden':isHidden&&hasControl,'is-visable':isVisable}">
-          {{imgList.tagList[currentTagIndex].desc}}
+        <view
+          class="content-text"
+          id="content-text"
+          :class="{
+            'is-hidden': isHidden && hasControl,
+            'is-visable': isVisable,
+          }"
+        >
+          {{ imgList.tagList[currentTagIndex].desc }}
         </view>
         <view class="control-text">
-        <view class="text-btn" v-if="hasControl" @click="openIntorduce">{{isHidden?'展开':'收起'}}</view>
+          <view class="text-btn" v-if="hasControl" @click="openIntorduce">{{
+            isHidden ? "展开" : "收起"
+          }}</view>
         </view>
       </view>
     </view>
@@ -38,78 +54,80 @@
 <script lang="ts">
 import { onLoad } from "@dcloudio/uni-app";
 import { defineComponent, ref, onMounted, nextTick, computed } from "vue";
-import {getCaseDetailHooks} from "../case-detail/hooks/index"
-import whiteBack from "../../images/back-icon.png"
+import { getCaseDetailHooks } from "../case-detail/hooks/index";
+import whiteBack from "../../images/back-icon.png";
 export default defineComponent({
+  setup(props, context) {
+    const hasControl = ref<Boolean>(false);
+    const controlText = ref<String>("展开");
+    const isHidden = ref<Boolean>(true);
+    const currentIndex = ref<number>(0);
+    const swiperHeight = ref<number>(0);
+    const isVisable = ref<Boolean>(false);
+    const currentTagIndex = computed(() => {
+      return imgList.tagList.findIndex((item) => {
+        return (
+          currentIndex.value >= item.index &&
+          currentIndex.value < item.index + item.length
+        );
+      });
+    });
 
-  setup(props,context){
-    const hasControl = ref<Boolean>(false)
-    const controlText = ref<String>('展开')
-    const isHidden = ref<Boolean>(true)
-    const currentIndex = ref<number>(0)
-    const swiperHeight = ref<number>(0)
-    const isVisable = ref<Boolean>(false)
-    const currentTagIndex = computed(()=>{
-      return imgList.tagList.findIndex(item=>{
-        return currentIndex.value>=item.index&&currentIndex.value<item.index+item.length
-      })
-    })
+    const { imgList } = getCaseDetailHooks();
 
-    const {imgList} = getCaseDetailHooks()
+    onLoad((e) => {
+      e.index ? (currentIndex.value = +e.index) : "";
+    });
 
-    onLoad((e)=>{
-      e.index?currentIndex.value = +e.index:""
-    })
-
-    setTimeout(()=>{
-      nextTick(()=>{
-        setSwiperHeight()
-      })
-    },100)
+    setTimeout(() => {
+      nextTick(() => {
+        setSwiperHeight();
+      });
+    }, 100);
     const openIntorduce = () => {
-      isHidden.value = !isHidden.value
-    }
-    const swiperChange = (e:any) => {
-      isVisable.value = true
-      isHidden.value = true
-      hasControl.value = false
+      isHidden.value = !isHidden.value;
+    };
+    const swiperChange = (e: any) => {
+      isVisable.value = true;
+      isHidden.value = true;
+      hasControl.value = false;
 
-      currentIndex.value = e.detail.current
+      currentIndex.value = e.detail.current;
       // swiperHeight.value = currentIndex.value*200
-      nextTick(()=>{
-        setSwiperHeight()
-      })
-    }
-    const setSwiperHeight =() => {
+      nextTick(() => {
+        setSwiperHeight();
+      });
+    };
+    const setSwiperHeight = () => {
       let element = "#content-wrap" + currentIndex.value;
       let query = uni.createSelectorQuery();
-      console.log(query)
-      query.select(element).boundingClientRect(()=>{});
-      query.select('#content-text').boundingClientRect(()=>{})
+      console.log(query);
+      query.select(element).boundingClientRect(() => {});
+      query.select("#content-text").boundingClientRect(() => {});
       query.exec((res) => {
-          console.log(res)
+        console.log(res);
         if (res && res[0]) {
           // console.log(res[0].height)
           swiperHeight.value = res[0].height;
         }
-        if(res&&res[1]){
-          hasControl.value = (res[1].height/18)>4
-          console.log(hasControl.value ,'hascontrol')
-          isVisable.value = false
+        if (res && res[1]) {
+          hasControl.value = res[1].height / 18 > 4;
+          console.log(hasControl.value, "hascontrol");
+          isVisable.value = false;
         }
       });
-    }
+    };
 
-    const toTagImage = (index:number) => {
-      currentIndex.value = imgList.tagList[index].index
-    }
+    const toTagImage = (index: number) => {
+      currentIndex.value = imgList.tagList[index].index;
+    };
     const backPage = () => {
       uni.navigateBack({ delta: 1 });
     };
     // nextTick(()=>{
     //     setSwiperHeight()
     //   })
-    return{
+    return {
       controlText,
       isHidden,
       currentIndex,
@@ -122,22 +140,22 @@ export default defineComponent({
       swiperChange,
       openIntorduce,
       toTagImage,
-      backPage
-    }
-  }
-})
+      backPage,
+    };
+  },
+});
 </script>
 <style lang="scss" scoped>
-page{
+page {
   height: 100%;
 }
-.picture-preview{
+.picture-preview {
   background-color: #000;
   height: 100%;
   position: relative;
   display: flex;
   align-items: center;
-  .back{
+  .back {
     position: absolute;
     top: 88rpx;
     height: 88rpx;
@@ -145,78 +163,78 @@ page{
     left: 34rpx;
     display: flex;
     align-items: center;
-    image{
+    image {
       width: 24rpx;
       height: 48rpx;
     }
   }
-  .content{
+  .content {
     width: 100%;
-    .swiper-item{
-
-      image{
+    .swiper-item {
+      image {
         width: 100%;
         max-height: 100%;
       }
     }
   }
-  .img-introduce{
+  .img-introduce {
     position: absolute;
     bottom: 0;
     color: #fff;
-    background: #1D1D1D;
+    background: #1d1d1d;
     opacity: 0.9;
     backdrop-filter: blur(6px);
     border-radius: 32rpx;
     padding-top: 40rpx;
     width: 100%;
-    .introduce-list{
+    .introduce-list {
       padding-left: 40rpx;
       margin-bottom: 48rpx;
     }
-      .scroll-list{
-        white-space: nowrap;
-        view{
-          display: inline-block;
-          height: 56rpx;
-          line-height: 56rpx;
-          text-align: center;
-          padding: 0 20rpx;
-          border: 0.5px solid rgba(255, 255, 255, 0.15);
-          box-sizing: border-box;
-          border-radius: 6px;
-          margin-right: 24rpx;
-          color: #FFFFFF;
-          opacity: 0.6;
-        }
-        .active{
-          opacity: 1;
-          border: 0.5px solid #FFFFFF;
-        }
+    .scroll-list {
+      white-space: nowrap;
+      view {
+        display: inline-block;
+        height: 56rpx;
+        line-height: 56rpx;
+        text-align: center;
+        padding: 0 20rpx;
+        border: 0.5px solid rgba(255, 255, 255, 0.15);
+        box-sizing: border-box;
+        border-radius: 6px;
+        margin-right: 24rpx;
+        color: #ffffff;
+        opacity: 0.6;
+      }
+      .active {
+        opacity: 1;
+        border: 0.5px solid #ffffff;
+      }
     }
-    .introduce-content{
+    .introduce-content {
       padding: 0 40rpx 152rpx;
-      .content-text{
+      .content-text {
         font-size: 28rpx;
         // line-height: 0.22rem;
         letter-spacing: 0.3px;
+        word-break: break-word;
       }
-      .is-visable{
+      .is-visable {
         visibility: hidden;
       }
-      .is-hidden{
-        overflow : hidden;
-      text-overflow: ellipsis;
-      display: -webkit-box;
-      -webkit-line-clamp: 3;
-      -webkit-box-orient: vertical;
+      .is-hidden {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
       }
-      .control-text{
+      .control-text {
         width: 100%;
         text-align: right;
         margin-top: 32rpx;
       }
-      .text-btn{
+      .text-btn {
         position: relative;
         width: 100rpx;
         height: 42rpx;
@@ -227,11 +245,10 @@ page{
         font-size: 24rpx;
         font-weight: 500;
         border: 0.5px solid rgba(255, 255, 255, 0.44);
-box-sizing: border-box;
-border-radius: 152rpx;
+        box-sizing: border-box;
+        border-radius: 152rpx;
       }
     }
-
   }
 }
 </style>

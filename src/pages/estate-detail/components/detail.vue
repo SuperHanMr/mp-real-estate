@@ -11,7 +11,10 @@
             <text>{{ estateDetail.developerName }}</text>
           </view>
           <view class="describe">
-            <image src="../../../images/address-icon.png" />
+            <image
+              style="width: 20rpx; height: 22rpx"
+              src="../../../images/address-icon.png"
+            />
             <text
               >{{ estateDetail.provinceName }}{{ estateDetail.cityName
               }}{{ estateDetail.districtName }}{{ estateDetail.address }}</text
@@ -118,6 +121,7 @@ const refreshPage = () => {
 };
 defineExpose({
   refreshPage,
+  estateDetail,
 });
 
 watch(
@@ -128,6 +132,7 @@ watch(
     }
   }
 );
+
 const onClickHouseType = (id: number) => {
   uni.navigateTo({
     url: "/pages/house-detail/index?houseId=" + id,
@@ -158,7 +163,7 @@ const onClickCodeImage = () => {
 
   .bac-image {
     width: 100%;
-    height: 462rpx;
+    height: 562rpx;
   }
 
   .estate-content-warp {
@@ -197,8 +202,8 @@ const onClickCodeImage = () => {
         // display: flex;
         // align-items: center;
         image {
-          width: 24rpx;
-          height: 24rpx;
+          width: 22rpx;
+          height: 22rpx;
           margin-right: 11rpx;
         }
         text {
@@ -217,7 +222,7 @@ const onClickCodeImage = () => {
       box-sizing: border-box;
       box-shadow: 0px 6rpx 18rpx rgba(0, 0, 0, 0.04);
       width: 184rpx;
-      height: 122rpx;
+      height: 132rpx;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -245,7 +250,7 @@ const onClickCodeImage = () => {
 .house-type-list {
   background: #ffffff;
   padding-top: 48rpx;
-  margin-top: -20rpx;
+  margin-top: -26rpx;
   position: absolute;
   border-top-left-radius: 40rpx;
   border-top-right-radius: 40rpx;
@@ -256,6 +261,8 @@ const onClickCodeImage = () => {
       width: 6rpx;
       height: 28rpx;
       background: #333333;
+      border-top-right-radius: 6rpx;
+      border-bottom-right-radius: 6rpx;
     }
     :nth-child(2) {
       margin-left: 24rpx;
@@ -290,11 +297,11 @@ const onClickCodeImage = () => {
           line-height: 40rpx;
           left: 0px;
           top: 0px;
-          background: linear-gradient(96.56deg, #ff4326 0%, #ff9f46 100%);
+          background: linear-gradient(96.56deg, #424242 0%, #222222 100%);
           text-align: center;
           font-weight: 500;
           font-size: 22rpx;
-          color: #ffffff;
+          color: #ebb77a;
           border-bottom-right-radius: 16rpx;
         }
       }

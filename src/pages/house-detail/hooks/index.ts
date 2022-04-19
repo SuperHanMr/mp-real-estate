@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-14 11:45:16
- * @LastEditTime: 2022-04-15 11:53:04
+ * @LastEditTime: 2022-04-18 12:22:34
  * @LastEditors: HanYongHui
  */
 import { defineComponent, reactive, ref, toRefs } from "vue";
@@ -29,7 +29,7 @@ export const getHouseDetailHooks = () => {
   const requestHouseDetail = async (houseId: number) => {
     let res = await houseDetailHooks(houseId)
     houseDetailData.houseDetail = res.data as houseDetail
-    if (houseDetailData.houseDetail.status === 2) {
+    if (houseDetailData.houseDetail.status !== 1) {
       switchHome("该户型已下架")
       return
     }

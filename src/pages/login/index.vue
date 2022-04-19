@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:41:39
- * @LastEditTime: 2022-04-15 14:42:28
+ * @LastEditTime: 2022-04-18 17:43:01
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -10,12 +10,16 @@
     <image class="logo-image" src="../../images/logo.png" />
 
     <view class="bottom-warp">
-      <button v-if="!rawDataStr" @click="login">微信授权</button>
+      <button v-if="!rawDataStr" @click="login">
+        <image class="wx-icon" src="../../images/wx-icon.png" />
+        微信授权
+      </button>
       <button
         v-if="rawDataStr"
         open-type="getPhoneNumber"
         @getphonenumber="bindgetPhoneNumber"
       >
+        <image class="wx-icon" src="../../images/wx-icon.png" />
         微信手机号一键登录
       </button>
       <view class="agreement-warp" @click="isAgreement = !isAgreement">
@@ -116,7 +120,7 @@ const clickEvent = (type: string) => {
 .login-warp {
   height: 100%;
   width: 100%;
-  background-image: url("https://ali-image.dabanjia.com/image/20220407/10/164929927492708.png");
+  background-image: url("https://ali-image.dabanjia.com/image/20220418/17/165027371878605.png");
   background-repeat: no-repeat;
   background-size: 100% 100%;
   display: flex;
@@ -139,13 +143,23 @@ const clickEvent = (type: string) => {
     button {
       width: 614rpx;
       height: 92rpx;
-      background: linear-gradient(117.02deg, #fa3b34 24.56%, #ff6a33 92.21%);
+      background: linear-gradient(90.32deg, #f0cca3 0.28%, #e0a867 99.75%);
       border-radius: 24rpx;
       font-weight: bold;
       font-size: 30rpx;
       line-height: 92rpx;
       text-align: center;
-      color: #ffffff;
+      color: #222;
+      border: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .wx-icon {
+        margin-right: 12rpx;
+        width: 40rpx;
+        height: 40rpx;
+      }
     }
 
     .agreement-warp {
@@ -169,14 +183,14 @@ const clickEvent = (type: string) => {
         font-weight: bold;
         font-size: 20rpx;
         line-height: 28rpx;
-        color: #333;
+        color: #fff;
       }
 
       text:nth-child(4) {
         font-weight: bold;
         font-size: 20rpx;
         line-height: 28rpx;
-        color: #333;
+        color: #fff;
       }
     }
   }

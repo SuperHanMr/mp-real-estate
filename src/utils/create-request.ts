@@ -3,7 +3,7 @@ import axios, { AxiosInstance, AxiosRequestConfig, } from 'axios'
 import buildUrl from "axios/lib/helpers/buildURL";
 // @ts-ignore
 import settle from 'axios/lib/core/settle'
-import { useUserInfoHooks } from "../hoosk/index";
+import { useUserInfoHooks, switchHome } from "../hoosk/index";
 const { storeData } = useUserInfoHooks()
 type RequestInfo = {
   config: AxiosRequestConfig;
@@ -85,7 +85,7 @@ function createRequest(baseURL: string): Request {
       if (response.data.code !== 1) {
         return Promise.reject(response)
       } else {
-        console.log("------request-response-----", response);
+        // console.log("------request-response-----", response);
         if (response.headers["applet-token"]) uni.setStorageSync('token', response.headers["applet-token"])
         return response
       }
@@ -116,7 +116,20 @@ function createRequest(baseURL: string): Request {
           switch (err.status) {
             case 401:
               // 跳转登录页
+              storeData.isRegister = 1
               uni.reLaunch({ url: '/pages/login/index' })
+              break
+            case 423:
+              // 跳转登录页
+              storeData.isRegister = 2
+              uni.showModal({
+                title: '提示',
+                content: '该账号已停用',
+                showCancel: false,
+                success: () => {
+                  uni.reLaunch({ url: '/pages/login/index' })
+                }
+              })
               break
             case 403 || 410:
               setTimeout(() => {

@@ -2,23 +2,16 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-15 10:47:49
+ * @LastEditTime: 2022-04-19 10:48:57
  * @LastEditors: HanYongHui
 -->
 <template>
   <navigation-custom title="户型详情" :theme="theme" :shareBtn="fromShare" />
   <view class="estate-detail-warp">
-    <!-- <img class="bac-image" :src="imageUrl" mode="aspectFill" /> -->
     <swiper class="house-type_image--swipe" :current="0">
       <swiper-item v-for="(item, index) of houseDetail.floorPlans" :key="index">
         <image class="bac-image" :src="item" mode="widthFix" />
       </swiper-item>
-      <!-- <swiper-item>
-        <image class="bac-image" src="https://ali-res-test.dabanjia.com/res/20220322/15/1647934285886_9412%2403.jpg" mode="widthFix" />
-      </swiper-item>
-      <swiper-item>
-        <image class="bac-image" src="https://ali-res-test.dabanjia.com/res/20220322/15/1647934285886_9412%2403.jpg" mode="widthFix" />
-      </swiper-item> -->
     </swiper>
     <view class="estate-content-warp">
       <view class="estate-detail_head">
@@ -49,36 +42,33 @@
           @click="toCasedetail(item.schemeId, houseDetail.id)"
           :key="index"
         >
+          <!--           -->
           <image
+            v-if="storeData.role === 2"
             class="left-img"
             src="../../images/case-left.png"
-            v-if="storeData.role === 2"
-            mode=""
           />
-          <view class="house-type_image">
-            <image
-              class="house-type_image--cover"
-              :src="item.coverPicture.coverPictureUrl"
-              mode="aspectFill"
-            />
-            <!-- <swiper class="house-type_image--swiper">
-              <swiper-item>
-                <image :src="imageUrl" mode="aspectFill" />
-              </swiper-item>
-            </swiper> -->
-          </view>
-          <view class="house-type_describe">
-            <view class="house-type_describe--title">{{
-              item.schemeName
-            }}</view>
-          </view>
-          <view class="house-type_describe">
-            <view
-              class="house-type_describe--info"
-              v-for="(el, index) in item.schemeStyles"
-              :key="index"
-            >
-              <text>{{ el }}</text>
+          <view :class="{ 'house-content-warp': storeData.role === 2 }">
+            <view class="house-type_image">
+              <image
+                class="house-type_image--cover"
+                :src="item.coverPicture.coverPictureUrl"
+                mode="aspectFill"
+              />
+            </view>
+            <view class="house-type_describe">
+              <view class="house-type_describe--title">{{
+                item.schemeName
+              }}</view>
+            </view>
+            <view class="house-type_describe">
+              <view
+                class="house-type_describe--info"
+                v-for="(el, index) in item.schemeStyles"
+                :key="index"
+              >
+                <text>{{ el }}</text>
+              </view>
             </view>
           </view>
         </view>
@@ -130,18 +120,21 @@ export default defineComponent({
 
     onLoad((e: any) => {
       console.log("---onLoad---", e);
+      let sahreId;
       if (e.scene) {
         // 二维码  分享进入
         const scene = decodeURIComponent(e.scene).split("&");
         console.log("二维码分享进入", scene);
         houseId.value = +scene[0].split("=")[1];
-        const sahreId = +scene[1].split("=")[1];
+        sahreId = +scene[1].split("=")[1];
         uni.setStorageSync("shareId", +sahreId ? sahreId : "");
         fromShare.value = sahreId ? true : false;
       } else {
         houseId.value = +e.houseId;
         fromShare.value = e.shareId ? true : false;
-        uni.setStorageSync("shareId", +e.shareId ? e.shareId : "");
+        if (e.shareId) {
+          uni.setStorageSync("shareId", +e.shareId ? e.shareId : "");
+        }
       }
       requestHouseDetail(houseId.value);
     });
@@ -154,7 +147,8 @@ export default defineComponent({
         shareId = +storeData.userId;
       }
       return {
-        title: "户型详情",
+        imageUrl: houseDetail.value.floorPlans[0],
+        title: houseDetail.value.name,
         path: `/pages/house-detail/index?houseId=${houseId.value}&shareId=${shareId}`,
       };
     });
@@ -252,6 +246,7 @@ export default defineComponent({
     .estate-detail_head--left {
       display: flex;
       flex-direction: column;
+      justify-content: center;
       .name {
         font-weight: bold;
         font-size: 36rpx;
@@ -283,7 +278,7 @@ export default defineComponent({
       box-sizing: border-box;
       box-shadow: 0px 6rpx 18rpx rgba(0, 0, 0, 0.04);
       width: 184rpx;
-      height: 122rpx;
+      height: 132rpx;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -311,7 +306,7 @@ export default defineComponent({
 .house-type-list {
   background: #ffffff;
   padding-top: 48rpx;
-  margin-top: -20rpx;
+  margin-top: -26rpx;
   position: absolute;
   border-top-left-radius: 40rpx;
   border-top-right-radius: 40rpx;
@@ -324,6 +319,8 @@ export default defineComponent({
       width: 6rpx;
       height: 28rpx;
       background: #333333;
+      border-top-right-radius: 6rpx;
+      border-bottom-right-radius: 6rpx;
     }
     :nth-child(2) {
       margin-left: 24rpx;
@@ -336,14 +333,18 @@ export default defineComponent({
 
   .house-type-warp {
     position: relative;
-    margin-top: 100rpx;
-    padding: 0 32rpx;
+    // margin-top: 100rpx;
+    padding: 32rpx;
     .left-img {
-      position: absolute;
-      left: 32rpx;
-      top: -62rpx;
-      height: 90rpx;
+      // position: absolute;
+      // left: 32rpx;
+      // top: -62rpx;
+      height: 95rpx;
       width: 310rpx;
+    }
+
+    .house-content-warp {
+      margin-top: -36rpx;
     }
     .house-type_image {
       display: flex;
@@ -381,7 +382,7 @@ export default defineComponent({
         flex-direction: column;
         background: #f7f3f0;
         border-radius: 3px;
-        padding: 6rpx 8rpx;
+        padding: 4rpx 10rpx;
         height: 36rpx;
         line-height: 36rpx;
         margin-right: 12rpx;

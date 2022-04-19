@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-02 16:29:52
- * @LastEditTime: 2022-04-09 10:55:51
+ * @LastEditTime: 2022-04-18 18:17:17
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -13,18 +13,11 @@
   >
     <view class="dialog_content">
       <view class="code-content">
-        <image
-          class="share-logo"
-          src="https://ali-image.dabanjia.com/static/mp/capsule-store/share/share_logo.png"
-        />
         <view class="share-title">装修就找打扮家</view>
-        <image
-          class="share-b"
-          src="https://ali-image.dabanjia.com/static/mp/capsule-store/share/share_b.png"
-        />
+        <image class="share-b" src="../../images/fuhao-icon.png" />
         <image class="code" :src="codeUrl" mode="aspectFit"></image>
         <view class="code-tip">
-          <text>扫描二维码，查看{{from}}详情</text>
+          <text>扫描二维码，查看{{ from }}详情</text>
         </view>
       </view>
     </view>
@@ -43,9 +36,9 @@ const props = defineProps({
     type: String,
     required: true,
   },
-  from:{
-    type:String,
-    default:'户型'
+  from: {
+    type: String,
+    default: "户型",
   },
   show: {
     type: Boolean,
@@ -74,19 +67,20 @@ const close = () => {
 
   .dialog_content {
     width: 648rpx;
-    background: #fff6f4;
+    background: #f9f9f9;
     border-radius: 24rpx;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: url("https://ali-image.dabanjia.com/static/mp/capsule-store/share/share_bg.png");
+    background: url("https://ali-image.dabanjia.com/image/20220418/18/165027690701414.png");
     background-size: contain;
     padding-bottom: 46rpx;
+    background-repeat: no-repeat;
 
     .code-content {
       margin-top: 88rpx;
       width: 580rpx;
-      height: 782rpx;
+      height: 730rpx;
       background: #ffffff;
       border-radius: 20px;
       position: relative;
@@ -104,7 +98,7 @@ const close = () => {
       }
 
       .share-title {
-        margin-top: 108rpx;
+        margin-top: 60rpx;
         font-size: 44rpx;
         color: #333333;
         font-weight: 500;
@@ -112,18 +106,16 @@ const close = () => {
 
       .share-b {
         position: absolute;
-        top: 142rpx;
+        top: 92rpx;
         right: 98rpx;
         width: 50rpx;
         height: 44rpx;
       }
 
       .code {
-        width: 357rpx;
+        width: 360rpx;
         height: 360rpx;
-        border-radius: 50%;
-        border: 1rpx solid #f5f5f5;
-        margin-top: 118rpx;
+        margin-top: 102rpx;
       }
 
       .code-tip {

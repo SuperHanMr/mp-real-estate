@@ -25,10 +25,9 @@
               <text class="text">{{
                 procuctItem.firstTwoFrontCategories4String
               }}</text>
-              <!-- <text v-if="procuctItem.brandName" class="text">|</text>
-              <text v-if="procuctItem.brandName" class="text"
-                >&nbsp;{{ procuctItem.brandName }}</text
-              > -->
+              <text v-if="procuctItem.brandName !== '--'" class="text"
+                >&nbsp;|&nbsp;{{ procuctItem.brandName }}</text
+              >
             </view>
           </view>
         </view>
@@ -141,6 +140,7 @@ export default defineComponent({
     color: #999999;
     background-color: #ffffff;
     word-wrap: break-word;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.03);
   }
 
   .list-container {

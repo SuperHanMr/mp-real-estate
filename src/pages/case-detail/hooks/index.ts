@@ -2,7 +2,7 @@
  * @Description: login
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:42:10
- * @LastEditTime: 2022-04-15 11:09:48
+ * @LastEditTime: 2022-04-18 12:15:24
  * @LastEditors: HanYongHui
  */
 import { defineComponent, reactive, ref, toRefs } from "vue";
@@ -17,7 +17,7 @@ import {
   addBrowseRecord,
 } from "../../../api/case";
 import { getCodeImage } from "../../../api/estate-detail";
-import { useUserInfoHooks } from "../../../hoosk/index";
+import { useUserInfoHooks, switchHome } from "../../../hoosk/index";
 const { storeData } = useUserInfoHooks();
 const caseDetailData = reactive<{ caseDetail: caseDetail }>({ caseDetail: { houseWithSchemeInfo: {} } as caseDetail })
 export type imgList = {
@@ -50,20 +50,7 @@ export const getCaseDetailHooks = () => {
       console.log(caseDetailData.caseDetail, ">>>>>>>")
       addImage(caseDetailData.caseDetail)
     } catch {
-      setTimeout(() => {
-        let pages = getCurrentPages()
-        // console.log(pages.length,'当前栈深度')
-        if (pages.length < 2) {
-          uni.switchTab({
-            url: '/pages/home/index'
-          });
-        } else {
-          uni.navigateBack({
-            delta: 1
-          })
-        }
-      }, 1000)
-
+      switchHome("该方案未启用")
     }
 
   }
