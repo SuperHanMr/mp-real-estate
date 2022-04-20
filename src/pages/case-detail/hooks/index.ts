@@ -2,7 +2,7 @@
  * @Description: login
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:42:10
- * @LastEditTime: 2022-04-19 12:35:00
+ * @LastEditTime: 2022-04-20 10:51:28
  * @LastEditors: HanYongHui
  */
 import { defineComponent, reactive, ref, toRefs } from "vue";
@@ -42,16 +42,20 @@ const codeDialogShow = ref<boolean>(false)
 
 export const getCaseDetailHooks = () => {
   const requestCaseDetail = async (caseId: number) => {
-    caseDetailData.caseDetail = { houseWithSchemeInfo: {} } as caseDetail
-    console.log(caseDetailData.caseDetail, ">>>>>>>")
     try {
+      caseDetailData.caseDetail = { houseWithSchemeInfo: {} } as caseDetail
+      console.log(caseDetailData.caseDetail, ">>>>>>>")
       const data = await caseDetail(caseId)
       caseDetailData.caseDetail = data.data as caseDetail
       console.log(caseDetailData.caseDetail, ">>>>>>>")
       addImage(caseDetailData.caseDetail)
-    } catch {
-      switchHome("该方案已下架")
+    } catch (err) {
+      if (err.data.code === 410) {
+        switchHome("该方案已下架")
+      }
     }
+
+
 
   }
   const addImage = (data: caseDetail) => {

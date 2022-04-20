@@ -28,9 +28,15 @@
               <text
                 class="text"
                 v-if="procuctItem.firstTwoFrontCategories4String"
-                >{{
-                  procuctItem.firstTwoFrontCategories4String
-                }}&nbsp;|&nbsp;</text
+                >{{ procuctItem.firstTwoFrontCategories4String }}</text
+              >
+              <text
+                class="text"
+                v-if="
+                  procuctItem.firstTwoFrontCategories4String &&
+                  procuctItem.brandName !== '--'
+                "
+                >&nbsp;|&nbsp;</text
               >
               <text v-if="procuctItem.brandName !== '--'" class="text">{{
                 procuctItem.brandName

@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-19 16:16:18
+ * @LastEditTime: 2022-04-20 11:03:39
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -76,6 +76,12 @@ export default defineComponent({
     watch(
       () => storeData.isLogin,
       () => {
+        let pages = getCurrentPages();
+
+        console.log(
+          "------watch storeData.isLogin---------",
+          pages[pages.length - 1].route
+        );
         if (storeData.role === 2) {
           uni.setTabBarItem({
             index: 1,
@@ -86,6 +92,14 @@ export default defineComponent({
         }
       }
     );
+    if (storeData.isLogin && storeData.role === 2) {
+      uni.setTabBarItem({
+        index: 1,
+        text: "我的",
+        iconPath: "/static/tab-image/my-un-icon.png",
+        selectedIconPath: "/static/tab-image/my-icon.png",
+      });
+    }
     onShow(() => {
       if (storeData.role === 2 && storeData.isLogin) {
         // 查询浏览记录
@@ -129,7 +143,7 @@ export default defineComponent({
       };
     });
 
-    const showOpenDbjMp = ref<boolean>(true);
+    const showOpenDbjMp = ref<boolean>(false);
     const openDbjMp = () => {
       uni.navigateToMiniProgram({
         appId: "wx2e14a7847b8047b5",

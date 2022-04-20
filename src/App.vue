@@ -2,7 +2,7 @@
  * @Description: 小程序 主入口
  * @Author: HanYongHui
  * @Date: 2022-03-29 16:44:50
- * @LastEditTime: 2022-04-19 10:24:45
+ * @LastEditTime: 2022-04-19 11:03:04
  * @LastEditors: HanYongHui
 -->
 <script setup lang="ts">
@@ -66,5 +66,15 @@ page {
   height: 100%;
   background-color: #fff;
   font-size: 16px;
+}
+
+@font-face {
+  font-family: PriceFont;
+  src: url("https://ali-res.dabanjia.com/static/font/price-font/price-font.woff2"),
+    url("https://ali-res.dabanjia.com/static/font/price-font/price-font.woff");
+}
+
+.price-font {
+  font-family: PriceFont;
 }
 </style>

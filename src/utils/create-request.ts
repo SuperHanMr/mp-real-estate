@@ -116,6 +116,10 @@ function createRequest(baseURL: string): Request {
           switch (err.status) {
             case 401:
               // 跳转登录页
+              let pages = getCurrentPages()
+              if (pages[pages.length - 1].route === "pages/login/index") {
+                return
+              }
               storeData.isRegister = 1
               uni.reLaunch({ url: '/pages/login/index' })
               break
