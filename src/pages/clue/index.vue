@@ -2,7 +2,7 @@
  * @Description: 线索
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:33
- * @LastEditTime: 2022-04-19 11:50:24
+ * @LastEditTime: 2022-04-20 16:54:09
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -36,10 +36,7 @@
           refresher-enabled="true"
           @scrolltolower="onLoadMore"
         >
-          <view
-            class="list-container"
-            v-if="currentIndex == 0 && signupList && signupList.length"
-          >
+          <view class="list-container" v-if="currentIndex == 0">
             <view
               class="item-container"
               v-for="(signupItem, index2) in signupList"
@@ -85,12 +82,12 @@
                 </view>
               </view>
             </view>
+            <view class="no-data" v-if="signupList.length === 0">
+              暂无数据
+            </view>
           </view>
 
-          <view
-            class="list-container"
-            v-if="currentIndex == 1 && browerList && browerList.length"
-          >
+          <view class="list-container" v-if="currentIndex == 1">
             <view
               class="item-container"
               v-for="(browerItem, index3) in browerList"
@@ -134,6 +131,9 @@
                   }}</view>
                 </view>
               </view>
+            </view>
+            <view class="no-data" v-if="browerList.length === 0">
+              暂无数据
             </view>
           </view>
         </scroll-view>
@@ -419,6 +419,7 @@ export default defineComponent({
       height: 100%;
 
       .list-container {
+        height: 100%;
         display: flex;
         flex-flow: column nowrap;
         align-items: center;
@@ -572,5 +573,14 @@ export default defineComponent({
   width: 200rpx;
   height: 90rpx;
   background-color: pink;
+}
+
+.no-data {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ccc;
 }
 </style>

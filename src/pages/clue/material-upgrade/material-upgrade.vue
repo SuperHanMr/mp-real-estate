@@ -127,6 +127,12 @@ export default defineComponent({
   },
 });
 </script>
+
+<style>
+page {
+  background-color: #fff;
+}
+</style>
 <style lang="scss" scoped>
 .container {
   width: 100%;
@@ -135,6 +141,7 @@ export default defineComponent({
   background: #ffffff;
 
   .header {
+    margin-top: 12rpx;
     padding-left: 40rpx;
     font-weight: bold;
     font-size: 40rpx;
