@@ -67,8 +67,8 @@
                 </view>
               </view>
 
-              <view class="bottomInfo" v-if="item1.key == 1">
-                <view class="itemInfo">
+              <view class="bottomInfo" v-if="item1.key == 1" @click.stop="gotoOtherPage">
+                <view class="itemInfo" >
                   <view class="left">报名时间</view>
                   <view class="right">{{
                     formatDate(signupItem.signTime)
@@ -344,6 +344,11 @@ export default defineComponent({
         reqBrowerList();
       }
     };
+    const gotoOtherPage=()=>{
+      uni.navigateTo({
+        url:"dismantle-detail/dismantle-detail"
+      })
+    }
     return {
       bgImg,
       currentIndex,
@@ -361,6 +366,7 @@ export default defineComponent({
       triggerd,
       loading,
       storeData,
+      gotoOtherPage,
     };
   },
 });

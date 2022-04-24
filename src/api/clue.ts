@@ -264,3 +264,8 @@ export function getBagInfo(params: BagParams) {
 export function requestHouseCaseCheck(schemeId: number) {
   return request.get<{ status: number }>('/em/applet/client/checkScheme?schemeId=' + schemeId)
 }
+
+//查询拆除包详情
+export function reqRemovePackage(schemeId: number) {
+  return request.get<any>(`/em/applet/client/scheme/find/${schemeId}`)
+}
