@@ -53,6 +53,9 @@ export type caseDetail = {
   planeImages: [],
   //套包
   productBagVOS: productItem[],
+  //施工包
+  constructionBags: constructionItem[],
+
   //方案名称
   schemeName: string,
   //方案标签
@@ -105,7 +108,32 @@ export type productItem = {
   }],
   index: number
 }
+export type constructionItem = {
+  buyItNow: {
+    buyItNow: number,
+  },
+  bagDesc: {
+    bagPackageDesc: string
+  },
+  constructionItems: {//施工项目
+    processes: processItem[],
+    materials: materialItem[]
+  },
+  constructionBagName: {//产品袋名
+    constructionBagName: string,
+  },
 
+}
+export type processItem = {
+  unit: string,
+  name: string,
+  count: string,
+  info: string
+}
+export type materialItem = {
+  name: string,
+  info: string,
+}
 export type reportData = {
   houseTypeId: number,
   userId: string,

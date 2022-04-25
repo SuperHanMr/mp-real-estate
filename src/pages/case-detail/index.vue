@@ -94,9 +94,10 @@
               mode=""
             />
             <view class="case-content">
-              <text class="case-name">{{
-                item.productBagName.productBagName
-              }}</text>
+               <view class="case-name">
+                <view class="icon-style pro-icon">商品</view>
+                <view class="text">{{item.productBagName.productBagName }}</view>
+              </view>
               <view class="case-desc">{{ item.bagDesc.bagPackageDesc }}</view>
               <view class="case-price">
                 <text class="price-symbol">¥</text>
@@ -114,6 +115,47 @@
               </view>
             </view>
           </view>
+          <!-- 二期 施工包 -->
+          <view
+            class="case-type-warp"
+            v-for="(item, index) in caseDetail.productBagVOS"
+            :key="index"
+            :class="{
+              'is-user': storeData.role === 2,
+              'active-choose': hasGoods(index),
+            }"
+            @click="chooseGoods(item, index)"
+          >
+            <image src="../../images/case-bg.png" class="case-bg" mode="" />
+            <image
+              src="../../images/choose-bg.png"
+              v-if="hasGoods(index)"
+              class="choose-bg"
+              mode=""
+            />
+            <view class="case-content">
+              <view class="case-name">
+                <view class="icon-style con-icon">施工</view>
+                <view class="text">{{item.productBagName.productBagName }}</view>
+              </view>
+              <view class="case-desc">{{ item.bagDesc.bagPackageDesc }}</view>
+              <view class="case-price">
+                <text class="price-symbol">¥</text>
+                <text class="price-num price-font">{{
+                  item.buyItNow.buyItNow.toFixed(2)
+                }}</text>
+              </view>
+              <view class="case-btn" @click.stop="toCheckGood(index)">
+                <image
+                  :src="hasGoods(index) ? goodsPackActive : goodsPack"
+                ></image>
+                <text :class="{ active: hasGoods(index) }"
+                  >查看套餐所含全部商品</text
+                >
+              </view>
+            </view>
+          </view>
+
           <view class="report" v-if="storeData.role === 2">
             <view class="report-text">精选装修套餐 限时参团享优惠</view>
             <view class="report-shadow"></view>
@@ -567,11 +609,35 @@ export default defineComponent({
       margin: 24rpx 0;
 
       .case-name {
-        margin-bottom: 1px;
-        color: #333;
-        font-weight: 500;
-        font-size: 30rpx;
-        letter-spacing: 0.1px;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        .icon-style{
+          width: 52rpx;
+          height: 32rpx;
+          line-height: 32rpx;
+          text-align: center;
+          border-radius: 6rpx;
+          font-size: 20rpx;
+          font-weight: 500;
+          margin-right: 12rpx;
+        }
+        .pro-icon{
+          background: #E9EFF5;
+          color: #586E85;
+        }
+        .con-icon{
+          background: #EEE8E5;
+          color: #856858;
+        }
+
+        .text{
+          margin-bottom: 1px;
+          color: #333;
+          font-weight: 500;
+          font-size: 30rpx;
+          letter-spacing: 0.1px;
+        }
       }
       .case-desc {
         width: 100%;
