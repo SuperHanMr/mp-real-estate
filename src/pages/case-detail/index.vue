@@ -105,7 +105,7 @@
                   item.buyItNow.buyItNow.toFixed(2)
                 }}</text>
               </view>
-              <view class="case-btn" @click.stop="toCheckGood(index)">
+              <view class="case-btn" @click.stop="toCheckGood(index,"product")">
                 <image
                   :src="hasGoods(index) ? goodsPackActive : goodsPack"
                 ></image>
@@ -118,39 +118,41 @@
           <!-- 二期 施工包 -->
           <view
             class="case-type-warp"
-            v-for="(item, index) in caseDetail.productBagVOS"
-            :key="index"
+            v-for="(item2, index2) in caseDetail.constructionBags"
+            :key="index2"
             :class="{
               'is-user': storeData.role === 2,
-              'active-choose': hasGoods(index),
+              'active-choose': hasGoods(index2),
             }"
-            @click="chooseGoods(item, index)"
+            @click="chooseGoods(item2, index2)"
           >
             <image src="../../images/case-bg.png" class="case-bg" mode="" />
             <image
               src="../../images/choose-bg.png"
-              v-if="hasGoods(index)"
+              v-if="hasGoods(index2)"
               class="choose-bg"
               mode=""
             />
             <view class="case-content">
               <view class="case-name">
                 <view class="icon-style con-icon">施工</view>
-                <view class="text">{{item.productBagName.productBagName }}</view>
+                <!-- 产品袋名 -->
+                <view class="text">{{item2.constructionBagName.constructionBagName }}</view>
               </view>
-              <view class="case-desc">{{ item.bagDesc.bagPackageDesc }}</view>
+              <!-- 套包简介 -->
+              <view class="case-desc">{{ item2.bagDesc.bagPackageDesc }}</view>
               <view class="case-price">
                 <text class="price-symbol">¥</text>
                 <text class="price-num price-font">{{
-                  item.buyItNow.buyItNow.toFixed(2)
+                  item2.buyItNow.buyItNow.toFixed(2)
                 }}</text>
               </view>
-              <view class="case-btn" @click.stop="toCheckGood(index)">
+              <view class="case-btn" @click.stop="toCheckGood(index2,"construct")">
                 <image
-                  :src="hasGoods(index) ? goodsPackActive : goodsPack"
+                  :src="hasGoods(index2) ? goodsPackActive : goodsPack"
                 ></image>
-                <text :class="{ active: hasGoods(index) }"
-                  >查看套餐所含全部商品</text
+                <text :class="{ active: hasGoods(index2) }"
+                  >查看套餐所含全部施工项</text
                 >
               </view>
             </view>
@@ -356,13 +358,28 @@ export default defineComponent({
       });
     };
 
-    const toCheckGood = (index: number) => {
+    const toCheckGood = (index: number,type: string) => {
+      // if(type=="product"){
+      //   uni.navigateTo({
+      //     url:
+      //       "/pages/clue/material-upgrade/material-upgrade?index=" +
+      //       index +
+      //       "&source=true",
+      //   });
+      // }else{
+      //   uni.navigateTo({
+      //     url:
+      //     "/pages/clue/dismantle-detail/dismantle-detail?index="+
+      //     index +
+      //     "&source=true"
+      //   })
+      // }
       uni.navigateTo({
         url:
-          "/pages/clue/material-upgrade/material-upgrade?index=" +
-          index +
-          "&source=true",
-      });
+        "/pages/clue/dismantle-detail/dismantle-detail?index="+
+        index +
+        "&source=true"
+      })
     };
     return {
       // imageUrl,

@@ -32,15 +32,33 @@
 <script lang="ts">
 import { defineComponent, reactive, ref, toRefs } from "vue";
 import { onLoad, onShow } from "@dcloudio/uni-app";
-
+import {getCaseDetailHooks} from "../../case-detail/hooks"
 export default defineComponent({
   name: "",
   components: {},
   setup() {
-
+    const index = ref<number>(0);
+    const source = ref<boolean>(false); //玉帛的页面跳转到此页面
+    const bagPackageDesc = ref<string>("");
+    const buyItNow = ref<number>(0);
+    const productBagName = ref<string>("");
+    const spuHelperList =ref<Array<number>>([])
     onLoad((e: any) => {
+      source.value = e.source;
+      index.value = +e.index;
+      if(!source){
 
-
+      }else{
+        const { caseDetail } = getCaseDetailHooks();
+        buyItNow.value =
+          caseDetail.value.productBagVOS[index.value].buyItNow.buyItNow;
+        bagPackageDesc.value =
+          caseDetail.value.productBagVOS[index.value].bagDesc.bagPackageDesc;
+        productBagName.value =
+          caseDetail.value.productBagVOS[
+            index.value
+          ].productBagName.productBagName;
+      }
     });
     onShow(() => {
       console.log("ddd");
