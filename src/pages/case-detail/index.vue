@@ -122,14 +122,14 @@
             :key="index2"
             :class="{
               'is-user': storeData.role === 2,
-              'active-choose': hasGoods(index2),
+              'active-choose': hasWorks(index2),
             }"
-            @click="chooseGoods(item2, index2)"
+            @click="chooseWorkGoods(item2, index2)"
           >
             <image src="../../images/case-bg.png" class="case-bg" mode="" />
             <image
               src="../../images/choose-bg.png"
-              v-if="hasGoods(index2)"
+              v-if="hasWorks(index2)"
               class="choose-bg"
               mode=""
             />
@@ -149,7 +149,7 @@
               </view>
               <view class="case-btn" @click.stop="toCheckGood(index2,"construct")">
                 <image
-                  :src="hasGoods(index2) ? goodsPackActive : goodsPack"
+                  :src="hasWorks(index2) ? goodsPackActive : goodsPack"
                 ></image>
                 <text :class="{ active: hasGoods(index2) }"
                   >查看套餐所含全部施工项</text
@@ -195,7 +195,7 @@ import { useUserInfoHooks, switchHome } from "../../hoosk/index";
 import loadMore from "@/components/load-more/index.vue";
 import codeDialog from "@/components/code-dialog/index.vue";
 import { getCaseDetailHooks } from "./hooks/index";
-import { productItem } from "../../api/case";
+import { productItem,constructionItem } from "../../api/case";
 import goodsPack from "../../images/goods-pack.png";
 import goodsPackActive from "../../images/goods-pack-active.png";
 export default defineComponent({
@@ -214,6 +214,7 @@ export default defineComponent({
     const caseId = ref<number>(0);
     const fromShare = ref<Boolean>(false);
     const goodList = ref<productItem[]>([]);
+    const workList = ref<constructionItem[]>([])
     const goodPrice = computed(() => {
       let num = 0;
       goodList.value.forEach((item) => {
@@ -327,8 +328,28 @@ export default defineComponent({
         goodList.value.push(item);
       }
     };
+    const chooseWorkGoods = (item: productItem, index: number) => {
+      if (storeData.role !== 2) {
+        return;
+      }
+      let has = workList.value.findIndex((item) => {
+        return item.index === index;
+      });
+      if (has >= 0) {
+        workList.value.splice(has, 1);
+      } else {
+        item.index = index;
+        workList.value.push(item);
+      }
+    };
     const hasGoods = (index: number) => {
       let num = goodList.value.findIndex((item) => {
+        return item.index === index;
+      });
+      return num >= 0;
+    };
+    const hasWorks = (index: number) => {
+      let num = workList.value.findIndex((item) => {
         return item.index === index;
       });
       return num >= 0;
@@ -346,7 +367,10 @@ export default defineComponent({
         userId: storeData.userId,
         estateId: 0,
         schemeId: caseId.value,
-        schemeSnapshot: JSON.stringify(goodList.value),
+        schemeSnapshot: {
+          productBagVOs:JSON.stringify(goodList.value),
+          constructionBags:JSON.stringify(constructionBags.val)
+        },
         offerPrice: goodPrice.value * 100,
         schemeName: caseDetail.value.schemeName,
         consultantId: uni.getStorageSync("shareId") || "",
@@ -395,9 +419,12 @@ export default defineComponent({
       goodsPackActive,
       goodsPack,
       fromShare,
+      workList,
+      hasWorks,
       swiperChange,
       changeCurrent,
       chooseGoods,
+      chooseWorkGoods,
       toImage,
       hasGoods,
       report,
