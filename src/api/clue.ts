@@ -92,6 +92,7 @@ export type SignupRecordDetail = {
     }
   }],
   productBagVOS: MaterialItem[],
+  constructionBags: constructionItem[],//拆除包信息
   planeImages: string[] //平面图,
   houseTypeImageUrls: string[] //户型图,
   coverPictureInfoVO: {
@@ -163,6 +164,30 @@ export type MaterialItem = {
     storeName: string, //所属店铺】取商品关联店铺【店铺名称】
     firstTwoFrontCategories4String: string,
   }]
+}
+
+export type constructionItem = {
+  constructionBagName: {
+    constructionBagName: string //输入不超过15个字符
+  },
+  buyItNow: {
+    buyItNow: number //输入两位小数数字
+  },
+  bagDesc: {
+    bagPackageDesc: string //套包简介
+  },
+  constructionItems: {
+    processes: [{
+      name: string //工艺名称,
+      unit: string //单位,
+      count: string //工艺量,
+      info: string //工艺说明
+    }],
+    materials: [{
+      name: string //材料名称,
+      info: string //材料说明
+    }]
+  }
 }
 export type BrowerDetail = {
   EffectSpace: [{
