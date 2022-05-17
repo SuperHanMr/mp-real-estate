@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-04-19 16:43:12
+ * @LastEditTime: 2022-05-17 15:53:31
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -315,12 +315,13 @@ export default defineComponent({
     };
 
     const toCheckGood = (index: number) => {
-      uni.navigateTo({
-        url:
-          "/pages/clue/material-upgrade/material-upgrade?index=" +
-          index +
-          "&source=true",
-      });
+      // uni.navigateTo({
+      //   url:
+      //     "/pages/clue/material-upgrade/material-upgrade?index=" +
+      //     index +
+      //     "&source=true",
+      // });
+      uni.navigateTo({ url: `/pages/product-bundle-detail/index?id=${index}` });
     };
     return {
       // imageUrl,

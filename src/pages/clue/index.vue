@@ -1,10 +1,3 @@
-<!--
- * @Description: 线索
- * @Author: HanYongHui
- * @Date: 2022-03-29 18:00:33
- * @LastEditTime: 2022-04-20 16:54:09
- * @LastEditors: HanYongHui
--->
 <template>
   <view class="container">
     <view class="top-tab">

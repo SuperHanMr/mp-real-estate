@@ -2,7 +2,7 @@
  * @Description: 文件内容描述
  * @Author: HanYongHui
  * @Date: 2022-04-11 18:34:10
- * @LastEditTime: 2022-04-14 14:33:38
+ * @LastEditTime: 2022-05-17 11:02:57
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -10,9 +10,8 @@
   <web-view :src="webUrl"></web-view>
 </template>
 <script lang="ts" setup>
-import { computed, defineProps } from "vue";
+import { computed, defineProps, ref } from "vue";
 import { onLoad } from "@dcloudio/uni-app";
-import { ref } from "@vue/reactivity";
 const props = defineProps({
   agreementType: {
     type: String,

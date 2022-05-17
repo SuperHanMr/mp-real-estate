@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: HanYongHui
  * @Date: 2022-03-29 18:00:39
- * @LastEditTime: 2022-04-20 11:03:39
+ * @LastEditTime: 2022-05-16 14:36:31
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -76,12 +76,6 @@ export default defineComponent({
     watch(
       () => storeData.isLogin,
       () => {
-        let pages = getCurrentPages();
-
-        console.log(
-          "------watch storeData.isLogin---------",
-          pages[pages.length - 1].route
-        );
         if (storeData.role === 2) {
           uni.setTabBarItem({
             index: 1,
