@@ -49,7 +49,7 @@ export const getCaseDetailHooks = () => {
       caseDetailData.caseDetail = data.data as caseDetail
       console.log(caseDetailData.caseDetail, ">>>>>>>")
       addImage(caseDetailData.caseDetail)
-    } catch (err) {
+    } catch (err:any) {
       if (err.data.code === 410) {
         switchHome("该方案已下架")
       }

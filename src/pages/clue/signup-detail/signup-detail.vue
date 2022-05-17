@@ -73,9 +73,10 @@
           :key="index"
           @click="gotoNextPage(index)"
         >
-          <view class="updateMaterial-text">{{
-            materialItem.productBagName.productBagName
-          }}</view>
+          <view class="updateMaterial-header">
+            <view class="icon-style pro-icon">商品</view>
+            <view class="text">{{ materialItem.productBagName.productBagName }}</view>
+          </view>
           <view class="content">{{ materialItem.bagDesc.bagPackageDesc }}</view>
           <view class="price price-font">
             <text style="font-size: 26rpx">￥</text>
@@ -349,12 +350,35 @@ export default defineComponent({
       border-radius: 16rpx;
       padding: 32rpx 40rpx;
 
-      .updateMaterial-text {
-        height: 42rpx;
-        line-height: 42rpx;
-        font-size: 30rpx;
-        color: #333333;
-        margin-bottom: 2rpx;
+      .updateMaterial-header {
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        .icon-style{
+          width: 52rpx;
+          height: 32rpx;
+          line-height: 32rpx;
+          text-align: center;
+          border-radius: 6rpx;
+          font-size: 20rpx;
+          font-weight: 500;
+          margin-right: 12rpx;
+        }
+        .pro-icon{
+          background: #E9EFF5;
+          color: #586E85;
+        }
+        .con-icon{
+          background: #EEE8E5;
+          color: #856858;
+        }
+        .text{
+          height: 42rpx;
+          line-height: 42rpx;
+          font-size: 30rpx;
+          color: #333333;
+          margin-bottom: 2rpx;
+        }
       }
 
       .content {

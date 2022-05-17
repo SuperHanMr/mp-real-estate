@@ -47,6 +47,14 @@
 			}
 		},
 		{
+			"path": "pages/clue/dismantle-detail/dismantle-detail",
+			"style": {
+				"navigationBarTitleText": "拆除包",
+				"navigationBarBackgroundColor": "#ffffff",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
 			"path": "pages/clue/signup-detail/signup-detail",
 			"style": {
 				"navigationBarTitleText": "报名详情",
