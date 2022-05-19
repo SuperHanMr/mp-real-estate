@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-05-17 15:53:31
+ * @LastEditTime: 2022-05-19 17:24:22
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -69,108 +69,16 @@
           </view>
         </view>
       </view>
+      <product-list />
+    </view>
 
-      <view class="house-type-list">
-        <view class="list-title">
-          <view></view>
-          <text>装修报价</text>
-        </view>
-        <view class="case-type-conetnt">
-          <view
-            class="case-type-warp"
-            v-for="(item, index) in caseDetail.productBagVOS"
-            :key="index"
-            :class="{
-              'is-user': storeData.role === 2,
-              'active-choose': hasGoods(index),
-            }"
-            @click="chooseGoods(item, index)"
-          >
-            <image src="../../images/case-bg.png" class="case-bg" mode="" />
-            <image
-              src="../../images/choose-bg.png"
-              v-if="hasGoods(index)"
-              class="choose-bg"
-              mode=""
-            />
-            <view class="case-content">
-               <view class="case-name">
-                <view class="icon-style pro-icon">商品</view>
-                <view class="text">{{item.productBagName.productBagName }}</view>
-              </view>
-              <view class="case-desc">{{ item.bagDesc.bagPackageDesc }}</view>
-              <view class="case-price">
-                <text class="price-symbol">¥</text>
-                <text class="price-num price-font">{{
-                  item.buyItNow.buyItNow.toFixed(2)
-                }}</text>
-              </view>
-              <view class="case-btn" @click.stop="toCheckGood(index,"product")">
-                <image
-                  :src="hasGoods(index) ? goodsPackActive : goodsPack"
-                ></image>
-                <text :class="{ active: hasGoods(index) }"
-                  >查看套餐所含全部商品</text
-                >
-              </view>
-            </view>
-          </view>
-          <!-- 二期 施工包 -->
-          <view
-            class="case-type-warp"
-            v-for="(item2, index2) in caseDetail.constructionBags"
-            :key="index2"
-            :class="{
-              'is-user': storeData.role === 2,
-              'active-choose': hasWorks(index2),
-            }"
-            @click="chooseWorkGoods(item2, index2)"
-          >
-            <image src="../../images/case-bg.png" class="case-bg" mode="" />
-            <image
-              src="../../images/choose-bg.png"
-              v-if="hasWorks(index2)"
-              class="choose-bg"
-              mode=""
-            />
-            <view class="case-content">
-              <view class="case-name">
-                <view class="icon-style con-icon">施工</view>
-                <!-- 产品袋名 -->
-                <view class="text">{{item2.constructionBagName.constructionBagName }}</view>
-              </view>
-              <!-- 套包简介 -->
-              <view class="case-desc">{{ item2.bagDesc.bagPackageDesc }}</view>
-              <view class="case-price">
-                <text class="price-symbol">¥</text>
-                <text class="price-num price-font">{{
-                  item2.buyItNow.buyItNow.toFixed(2)
-                }}</text>
-              </view>
-              <view class="case-btn" @click.stop="toCheckGood(index2,"construct")">
-                <image
-                  :src="hasWorks(index2) ? goodsPackActive : goodsPack"
-                ></image>
-                <text :class="{ active: hasGoods(index2) }"
-                  >查看套餐所含全部施工项</text
-                >
-              </view>
-            </view>
-          </view>
-
-          <view class="report" v-if="storeData.role === 2">
-            <view class="report-text">精选装修套餐 限时参团享优惠</view>
-            <view class="report-shadow"></view>
-            <view class="report-btn" @click="report">
-              <text class="text">立即报名</text>
-              <view class="symbol">
-                ¥<text class="num">{{ goodPrice.toFixed(2) }}</text>
-              </view>
-              <image src="../../images/report-btn-bg.png" mode="" />
-            </view>
-          </view>
-        </view>
-        <!-- <load-more :loadType="loadType" /> -->
+    <view class="report" v-if="storeData.role === 2">
+      <view class="report-text">精选装修套餐 限时参团享优惠</view>
+      <view class="report-shadow"></view>
+      <view class="report-btn" @click="report">
+        <text class="text">立即报名</text>
+        <view class="symbol"> ¥<text class="num">0</text> </view>
+        <image src="../../images/report-btn-bg.png" />
       </view>
     </view>
   </view>
@@ -182,46 +90,32 @@
   />
 </template>
 <script lang="ts">
-import { defineComponent, computed, ref, watch, onMounted } from "vue";
+import { defineComponent, ref, watch } from "vue";
 import {
   onLoad,
   onPullDownRefresh,
-  onReachBottom,
   onPageScroll,
   onShareAppMessage,
 } from "@dcloudio/uni-app";
 import navigationCustom from "@/components/navigation-custom/index.vue";
 import { useUserInfoHooks, switchHome } from "../../hoosk/index";
-import loadMore from "@/components/load-more/index.vue";
 import codeDialog from "@/components/code-dialog/index.vue";
 import { getCaseDetailHooks } from "./hooks/index";
-import { productItem,constructionItem } from "../../api/case";
-import goodsPack from "../../images/goods-pack.png";
-import goodsPackActive from "../../images/goods-pack-active.png";
+import ProductList from "./components/product-list.vue";
 export default defineComponent({
   name: "",
   components: {
     navigationCustom,
-    loadMore,
     codeDialog,
+    ProductList,
   },
   setup() {
     const { storeData } = useUserInfoHooks();
-    const loadType = ref<"succeed" | "error" | "load" | "complete">("succeed");
     const theme = ref<"white" | "black" | "transparent">("transparent");
     //轮播banner激活控制
     const currentIndex = ref<number>(0);
     const caseId = ref<number>(0);
     const fromShare = ref<Boolean>(false);
-    const goodList = ref<productItem[]>([]);
-    const workList = ref<constructionItem[]>([])
-    const goodPrice = computed(() => {
-      let num = 0;
-      goodList.value.forEach((item) => {
-        num = num + item.buyItNow.buyItNow;
-      });
-      return num;
-    });
     const {
       requestCaseDetail,
       requestReport,
@@ -244,13 +138,12 @@ export default defineComponent({
         uni.setStorageSync("shareId", +sahreId ? sahreId : "");
         fromShare.value = sahreId ? true : false;
       } else {
-        caseId.value = +e.caseId;
+        caseId.value = 184; //+e.caseId;
         fromShare.value = e.shareId ? true : false;
         if (e.shareId) {
           uni.setStorageSync("shareId", +e.shareId ? e.shareId : "");
         }
       }
-
       enterNum.value = 0;
       requestCaseDetail(caseId.value);
       requestFindParentIds({ pageId: caseId.value, level: 3 });
@@ -279,7 +172,6 @@ export default defineComponent({
       };
     });
     onPullDownRefresh(() => {
-      goodList.value = [];
       requestCaseDetail(caseId.value);
       setTimeout(() => {
         uni.stopPullDownRefresh();
@@ -292,129 +184,50 @@ export default defineComponent({
         theme.value = "transparent";
       }
     });
-    type swiper = {
-      detail: {
-        current: number;
-      };
-    };
-    watch(caseDetail, () => {
-      // goodList.value.push(caseDetail.value.productBagVOS[0])
-      chooseGoods(caseDetail.value.productBagVOS[0], 0);
-      //分享进入的  需要查询一下房屋是否启用
-      if (
-        caseDetail.value.houseWithSchemeInfo.status !== 1 ||
-        caseDetail.value.estateState !== 1
-      ) {
-        switchHome("该方案已下架");
-      }
-    });
-    const swiperChange = (e: swiper) => {
+    const swiperChange = (e: any) => {
       currentIndex.value = e.detail.current;
     };
     const changeCurrent = (num: number) => {
       currentIndex.value = num;
     };
-    const chooseGoods = (item: productItem, index: number) => {
-      if (storeData.role !== 2) {
-        return;
-      }
-      let has = goodList.value.findIndex((item) => {
-        return item.index === index;
-      });
-      if (has >= 0) {
-        goodList.value.splice(has, 1);
-      } else {
-        item.index = index;
-        goodList.value.push(item);
-      }
-    };
-    const chooseWorkGoods = (item: productItem, index: number) => {
-      if (storeData.role !== 2) {
-        return;
-      }
-      let has = workList.value.findIndex((item) => {
-        return item.index === index;
-      });
-      if (has >= 0) {
-        workList.value.splice(has, 1);
-      } else {
-        item.index = index;
-        workList.value.push(item);
-      }
-    };
-    const hasGoods = (index: number) => {
-      let num = goodList.value.findIndex((item) => {
-        return item.index === index;
-      });
-      return num >= 0;
-    };
-    const hasWorks = (index: number) => {
-      let num = workList.value.findIndex((item) => {
-        return item.index === index;
-      });
-      return num >= 0;
-    };
+
     const toImage = (index: number) => {
       uni.navigateTo({
         url: "/pages/picture-preview/index?index=" + index,
       });
     };
     const report = () => {
-      if (goodList.value.length === 0) {
-        return;
-      }
       let data = {
         userId: storeData.userId,
         estateId: 0,
         schemeId: caseId.value,
         schemeSnapshot: {
-          productBagVOs:JSON.stringify(goodList.value),
-          constructionBags:JSON.stringify(constructionBags.val)
+          // productBagVOs: JSON.stringify(goodList.value),
+          // constructionBags: JSON.stringify(constructionBags.val),
         },
-        offerPrice: goodPrice.value * 100,
+        offerPrice: 0,
         schemeName: caseDetail.value.schemeName,
         consultantId: uni.getStorageSync("shareId") || "",
         houseTypeId: 0,
       };
-      console.log(data, "报名");
-      requestReport(data, () => {
-        goodList.value = [];
-      });
+      // requestReport(data, () => {
+      //   goodList.value = [];
+      // });
     };
 
-    const toCheckGood = (index: number) => {
-      // uni.navigateTo({
-      //   url:
-      //     "/pages/clue/material-upgrade/material-upgrade?index=" +
-      //     index +
-      //     "&source=true",
-      // });
-      uni.navigateTo({ url: `/pages/product-bundle-detail/index?id=${index}` });
-    };
     return {
-      // imageUrl,
-      loadType,
       theme,
       codeDialogShow,
       currentIndex,
       storeData,
       caseDetail,
       imgList,
-      goodPrice,
       codeUrl,
-      goodsPackActive,
-      goodsPack,
       fromShare,
-      workList,
-      hasWorks,
       swiperChange,
       changeCurrent,
-      chooseGoods,
-      chooseWorkGoods,
       toImage,
-      hasGoods,
       report,
-      toCheckGood,
       getCodeImage,
     };
   },
@@ -593,208 +406,68 @@ export default defineComponent({
   }
 }
 
-.house-type-list {
-  background: #ffffff;
-  padding-top: 48rpx;
-  margin-top: -20rpx;
-  position: absolute;
-  border-top-left-radius: 40rpx;
-  border-top-right-radius: 40rpx;
-  width: 100%;
-  .list-title {
-    display: flex;
-    align-items: center;
-    :nth-child(1) {
-      width: 6rpx;
-      height: 28rpx;
-      background: #333333;
-      border-top-right-radius: 6rpx;
-      border-bottom-right-radius: 6rpx;
-    }
-    :nth-child(2) {
-      margin-left: 24rpx;
-      font-weight: 500;
-      font-size: 32rpx;
-      line-height: 44rpx;
-      color: #333333;
-    }
+.report {
+  position: fixed;
+  background: #fff;
+  width: calc(100% - 64rpx);
+  margin-left: 32rpx;
+  bottom: 82rpx;
+  z-index: 1;
+  .report-text {
+    height: 88rpx;
+    line-height: 88rpx;
+    padding: 0 24rpx;
+    background: linear-gradient(124.17deg, #333333 29.41%, #222222 81.43%);
+    border-radius: 8px;
+    color: #fff;
+    font-size: 28rpx;
   }
-  .is-user {
-    border: 0.5px solid #ececec;
+  .report-shadow {
+    position: absolute;
+    top: 0;
+    right: 60rpx;
+    height: 88rpx;
+    transform: skewX(-15deg);
+    background: linear-gradient(126.14deg, #f0cca2 30.84%, #e0a968 87.02%);
+    width: 200rpx;
+    box-shadow: #222;
   }
-  view .active-choose {
-    background: linear-gradient(281.11deg, #ffffff 0%, #fffbf7 100%);
-    border: 0.5px solid #222;
+  .report-btn {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 104rpx;
+    background: linear-gradient(126.14deg, #f0cca2 30.84%, #e0a968 87.02%);
+    width: 248rpx;
+    color: #222;
+    border-radius: 16rpx;
     box-sizing: border-box;
-    box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.06);
-  }
-  .case-type-conetnt {
-    padding: 8rpx 32rpx 250rpx;
-    .case-type-warp {
-      position: relative;
-      padding: 32rpx 40rpx;
-      background: #fafafa;
-      border-radius: 24rpx;
-      box-sizing: border-box;
-      margin: 24rpx 0;
-
-      .case-name {
-        display: flex;
-        flex-flow: row nowrap;
-        align-items: center;
-        .icon-style{
-          width: 52rpx;
-          height: 32rpx;
-          line-height: 32rpx;
-          text-align: center;
-          border-radius: 6rpx;
-          font-size: 20rpx;
-          font-weight: 500;
-          margin-right: 12rpx;
-        }
-        .pro-icon{
-          background: #E9EFF5;
-          color: #586E85;
-        }
-        .con-icon{
-          background: #EEE8E5;
-          color: #856858;
-        }
-
-        .text{
-          margin-bottom: 1px;
-          color: #333;
-          font-weight: 500;
-          font-size: 30rpx;
-          letter-spacing: 0.1px;
-        }
-      }
-      .case-desc {
-        width: 100%;
-        color: #999;
-        letter-spacing: 0.2px;
-        font-size: 24rpx;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        display: block;
-      }
-      .case-price {
-        margin-top: 32rpx;
-        margin-bottom: 24rpx;
-        .price-symbol {
-          color: #333;
-          font-size: 26rpx;
-          margin-right: 8rpx;
-        }
-        .price-num {
-          font-size: 40rpx;
-          color: #333;
-        }
-      }
-      .active {
-        font-weight: bold;
-        color: #b88c58 !important;
-      }
-      .case-btn {
-        width: 100%;
-        height: 68rpx;
-        text-align: center;
-        background-color: #fff;
-        border: 0.5px solid #ededed;
-        border-radius: 6px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        image {
-          width: 20rpx;
-          height: 20rpx;
-          margin-right: 12rpx;
-          vertical-align: middle;
-        }
-        text {
-          font-size: 24rpx;
-          letter-spacing: 0.1px;
-          color: #666;
-        }
-      }
-      .case-bg {
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: 188rpx;
-        height: 174rpx;
-      }
-      .choose-bg {
-        position: absolute;
-        right: 0;
-        top: 0;
-        width: 50rpx;
-        height: 30rpx;
-      }
+    padding: 16rpx 30rpx;
+    image {
+      position: absolute;
+      width: 248rpx;
+      height: 104rpx;
+      z-index: 11;
+      top: 0;
+      left: 0;
     }
-    .report {
-      position: fixed;
-      bottom: 82rpx;
-      width: calc(100% - 64rpx);
-      z-index: 1;
-      .report-text {
-        height: 88rpx;
-        line-height: 88rpx;
-        padding: 0 24rpx;
-        background: linear-gradient(124.17deg, #333333 29.41%, #222222 81.43%);
-        border-radius: 8px;
-        color: #fff;
-        font-size: 28rpx;
-      }
-      .report-shadow {
-        position: absolute;
-        top: 0;
-        right: 60rpx;
-        height: 88rpx;
-        transform: skewX(-15deg);
-        background: linear-gradient(126.14deg, #f0cca2 30.84%, #e0a968 87.02%);
-        width: 200rpx;
-        box-shadow: #222;
-      }
-      .report-btn {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        height: 104rpx;
-        background: linear-gradient(126.14deg, #f0cca2 30.84%, #e0a968 87.02%);
-        width: 248rpx;
-        color: #222;
-        border-radius: 16rpx;
-        box-sizing: border-box;
-        padding: 16rpx 30rpx;
-        image {
-          position: absolute;
-          width: 248rpx;
-          height: 104rpx;
-          z-index: 11;
-          top: 0;
-          left: 0;
-        }
-        text {
-          letter-spacing: 0.1px;
-        }
-        .text {
-          font-weight: bold;
-          font-size: 30rpx;
-          display: block;
-          text-align: center;
-        }
-        view {
-          font-size: 20rpx;
-          letter-spacing: 0, 1px;
-          text-align: center;
-          .num {
-            font-size: 26rpx;
-            display: inline-block;
-            margin-left: 4rpx;
-          }
-        }
+    text {
+      letter-spacing: 0.1px;
+    }
+    .text {
+      font-weight: bold;
+      font-size: 30rpx;
+      display: block;
+      text-align: center;
+    }
+    view {
+      font-size: 20rpx;
+      letter-spacing: 0, 1px;
+      text-align: center;
+      .num {
+        font-size: 26rpx;
+        display: inline-block;
+        margin-left: 4rpx;
       }
     }
   }

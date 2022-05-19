@@ -2,21 +2,24 @@
  * @Description: 商品套包详情
  * @Author: HanYongHui
  * @Date: 2022-05-16 14:13:56
- * @LastEditTime: 2022-05-17 11:07:21
+ * @LastEditTime: 2022-05-19 14:25:16
  * @LastEditors: HanYongHui
 -->
 <template>
   <view class="page-content">
     <web-view
-      :src="`${baseUrl}/app-pages/mp-real-estate/product-bundle.html?id=${id}`"
-    ></web-view>
+      :src="`${baseUrl}/app-pages/mp-real-estate/product-bundle.html?schemeId=${schemeId}&caseBagName=${caseBagName}`"
+    />
   </view>
 </template>
 <script lang="ts" setup>
 import { defineProps, ref } from "vue";
 const props = defineProps({
-  id: {
-    type: [Number, String],
+  schemeId: {
+    type: Number,
+  },
+  caseBagName: {
+    type: String,
   },
 });
 const baseUrl = ref<string>(import.meta.env.VITE_URL_BASE_H5 as string);

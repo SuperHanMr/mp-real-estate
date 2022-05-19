@@ -2,7 +2,7 @@
  * @Description: login and register
  * @Author: HanYongHui
  * @Date: 2022-04-06 16:48:34
- * @LastEditTime: 2022-04-19 14:30:28
+ * @LastEditTime: 2022-05-19 15:57:51
  * @LastEditors: HanYongHui
  */
 import createRequest from "../utils/create-request"
@@ -64,6 +64,23 @@ export type caseDetail = {
       schemeTagName: string
     }
   ],
+  caseBags: CaseBags[]
+}
+
+export type CaseBags = {
+  buyItNow: {
+    buyItNow: number,
+    printFlag: boolean,
+  },
+  caseBagName: {
+    caseBagName: string,
+  },
+  bagDesc: {
+    bagPackageDesc: string,
+  },
+  caseInfo: {
+    desc: string,
+  }
 }
 
 

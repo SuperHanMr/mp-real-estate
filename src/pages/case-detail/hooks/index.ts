@@ -2,7 +2,7 @@
  * @Description: login
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:42:10
- * @LastEditTime: 2022-04-20 10:51:28
+ * @LastEditTime: 2022-05-19 17:12:54
  * @LastEditors: HanYongHui
  */
 import { defineComponent, reactive, ref, toRefs } from "vue";
@@ -38,18 +38,20 @@ const parentId = ref<findParentData>({} as findParentData)
 const enterNum = ref<number>(0)
 const codeDialogShow = ref<boolean>(false)
 
-
-
 export const getCaseDetailHooks = () => {
   const requestCaseDetail = async (caseId: number) => {
     try {
       caseDetailData.caseDetail = { houseWithSchemeInfo: {} } as caseDetail
-      console.log(caseDetailData.caseDetail, ">>>>>>>")
       const data = await caseDetail(caseId)
       caseDetailData.caseDetail = data.data as caseDetail
-      console.log(caseDetailData.caseDetail, ">>>>>>>")
       addImage(caseDetailData.caseDetail)
-    } catch (err:any) {
+      if (
+        caseDetailData.caseDetail.houseWithSchemeInfo.status !== 1 ||
+        caseDetailData.caseDetail.estateState !== 1
+      ) {
+        switchHome("该方案已下架");
+      }
+    } catch (err: any) {
       if (err.data.code === 410) {
         switchHome("该方案已下架")
       }
