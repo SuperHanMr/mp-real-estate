@@ -2,7 +2,7 @@
  * @Description: login and register
  * @Author: HanYongHui
  * @Date: 2022-04-06 16:48:34
- * @LastEditTime: 2022-05-19 15:57:51
+ * @LastEditTime: 2022-05-20 10:51:43
  * @LastEditors: HanYongHui
  */
 import createRequest from "../utils/create-request"
@@ -80,7 +80,8 @@ export type CaseBags = {
   },
   caseInfo: {
     desc: string,
-  }
+  },
+  isChoose?: boolean,
 }
 
 

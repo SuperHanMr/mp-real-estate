@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-05-19 17:24:22
+ * @LastEditTime: 2022-05-20 11:22:15
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -77,7 +77,7 @@
       <view class="report-shadow"></view>
       <view class="report-btn" @click="report">
         <text class="text">立即报名</text>
-        <view class="symbol"> ¥<text class="num">0</text> </view>
+        <!-- <view class="symbol"> ¥<text class="num">0</text> </view> -->
         <image src="../../images/report-btn-bg.png" />
       </view>
     </view>
@@ -138,7 +138,7 @@ export default defineComponent({
         uni.setStorageSync("shareId", +sahreId ? sahreId : "");
         fromShare.value = sahreId ? true : false;
       } else {
-        caseId.value = 184; //+e.caseId;
+        caseId.value = 184; //;+e.caseId
         fromShare.value = e.shareId ? true : false;
         if (e.shareId) {
           uni.setStorageSync("shareId", +e.shareId ? e.shareId : "");
@@ -202,8 +202,7 @@ export default defineComponent({
         estateId: 0,
         schemeId: caseId.value,
         schemeSnapshot: {
-          // productBagVOs: JSON.stringify(goodList.value),
-          // constructionBags: JSON.stringify(constructionBags.val),
+          caseBags: JSON.stringify(caseDetail.value.caseBags),
         },
         offerPrice: 0,
         schemeName: caseDetail.value.schemeName,
@@ -459,6 +458,7 @@ export default defineComponent({
       font-size: 30rpx;
       display: block;
       text-align: center;
+      line-height: 87rpx;
     }
     view {
       font-size: 20rpx;

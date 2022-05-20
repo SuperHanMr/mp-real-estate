@@ -2,7 +2,7 @@
  * @Description: 方案详情 商品列表
  * @Author: HanYongHui
  * @Date: 2022-05-19 14:40:46
- * @LastEditTime: 2022-05-19 16:23:08
+ * @LastEditTime: 2022-05-20 10:56:25
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -18,14 +18,14 @@
         :key="index"
         :class="{
           'is-user': storeData.role === 2,
-          'active-choose': hasGoods(),
+          'active-choose': item.isChoose,
         }"
-        @click="chooseGoods"
+        @click="chooseGoods(index)"
       >
         <image src="../../../images/case-bg.png" class="case-bg" />
         <image
           src="../../../images/choose-bg.png"
-          v-if="hasGoods()"
+          v-if="item.isChoose"
           class="choose-bg"
         />
         <view class="case-content">
@@ -41,8 +41,8 @@
             }}</text>
           </view>
           <view class="case-btn" @click.stop="lookProductDetail(item)">
-            <image :src="hasGoods() ? goodsPackActive : goodsPack"></image>
-            <text :class="{ active: hasGoods() }">查看套餐所含全部商品</text>
+            <image :src="item.isChoose ? goodsPackActive : goodsPack"></image>
+            <text :class="{ active: item.isChoose }">查看套餐所含全部商品</text>
           </view>
         </view>
       </view>
@@ -50,7 +50,7 @@
   </view>
 </template>
 <script lang="ts" setup>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import { getCaseDetailHooks } from "../hooks/index";
 import { useUserInfoHooks } from "../../../hoosk/index";
 import goodsPack from "../../../images/goods-pack.png";
@@ -58,10 +58,16 @@ import goodsPackActive from "../../../images/goods-pack-active.png";
 import type { CaseBags } from "../../../api/case";
 const { storeData } = useUserInfoHooks();
 const { caseDetail } = getCaseDetailHooks();
-const hasGoods = (): boolean => false;
-const chooseGoods = () => {};
+const chooseGoods = (index: number) => {
+  caseDetail.value.caseBags[index].isChoose =
+    !caseDetail.value.caseBags[index].isChoose;
+};
 const lookProductDetail = (item: CaseBags) => {
-  console.log("查看套包商品详情");
+  uni.navigateTo({
+    url: `/pages/product-bundle-detail/index?schemeId=${184}&caseBagName=${
+      item.caseBagName.caseBagName
+    }`,
+  });
 };
 </script>
 <style lang="scss" scoped>
