@@ -1,9 +1,7 @@
 <template>
   <navigation-custom title="报名详情" :theme="theme"></navigation-custom>
-
   <view class="container">
     <image class="bgImg" :src="detailInfo.coverPictureInfoVO.coverImageUrl" />
-    <!-- <img class="bgImg" @click="toBack" :src="detailInfo.coverPictureInfoVO.coverImageUrl" alt=""> -->
     <view class="header-container">
       <view class="header-bg"></view>
       <view class="projectName">{{ detailInfo.schemeName }}</view>
@@ -69,18 +67,18 @@
       </view>
       <view class="renovation-content">
         <view
-          v-for="(materialItem, index) in detailInfo.productBagVOS"
-          :key="index"
-          @click="gotoNextPage(index)"
+          v-for="item in detailInfo.caseBags"
+          :key="item.caseBagName.caseBagName"
+          @click="gotoNextPage(item)"
         >
           <view class="updateMaterial-header">
             <view class="icon-style pro-icon">商品</view>
-            <view class="text">{{ materialItem.productBagName.productBagName }}</view>
+            <view class="text">{{ item.caseBagName.caseBagName }}</view>
           </view>
-          <view class="content">{{ materialItem.bagDesc.bagPackageDesc }}</view>
-          <view class="price price-font">
+          <view class="content">{{ item.bagDesc.bagPackageDesc }}</view>
+          <view class="price price-font" v-if="item.buyItNow.printFlag">
             <text style="font-size: 26rpx">￥</text>
-            <text>{{ handlePrice(materialItem.buyItNow.buyItNow) }}</text>
+            <text>{{ handlePrice(item.buyItNow.buyItNow) }}</text>
           </view>
           <view class="showMoreMaterial">
             <image class="iconImg" src="../../../images/shopping-icon.png" />
@@ -110,11 +108,12 @@ export default defineComponent({
     const theme = ref<"white" | "black" | "transparent">("transparent");
     const id = ref<number>(0);
     const type = ref<string>("");
+    const schemeId = ref<number>(0);
     onLoad((e: any) => {
       console.log("---onLoad---", e);
       id.value = +e.id;
       type.value = e.type;
-      console.log(id.value);
+      schemeId.value = +e.schemeId;
       requestSignupDetail(e.id);
     });
     onPageScroll((e) => {
@@ -136,9 +135,9 @@ export default defineComponent({
         },
       });
     };
-    const gotoNextPage = (index: number) => {
+    const gotoNextPage = (item: any) => {
       uni.navigateTo({
-        url: `../material-upgrade/material-upgrade?index=${index}`,
+        url: `/pages/product-bundle-detail/index?schemeId=${schemeId.value}&caseBagName=${item.caseBagName.caseBagName}`,
       });
     };
 
@@ -157,18 +156,6 @@ export default defineComponent({
         return list[0] + "." + list[1];
       }
     };
-    // const sliceArray = (array: number[], size: number) => {
-    // 	var result = [];
-    // 	for (var i = 0; i < Math.ceil(array.length / size); i++) {
-    // 		var start = i * size;
-    // 		var end = start + size;
-    // 		result.push(array.slice(start, end));
-    // 	}
-    // 	return result;
-    // }
-    // const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1, 2, 13, 14, 15, 16, 17, 18, 19, 20]
-    // const array = sliceArray(arr, 4)
-    // console.log("array====", array)
 
     return {
       theme,
@@ -354,7 +341,7 @@ export default defineComponent({
         display: flex;
         flex-flow: row nowrap;
         align-items: center;
-        .icon-style{
+        .icon-style {
           width: 52rpx;
           height: 32rpx;
           line-height: 32rpx;
@@ -364,15 +351,15 @@ export default defineComponent({
           font-weight: 500;
           margin-right: 12rpx;
         }
-        .pro-icon{
-          background: #E9EFF5;
-          color: #586E85;
+        .pro-icon {
+          background: #e9eff5;
+          color: #586e85;
         }
-        .con-icon{
-          background: #EEE8E5;
+        .con-icon {
+          background: #eee8e5;
           color: #856858;
         }
-        .text{
+        .text {
           height: 42rpx;
           line-height: 42rpx;
           font-size: 30rpx;

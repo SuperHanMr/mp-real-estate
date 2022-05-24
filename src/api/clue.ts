@@ -80,6 +80,7 @@ export type SignupRecordItem = {
 }
 
 export type SignupRecordDetail = {
+  caseBags: CaseBags[],
   EffectSpace: [{
     spaceName: {
       spaceName: string //空间名称
@@ -163,7 +164,25 @@ export type MaterialItem = {
     supplierName: string, //【供应商】取商品关联供应商【供应商名称】，无显示--,
     storeName: string, //所属店铺】取商品关联店铺【店铺名称】
     firstTwoFrontCategories4String: string,
-  }]
+  }],
+
+}
+
+export type CaseBags = {
+  buyItNow: {
+    buyItNow: number,
+    printFlag: boolean,
+  },
+  caseBagName: {
+    caseBagName: string,
+  },
+  bagDesc: {
+    bagPackageDesc: string,
+  },
+  caseInfo: {
+    desc: string,
+  },
+  isChoose?: boolean,
 }
 
 export type constructionItem = {

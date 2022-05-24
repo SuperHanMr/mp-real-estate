@@ -34,7 +34,13 @@
               class="item-container"
               v-for="(signupItem, index2) in signupList"
               :key="index2"
-              @click="gotoRegistrationDetailPage(signupItem.id, 0, 'signup')"
+              @click="
+                gotoRegistrationDetailPage(
+                  signupItem.id,
+                  signupItem.schemeId,
+                  'signup'
+                )
+              "
             >
               <view class="header">
                 <view class="img-shadow" />
@@ -60,8 +66,12 @@
                 </view>
               </view>
 
-              <view class="bottomInfo" v-if="item1.key == 1" @click.stop="gotoOtherPage">
-                <view class="itemInfo" >
+              <view
+                class="bottomInfo"
+                v-if="item1.key == 1"
+                @click.stop="gotoOtherPage"
+              >
+                <view class="itemInfo">
                   <view class="left">报名时间</view>
                   <view class="right">{{
                     formatDate(signupItem.signTime)
@@ -285,22 +295,17 @@ export default defineComponent({
 
     const gotoRegistrationDetailPage = (
       id: number,
-      estateId: number,
+      schemeId: number,
       type: string
     ) => {
-      console.log("去报名详情页面！！！", id);
-
       if (type == "signup") {
         // 去报名详情页面
         uni.navigateTo({
-          url: `signup-detail/signup-detail?id=${id}&type=${type}`,
+          url: `signup-detail/signup-detail?id=${id}&type=${type}&schemeId=${schemeId}`,
         });
       } else {
         // 去方案详情页面
         houseCaseCheck(id);
-        // uni.navigateTo({
-        // 	url: `../case-detail/index?caseId=${id}`
-        // })
       }
     };
     const formatDate = (time: number) =>
@@ -337,11 +342,11 @@ export default defineComponent({
         reqBrowerList();
       }
     };
-    const gotoOtherPage=()=>{
+    const gotoOtherPage = () => {
       uni.navigateTo({
-        url:"dismantle-detail/dismantle-detail"
-      })
-    }
+        url: "dismantle-detail/dismantle-detail",
+      });
+    };
     return {
       bgImg,
       currentIndex,

@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-05-20 11:22:15
+ * @LastEditTime: 2022-05-24 10:41:11
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -91,7 +91,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
-import { signUpRecord } from "../../api/case"
+import { signUpRecord } from "../../api/case";
 import {
   onLoad,
   onPullDownRefresh,
@@ -127,7 +127,6 @@ export default defineComponent({
       imgList,
       codeUrl,
       codeDialogShow,
-			
     } = getCaseDetailHooks();
     onLoad((e: any) => {
       console.log("---onLoad---", e);
@@ -198,38 +197,43 @@ export default defineComponent({
         url: "/pages/picture-preview/index?index=" + index,
       });
     };
-    const report = async() => {
-			let caseBags = [];
-			caseDetail.value.caseBags.forEach((item) => {
-				if (item.isChoose) {
-					caseBags.push({bagDesc: item.bagDesc, buyItNow: item.buyItNow, caseBagName: item.caseBagName, caseInfo: item.caseInfo});
-				}
-			})
-			if (caseBags.length) {
-				let data = {
-				  userId: storeData.userId,
-				  estateId: 0,
-				  schemeId: caseId.value,
-				  schemeSnapshot: JSON.stringify({caseBags: caseBags}),
-				  offerPrice: 0,
-				  schemeName: caseDetail.value.schemeName,
-				  consultantId: uni.getStorageSync("shareId") || "",
-				  houseTypeId: 0,
-				};
-				console.log(data)
-				// requestReport(data, () => {
-				//   goodList.value = [];
-				// });
-				console.log(signUpRecord);
-				let res = await signUpRecord(data);
-				console.log(res);
-			} else {
-				uni.showToast({
-				  title: "请选择装修报价",
-				  icon: "none",
-				  duration: 1000
-				})
-			}
+    const report = async () => {
+      let caseBags = [];
+      caseDetail.value.caseBags.forEach((item) => {
+        if (item.isChoose) {
+          caseBags.push({
+            bagDesc: item.bagDesc,
+            buyItNow: item.buyItNow,
+            caseBagName: item.caseBagName,
+            caseInfo: item.caseInfo,
+          });
+        }
+      });
+      if (caseBags.length) {
+        let data = {
+          userId: storeData.userId,
+          estateId: 0,
+          schemeId: caseId.value,
+          schemeSnapshot: JSON.stringify({ caseBags: caseBags }),
+          offerPrice: 0,
+          schemeName: caseDetail.value.schemeName,
+          consultantId: uni.getStorageSync("shareId") || "",
+          houseTypeId: 0,
+        };
+        console.log(data);
+        // requestReport(data, () => {
+        //   goodList.value = [];
+        // });
+        console.log(signUpRecord);
+        let res = await signUpRecord(data);
+        console.log(res);
+      } else {
+        uni.showToast({
+          title: "请选择装修报价",
+          icon: "none",
+          duration: 1000,
+        });
+      }
     };
 
     return {

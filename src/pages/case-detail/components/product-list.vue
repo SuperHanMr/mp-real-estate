@@ -2,7 +2,7 @@
  * @Description: 方案详情 商品列表
  * @Author: HanYongHui
  * @Date: 2022-05-19 14:40:46
- * @LastEditTime: 2022-05-20 10:56:25
+ * @LastEditTime: 2022-05-24 11:05:04
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -34,7 +34,7 @@
             <view class="text">{{ item.caseBagName.caseBagName }}</view>
           </view>
           <view class="case-desc">{{ item.bagDesc.bagPackageDesc }}</view>
-          <view class="case-price">
+          <view class="case-price" v-if="item.buyItNow.printFlag">
             <text class="price-symbol">¥</text>
             <text class="price-num price-font">{{
               item.buyItNow.buyItNow.toFixed(2)
