@@ -234,3 +234,23 @@ export function requestHouseCaseCheck(houseId: number) {
 // export function register(params: RegisterParams) {
 //   return request.post('/em/applet/wx/register', params)
 // }
+
+export type SignUpRecordParams = {
+	userId: number,
+	estateId: number,
+	schemeId: number,
+	schemeSnapshot: {
+	  caseBags: string,
+	},
+	offerPrice: number,
+	schemeName: string,
+	consultantId: [number, string],
+	houseTypeId: number,
+}
+
+export type signUpRecordMsg = {}
+
+// 立即报名
+export function signUpRecord(params: SignUpRecordParams) {
+	return request.post<{}>(`/em/applet/signUpRecord`, params);
+}

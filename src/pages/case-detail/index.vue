@@ -91,6 +91,7 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, watch } from "vue";
+import { signUpRecord } from "../../api/case"
 import {
   onLoad,
   onPullDownRefresh,
@@ -126,6 +127,7 @@ export default defineComponent({
       imgList,
       codeUrl,
       codeDialogShow,
+			
     } = getCaseDetailHooks();
     onLoad((e: any) => {
       console.log("---onLoad---", e);
@@ -196,22 +198,38 @@ export default defineComponent({
         url: "/pages/picture-preview/index?index=" + index,
       });
     };
-    const report = () => {
-      let data = {
-        userId: storeData.userId,
-        estateId: 0,
-        schemeId: caseId.value,
-        schemeSnapshot: {
-          caseBags: JSON.stringify(caseDetail.value.caseBags),
-        },
-        offerPrice: 0,
-        schemeName: caseDetail.value.schemeName,
-        consultantId: uni.getStorageSync("shareId") || "",
-        houseTypeId: 0,
-      };
-      // requestReport(data, () => {
-      //   goodList.value = [];
-      // });
+    const report = async() => {
+			let caseBags = [];
+			caseDetail.value.caseBags.forEach((item) => {
+				if (item.isChoose) {
+					caseBags.push({bagDesc: item.bagDesc, buyItNow: item.buyItNow, caseBagName: item.caseBagName, caseInfo: item.caseInfo});
+				}
+			})
+			if (caseBags.length) {
+				let data = {
+				  userId: storeData.userId,
+				  estateId: 0,
+				  schemeId: caseId.value,
+				  schemeSnapshot: JSON.stringify({caseBags: caseBags}),
+				  offerPrice: 0,
+				  schemeName: caseDetail.value.schemeName,
+				  consultantId: uni.getStorageSync("shareId") || "",
+				  houseTypeId: 0,
+				};
+				console.log(data)
+				// requestReport(data, () => {
+				//   goodList.value = [];
+				// });
+				console.log(signUpRecord);
+				let res = await signUpRecord(data);
+				console.log(res);
+			} else {
+				uni.showToast({
+				  title: "请选择装修报价",
+				  icon: "none",
+				  duration: 1000
+				})
+			}
     };
 
     return {
