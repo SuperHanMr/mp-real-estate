@@ -2,7 +2,7 @@
  * @Description: 商品套包详情
  * @Author: HanYongHui
  * @Date: 2022-05-16 14:13:56
- * @LastEditTime: 2022-05-24 10:18:27
+ * @LastEditTime: 2022-05-24 12:15:49
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -27,6 +27,7 @@ const props = defineProps({
 });
 console.log("props", props);
 const baseUrl = ref<string>(import.meta.env.VITE_URL_BASE_H5 as string);
+// baseUrl.value = "https://localhost";
 </script>
 <style lang="scss" scoped>
 .page-content {
