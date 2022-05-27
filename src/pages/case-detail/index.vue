@@ -2,7 +2,7 @@
  * @Description: 楼盘详情
  * @Author: HanYongHui
  * @Date: 2022-03-31 21:00:01
- * @LastEditTime: 2022-05-24 10:41:11
+ * @LastEditTime: 2022-05-25 18:09:35
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -69,7 +69,7 @@
           </view>
         </view>
       </view>
-      <product-list />
+      <product-list :schemeId="caseId" />
     </view>
 
     <view class="report" v-if="storeData.role === 2">
@@ -127,6 +127,7 @@ export default defineComponent({
       imgList,
       codeUrl,
       codeDialogShow,
+      parentId,
     } = getCaseDetailHooks();
     onLoad((e: any) => {
       console.log("---onLoad---", e);
@@ -139,7 +140,7 @@ export default defineComponent({
         uni.setStorageSync("shareId", +sahreId ? sahreId : "");
         fromShare.value = sahreId ? true : false;
       } else {
-        caseId.value = 184; //;+e.caseId
+        caseId.value = +e.caseId;
         fromShare.value = e.shareId ? true : false;
         if (e.shareId) {
           uni.setStorageSync("shareId", +e.shareId ? e.shareId : "");
@@ -198,7 +199,7 @@ export default defineComponent({
       });
     };
     const report = async () => {
-      let caseBags = [];
+      let caseBags: any = [];
       caseDetail.value.caseBags.forEach((item) => {
         if (item.isChoose) {
           caseBags.push({
@@ -212,20 +213,46 @@ export default defineComponent({
       if (caseBags.length) {
         let data = {
           userId: storeData.userId,
-          estateId: 0,
+          estateId: parentId.value.estateId,
           schemeId: caseId.value,
           schemeSnapshot: JSON.stringify({ caseBags: caseBags }),
           offerPrice: 0,
           schemeName: caseDetail.value.schemeName,
           consultantId: uni.getStorageSync("shareId") || "",
-          houseTypeId: 0,
+          houseTypeId: parentId.value.houseTypeId,
         };
-        console.log(data);
-        // requestReport(data, () => {
-        //   goodList.value = [];
-        // });
         console.log(signUpRecord);
-        let res = await signUpRecord(data);
+        let res = await signUpRecord(data as any);
+        switch (res.code) {
+          case 1:
+            uni.showToast({
+              title: "报名成功",
+              icon: "success",
+              mask: true,
+            });
+            setTimeout(() => {
+              uni.navigateBack({
+                delta: 1,
+              });
+            }, 1000);
+            break;
+          case 204:
+            let pages = getCurrentPages();
+            // console.log(pages.length,'当前栈深度')
+            if (pages.length < 2) {
+              uni.switchTab({
+                url: "/pages/home/index",
+              });
+            } else {
+              uni.navigateBack({
+                delta: 1,
+              });
+            }
+            break;
+          default:
+            break;
+        }
+
         console.log(res);
       } else {
         uni.showToast({
@@ -237,6 +264,7 @@ export default defineComponent({
     };
 
     return {
+      caseId,
       theme,
       codeDialogShow,
       currentIndex,

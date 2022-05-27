@@ -2,7 +2,7 @@
  * @Description: 方案详情 商品列表
  * @Author: HanYongHui
  * @Date: 2022-05-19 14:40:46
- * @LastEditTime: 2022-05-24 11:05:04
+ * @LastEditTime: 2022-05-25 18:27:20
  * @LastEditors: HanYongHui
 -->
 <template>
@@ -30,7 +30,6 @@
         />
         <view class="case-content">
           <view class="case-name">
-            <view class="icon-style pro-icon">商品</view>
             <view class="text">{{ item.caseBagName.caseBagName }}</view>
           </view>
           <view class="case-desc">{{ item.bagDesc.bagPackageDesc }}</view>
@@ -42,7 +41,7 @@
           </view>
           <view class="case-btn" @click.stop="lookProductDetail(item)">
             <image :src="item.isChoose ? goodsPackActive : goodsPack"></image>
-            <text :class="{ active: item.isChoose }">查看套餐所含全部商品</text>
+            <text :class="{ active: item.isChoose }">查看套餐详情</text>
           </view>
         </view>
       </view>
@@ -50,7 +49,7 @@
   </view>
 </template>
 <script lang="ts" setup>
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, defineProps } from "vue";
 import { getCaseDetailHooks } from "../hooks/index";
 import { useUserInfoHooks } from "../../../hoosk/index";
 import goodsPack from "../../../images/goods-pack.png";
@@ -58,15 +57,21 @@ import goodsPackActive from "../../../images/goods-pack-active.png";
 import type { CaseBags } from "../../../api/case";
 const { storeData } = useUserInfoHooks();
 const { caseDetail } = getCaseDetailHooks();
+const props = defineProps({
+  schemeId: {
+    type: Number,
+    required: true,
+  },
+});
 const chooseGoods = (index: number) => {
-  caseDetail.value.caseBags[index].isChoose =
-    !caseDetail.value.caseBags[index].isChoose;
+  if (storeData.role === 2) {
+    caseDetail.value.caseBags[index].isChoose =
+      !caseDetail.value.caseBags[index].isChoose;
+  }
 };
 const lookProductDetail = (item: CaseBags) => {
   uni.navigateTo({
-    url: `/pages/product-bundle-detail/index?schemeId=${184}&caseBagName=${
-      item.caseBagName.caseBagName
-    }`,
+    url: `/pages/product-bundle-detail/index?schemeId=${props.schemeId}&caseBagName=${item.caseBagName.caseBagName}`,
   });
 };
 </script>
@@ -159,7 +164,6 @@ const lookProductDetail = (item: CaseBags) => {
       }
       .case-price {
         margin-top: 32rpx;
-        margin-bottom: 24rpx;
         .price-symbol {
           color: #333;
           font-size: 26rpx;
@@ -175,6 +179,7 @@ const lookProductDetail = (item: CaseBags) => {
         color: #b88c58 !important;
       }
       .case-btn {
+        margin-top: 24rpx;
         width: 100%;
         height: 68rpx;
         text-align: center;

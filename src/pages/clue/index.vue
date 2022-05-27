@@ -66,23 +66,19 @@
                 </view>
               </view>
 
-              <view
-                class="bottomInfo"
-                v-if="item1.key == 1"
-                @click.stop="gotoOtherPage"
-              >
+              <view class="bottomInfo" v-if="item1.key == 1">
                 <view class="itemInfo">
                   <view class="left">报名时间</view>
                   <view class="right">{{
                     formatDate(signupItem.signTime)
                   }}</view>
                 </view>
-                <view class="itemInfo">
+                <!-- <view class="itemInfo">
                   <view class="left"> 总价</view>
                   <view class="right price-font" style="font-weight: 500">
                     ￥{{ handlePrice(signupItem.offerPrice / 100) }}
                   </view>
-                </view>
+                </view> -->
               </view>
             </view>
             <view class="no-data" v-if="signupList.length === 0">

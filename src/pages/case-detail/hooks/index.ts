@@ -2,7 +2,7 @@
  * @Description: login
  * @Author: HanYongHui
  * @Date: 2022-03-31 11:42:10
- * @LastEditTime: 2022-05-19 17:12:54
+ * @LastEditTime: 2022-05-25 18:28:37
  * @LastEditors: HanYongHui
  */
 import { defineComponent, reactive, ref, toRefs } from "vue";
@@ -44,6 +44,9 @@ export const getCaseDetailHooks = () => {
       caseDetailData.caseDetail = { houseWithSchemeInfo: {} } as caseDetail
       const data = await caseDetail(caseId)
       caseDetailData.caseDetail = data.data as caseDetail
+      if (caseDetailData.caseDetail.caseBags && caseDetailData.caseDetail.caseBags.length > 0 && storeData.role === 2) {
+        caseDetailData.caseDetail.caseBags[0].isChoose = true
+      }
       addImage(caseDetailData.caseDetail)
       if (
         caseDetailData.caseDetail.houseWithSchemeInfo.status !== 1 ||
@@ -177,6 +180,7 @@ export const getCaseDetailHooks = () => {
     codeDialogShow,
     requestCaseDetail,
     requestReport,
+    parentId,
     requestCode,
     requestFindParentIds,
     // requestRegister,

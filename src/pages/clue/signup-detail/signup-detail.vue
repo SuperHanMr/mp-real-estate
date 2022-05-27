@@ -47,7 +47,7 @@
           <text class="left">报名编号</text>
           <view class="right">
             <text>{{ detailInfo.signNo }}</text>
-            <view class="button" @click="duplicate(+detailInfo.signNo)"
+            <view class="button" @click="duplicate(detailInfo.signNo)"
               >复制</view
             >
           </view>
@@ -72,7 +72,6 @@
           @click="gotoNextPage(item)"
         >
           <view class="updateMaterial-header">
-            <view class="icon-style pro-icon">商品</view>
             <view class="text">{{ item.caseBagName.caseBagName }}</view>
           </view>
           <view class="content">{{ item.bagDesc.bagPackageDesc }}</view>
@@ -82,7 +81,7 @@
           </view>
           <view class="showMoreMaterial">
             <image class="iconImg" src="../../../images/shopping-icon.png" />
-            <text>查看套餐所含全部商品</text>
+            <text>查看套餐详情</text>
           </view>
         </view>
       </view>
@@ -123,9 +122,10 @@ export default defineComponent({
         theme.value = "transparent";
       }
     });
-    const duplicate = (num: number) => {
+    const duplicate = (num: string) => {
+      console.log(num);
       uni.setClipboardData({
-        data: `${num}`,
+        data: num,
         success(res) {
           uni.showToast({
             title: "复制成功",
